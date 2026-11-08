@@ -7,6 +7,9 @@
           <div
             class="work-center-row"
             [class.work-center-row--alternate]="index % 2 === 1"
+            [class.work-center-row--hovered]="hovered() === center.id"
+            (mouseenter)="hovered.set(center.id)"
+            (mouseleave)="hovered.set(null)"
           >
             <span class="work-center-name">{{ center.name }}</span>
           </div>
@@ -27,19 +30,20 @@
             class="grid-cell grid-header-cell"
             [class.grid-header-cell--current]="column.current"
           >
-            <span
-              class="grid-header-cell__label"
-              [class.grid-header-cell__label--pill]="column.current"
-            >
-              {{ column.label }}
-            </span>
+            <span class="grid-header-cell__label">{{ column.label }}</span>
           </div>
         }
       </div>
 
       <div class="grid__body">
         @for (center of workCenters(); track center.id; let index = $index) {
-          <div class="grid-row" [class.grid-row--alternate]="index % 2 === 1">
+          <div
+            class="grid-row"
+            [class.grid-row--alternate]="index % 2 === 1"
+            [class.grid-row--hovered]="hovered() === center.id"
+            (mouseenter)="hovered.set(center.id)"
+            (mouseleave)="hovered.set(null)"
+          >
             @for (column of columns(); track column.key) {
               <div class="grid-cell grid-cell--row"></div>
             }
@@ -49,6 +53,9 @@
 
       <div class="grid__markers">
         <div class="grid-current-marker" [style.--col-index]="currentIndex()"></div>
+        <div class="grid-current-chip" [style.--col-index]="currentIndex()">
+          Current month
+        </div>
         <div
           class="grid-today-marker"
           [style.--col-index]="today().index"

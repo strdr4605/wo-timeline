@@ -50,10 +50,13 @@ test('[B2] the timeline grid scrolls horizontally', async ({ page }) => {
   expect(scrollable).toBe(true);
 
   const firstCellBefore = await page.locator('.grid-header-cell').first().boundingBox();
+  const scrollBefore = await grid.evaluate((element) => element.scrollLeft);
 
   await grid.hover();
   await page.mouse.wheel(400, 0);
-  await expect.poll(() => grid.evaluate((element) => element.scrollLeft)).toBeGreaterThan(0);
+  await expect
+    .poll(() => grid.evaluate((element) => element.scrollLeft))
+    .toBeGreaterThan(scrollBefore);
 
   const firstCellAfter = await page.locator('.grid-header-cell').first().boundingBox();
   expect(firstCellAfter!.x).toBeLessThan(firstCellBefore!.x);
@@ -104,19 +107,25 @@ test('[B5] the header row re-labels per zoom level', async ({ page }) => {
   }
 });
 
-test('[B6] the current period shows a pill in the header and a vertical line', async ({
+test('[B6] the current month shows the chip of the design and a vertical line', async ({
   page,
 }) => {
   await page.goto('/');
 
-  const current = new Date();
-  const expected = current.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
-
-  const pill = page.locator('.grid-header-cell--current .grid-header-cell__label');
-  await expect(pill).toHaveText(expected);
-  expect(await pill.evaluate((element) => getComputedStyle(element).backgroundColor)).toBe(
+  const chip = page.locator('.grid-current-chip');
+  await expect(chip).toHaveText('Current month');
+  expect(await chip.evaluate((element) => getComputedStyle(element).backgroundColor)).toBe(
     rgb('#d4d7ff'),
   );
+  expect(await chip.evaluate((element) => getComputedStyle(element).color)).toBe(rgb('#3e40db'));
+
+  const chipBox = await chip.boundingBox();
+  expect(chipBox!.width).toBe(109);
+  expect(chipBox!.height).toBe(22);
+
+  // The chip sits on the header band edge, at the top of the current month column.
+  const header = await page.locator('.grid__header').boundingBox();
+  expect(Math.abs(chipBox!.y - (header!.y + header!.height))).toBeLessThan(2);
 
   const marker = page.locator('.grid-current-marker');
   const markerBox = await marker.boundingBox();
@@ -128,6 +137,7 @@ test('[B6] the current period shows a pill in the header and a vertical line', a
   // The marker stands on the left edge of the current column.
   const cell = await page.locator('.grid-header-cell--current').boundingBox();
   expect(Math.abs(markerBox!.x - cell!.x)).toBeLessThan(2);
+  expect(Math.abs(chipBox!.x - cell!.x)).toBeLessThan(2);
 });
 
 test('[B7] the grid shows a line for the current day', async ({ page }) => {
@@ -166,21 +176,44 @@ test('[B8] the initial view centres on today with a buffer', async ({ page }) =>
   expect(todayIndex).toBe(14);
 });
 
-test('[B9] hovering a row highlights the row background', async ({ page }) => {
+test('[B9] the work centre row and the timeline row hover together', async ({ page }) => {
   await page.goto('/');
 
-  const row = page.locator('.grid-row').first();
-  await row.hover();
+  const hover = 'rgba(241, 243, 248, 0.75)';
+  const railRow = page.locator('.work-center-row').nth(1);
+  const gridRow = page.locator('.grid-row').nth(1);
 
-  expect(await row.evaluate((element) => getComputedStyle(element).backgroundColor)).toBe(
-    'rgba(241, 243, 248, 0.75)',
-  );
-
-  const railRow = page.locator('.work-center-row').first();
   await railRow.hover();
-  expect(await railRow.evaluate((element) => getComputedStyle(element).backgroundColor)).toBe(
-    'rgba(241, 243, 248, 0.75)',
-  );
+  await expect
+    .poll(() => railRow.evaluate((element) => getComputedStyle(element).backgroundColor))
+    .toBe(hover);
+  await expect
+    .poll(() => gridRow.evaluate((element) => getComputedStyle(element).backgroundColor))
+    .toBe(hover);
+
+  await gridRow.hover();
+  await expect
+    .poll(() => gridRow.evaluate((element) => getComputedStyle(element).backgroundColor))
+    .toBe(hover);
+  await expect
+    .poll(() => railRow.evaluate((element) => getComputedStyle(element).backgroundColor))
+    .toBe(hover);
+});
+
+test('[G2] the timescale chip is 146 wide with the segments at 75 and 71', async ({ page }) => {
+  await page.goto('/');
+
+  const chip = await page.locator('.timescale-chip').boundingBox();
+  expect(chip!.width).toBe(146);
+
+  const label = await page.locator('.timescale-chip__label').boundingBox();
+  const value = await page.locator('.timescale-chip__value').boundingBox();
+  expect(label!.width).toBe(75);
+  expect(value!.width).toBe(71);
+
+  // The value segment starts at x 176, the chip starts at x 101.
+  expect(chip!.x).toBe(101);
+  expect(value!.x).toBe(176);
 });
 
 test('[B10] rows are 48 high and the work center panel is 380 wide', async ({ page }) => {

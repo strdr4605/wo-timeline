@@ -158,7 +158,7 @@
       "verify": "visual",
       "priority": "must",
       "status": "pass",
-      "evidence": "e2e: [B6] the current period shows a pill in the header and a vertical line"
+      "evidence": "e2e: [B6] the current month shows the chip of the design and a vertical line"
     },
     {
       "id": "B7",
@@ -196,7 +196,7 @@
       "verify": "e2e",
       "priority": "must",
       "status": "pass",
-      "evidence": "e2e: [B9] hovering a row highlights the row background"
+      "evidence": "e2e: [B9] the work centre row and the timeline row hover together"
     },
     {
       "id": "B10",
@@ -664,7 +664,7 @@
       "verify": "visual",
       "priority": "must",
       "status": "pass",
-      "evidence": "measure: .timescale-chip border-radius = \"5px\" (expected \"5px\")"
+      "evidence": "e2e: [G2] the timescale chip is 146 wide with the segments at 75 and 71"
     },
     {
       "id": "G3",

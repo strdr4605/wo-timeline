@@ -61,7 +61,8 @@
   background: t.$color-surface-row-alternate;
 }
 
-.work-center-row:hover {
+// The rail row and the timeline row of a work centre hover together.
+.work-center-row--hovered {
   background: rgba(t.$color-surface-row-hover, t.$color-surface-row-hover-alpha);
 }
 
@@ -115,16 +116,6 @@
   color: t.$type-label-secondary-color;
 }
 
-.grid-header-cell__label--pill {
-  display: inline-flex;
-  align-items: center;
-  height: t.$layout-badge-height;
-  padding: 0 t.$layout-badge-padding-x;
-  border-radius: t.$radius-badge;
-  background: t.$color-brand-tint;
-  color: t.$color-brand-primary;
-}
-
 .grid-row {
   display: flex;
   height: t.$layout-grid-row-height;
@@ -140,7 +131,7 @@
   background: t.$color-surface-row-alternate;
 }
 
-.grid-row:hover {
+.grid-row--hovered {
   background: rgba(t.$color-surface-row-hover, t.$color-surface-row-hover-alpha);
 }
 
@@ -161,6 +152,24 @@
   left: calc(var(--col-index) * var(--column-width));
   width: t.$layout-grid-current-month-marker-width;
   background: t.$layout-grid-current-month-marker-color;
+}
+
+// The chip of the Sketch: it names the current month column at the header band edge.
+.grid-current-chip {
+  position: absolute;
+  top: 0;
+  left: calc(var(--col-index) * var(--column-width));
+  display: flex;
+  align-items: center;
+  width: t.$layout-grid-current-month-chip-width;
+  height: t.$layout-grid-current-month-chip-height;
+  padding-left: t.$layout-badge-padding-x;
+  border-radius: t.$radius-badge;
+  background: t.$color-brand-tint;
+  font-family: t.$font-family;
+  font-size: t.$type-body-size;
+  font-weight: t.$type-body-font-weight;
+  color: t.$color-brand-primary;
 }
 
 .grid-today-marker {

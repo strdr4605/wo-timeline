@@ -10,9 +10,13 @@
   display: inline-flex;
   align-items: stretch;
   height: t.$component-scale-chip-height;
+  // The Sketch chip is as wide as its two segments: label 75 at x 101, value 71 at x 176.
+  width: (t.$component-scale-chip-segments-label-w + t.$component-scale-chip-segments-value-w);
   border: t.$component-scale-chip-border-width solid t.$component-scale-chip-border-color;
   border-radius: t.$component-scale-chip-radius;
-  overflow: hidden;
+  // The segments lie on the border, so the ring is drawn on top of them.
+  outline: t.$component-scale-chip-border-width solid t.$component-scale-chip-border-color;
+  outline-offset: -#{t.$component-scale-chip-border-width};
   font-family: t.$font-family;
 }
 
@@ -20,7 +24,12 @@
   display: flex;
   align-items: center;
   width: t.$component-scale-chip-segments-label-w;
+  margin-left: -#{t.$component-scale-chip-border-width};
   padding-left: t.$layout-badge-padding-x;
+  border-radius: (
+      t.$component-scale-chip-radius - t.$component-scale-chip-border-width
+    )
+    0 0 (t.$component-scale-chip-radius - t.$component-scale-chip-border-width);
   background: rgba(
     t.$component-scale-chip-segments-label-fill,
     t.$component-scale-chip-segments-label-alpha
@@ -35,8 +44,12 @@
   align-items: center;
   justify-content: space-between;
   width: t.$component-scale-chip-segments-value-w;
+  margin-right: -#{t.$component-scale-chip-border-width};
   padding: 0 t.$layout-badge-padding-x;
   border: 0;
+  border-radius: 0
+    (t.$component-scale-chip-radius - t.$component-scale-chip-border-width)
+    (t.$component-scale-chip-radius - t.$component-scale-chip-border-width) 0;
   background: t.$component-scale-chip-segments-value-fill;
   font-family: t.$font-family;
   font-size: t.$type-chip-value-size;

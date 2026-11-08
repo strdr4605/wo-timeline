@@ -26,7 +26,15 @@ Read it before you judge. Do not re-open a settled decision.
 
 ## Your scope for this round
 
-Verify the items that the builder waves have delivered. For each item in your scope:
+Verify these items: **A1, A5, G1, G2, G5, B1, B2, B3, B4, B5, B6, B7, B8, B9, B10, B11**.
+
+Wave 0 notes: `docs/requirements/notes/builder-wave0.md`. Wave 1 notes:
+`docs/requirements/notes/builder-wave1.md`. Read both. They are the builder's claims, not verdicts.
+
+Environment: the system `node` on PATH is too old for Angular 20. Prefix every command with
+`export PATH="/opt/homebrew/opt/node@26/bin:$PATH";`.
+
+For each item in your scope:
 
 1. Start the app: `npm start` (port 4200). Use the `hc` background terminal for it, or a
    background process you can stop later. Do not leave a server running after you report.

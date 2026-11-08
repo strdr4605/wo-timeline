@@ -25,10 +25,10 @@ Legend: `[x]` pass, `[ ]` pending, `[?]` open decision. An item may only be mark
 | [x] | B3 | Timescale dropdown offers Day, Week, Month (Hour is optional extra) | brief, owner, ref | e2e | must | e2e: [B3] the timescale dropdown offers Day, Week and Month |
 | [x] | B4 | Default timescale is Month. The written brief says Day; the owner video, both candidate demos and every Sketch artboard show Month. The decision is recorded in docs/decisions/2026-11-08-grill-session.md (Q1). Month is the default; switching to Day later is a one-constant change. | owner, ref, cand | e2e | must | e2e: [B4] the default timescale is Month |
 | [x] | B5 | Header row re-labels per zoom level (month names, week starts, day numbers) | brief, sketch | visual | must | e2e: [B5] the header row re-labels per zoom level |
-| [x] | B6 | Current period indicator: highlighted current month pill in the header plus a vertical line on the grid | sketch, ref | visual | must | e2e: [B6] the current period shows a pill in the header and a vertical line |
+| [x] | B6 | Current period indicator: highlighted current month pill in the header plus a vertical line on the grid | sketch, ref | visual | must | e2e: [B6] the current month shows the chip of the design and a vertical line |
 | [x] | B7 | Current day indicator line on the grid | brief | e2e | must | e2e: [B7] the grid shows a line for the current day |
 | [x] | B8 | Initial view centres on today with a buffer (about two weeks either side in Day view) | brief | e2e | must | e2e: [B8] the initial view centres on today with a buffer |
-| [x] | B9 | Row hover highlights the row background | brief, owner, ref | e2e | must | e2e: [B9] hovering a row highlights the row background |
+| [x] | B9 | Row hover highlights the row background | brief, owner, ref | e2e | must | e2e: [B9] the work centre row and the timeline row hover together |
 | [x] | B10 | Row height 48, bars aligned with their work center row, left panel width 380 | sketch, ref | visual | must | e2e: [B10] rows are 48 high and the work center panel is 380 wide |
 | [x] | B11 | Grid lines 1px #e6ebf0, column dividers per timescale | sketch | visual | must | e2e: [B11] grid lines are 1px #e6ebf0 and columns follow the timescale |
 
@@ -90,7 +90,7 @@ Legend: `[x]` pass, `[ ]` pending, `[?]` open decision. An item may only be mark
 | | id | requirement | source | verify | priority | evidence |
 |---|---|---|---|---|---|---|
 | [x] | G1 | Every colour and size comes from docs/design/tokens.json, no guessed values | owner, sketch | visual | must | unit: design tokens [G1] every SCSS token variable matches tokens.json |
-| [x] | G2 | Timescale chip geometry: label segment 75, value segment 71, height 25, radius 5 | sketch | visual | must | measure: .timescale-chip border-radius = "5px" (expected "5px") |
+| [x] | G2 | Timescale chip geometry: label segment 75, value segment 71, height 25, radius 5 | sketch | visual | must | e2e: [G2] the timescale chip is 146 wide with the segments at 75 and 71 |
 | [ ] | G3 | Logo top left with the spacing from the design | ref, sketch | visual | must |  |
 | [ ] | G4 | Measure the rendered DOM against the token values (a script prints differences) | sketch, owner | visual | must | measure: selector not found: .drawer |
 | [x] | G5 | Type scale matches: body 14 Book, drawer title 20 Medium, chip 13 | sketch | visual | must | unit: design tokens [G5] type scale matches the token file |

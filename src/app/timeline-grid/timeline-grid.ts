@@ -5,6 +5,7 @@ import {
   afterRenderEffect,
   computed,
   input,
+  signal,
   viewChild,
 } from '@angular/core';
 import {
@@ -34,6 +35,9 @@ export class TimelineGrid implements AfterViewInit {
   protected readonly currentIndex = computed(() =>
     this.columns().findIndex((column) => column.current),
   );
+
+  /** The work centre whose row is hovered. The rail row and the timeline row hover together. */
+  protected readonly hovered = signal<string | null>(null);
 
   private readonly scroller = viewChild<ElementRef<HTMLElement>>('scroller');
   private readonly rail = viewChild<ElementRef<HTMLElement>>('rail');
