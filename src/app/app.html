@@ -1,0 +1,35 @@
+<header class="top-bar">
+  <div class="logo" aria-label="Naologic"></div>
+</header>
+
+<main class="page">
+  <h1 class="page__title">Work Orders</h1>
+
+  <div class="toolbar">
+    <app-timescale-chip [value]="timescale" />
+  </div>
+
+  <section class="grid">
+    <div class="grid__rail">
+      <div class="grid__rail-header">Work Center</div>
+      @for (center of workCenters; track center.id) {
+        <div class="work-center-row">
+          <span class="work-center-name">{{ center.name }}</span>
+        </div>
+      }
+    </div>
+
+    <div class="grid__timeline">
+      <div class="grid__header">
+        @for (month of months; track month) {
+          <div class="grid-cell">{{ month }}</div>
+        }
+      </div>
+      <div class="grid__body">
+        @for (center of workCenters; track center.id) {
+          <div class="grid-cell grid-cell--row"></div>
+        }
+      </div>
+    </div>
+  </section>
+</main>

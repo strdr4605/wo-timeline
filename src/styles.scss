@@ -1,0 +1,21 @@
+@use 'styles/tokens' as t;
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: t.$color-surface-page;
+  color: t.$color-text-primary;
+  font-family: t.$font-family;
+  font-size: t.$type-body-size;
+  font-weight: t.$type-body-font-weight;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}

@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.angular/
+out-tsc/
+*.log
+playwright-report/
+vitest-report/
+playwright-report.json
+vitest-report.json
+test-results/
+docs/demo/videos/
+.DS_Store

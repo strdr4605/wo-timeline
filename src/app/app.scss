@@ -1,0 +1,108 @@
+@use '../styles/tokens' as t;
+
+.top-bar {
+  position: relative;
+  height: t.$layout-top-bar-height;
+  background: t.$color-surface-panel;
+  border-bottom: 1px solid t.$color-border-grid;
+}
+
+.logo {
+  position: absolute;
+  top: t.$layout-top-bar-logo-y;
+  left: t.$layout-top-bar-logo-x;
+  width: t.$layout-top-bar-logo-w;
+  height: t.$layout-top-bar-logo-h;
+  background: t.$color-brand-element;
+}
+
+.page {
+  padding-left: t.$layout-grid-left-rail-x;
+  padding-right: t.$layout-grid-left-rail-x;
+}
+
+.page__title {
+  margin: 0;
+  // The title sits above the toolbar chip. Both offsets come from the layout tokens.
+  margin-top: (
+    t.$layout-toolbar-timescale-y - t.$layout-top-bar-height - t.$type-h3-size - t.$layout-toolbar-timescale-h
+  );
+  margin-bottom: t.$layout-toolbar-timescale-h;
+  font-family: t.$font-family;
+  font-size: t.$type-h3-size;
+  line-height: t.$type-h3-size;
+  font-weight: t.$type-h3-font-weight;
+  color: t.$type-h3-color;
+}
+
+.toolbar {
+  height: t.$layout-toolbar-timescale-h;
+}
+
+.grid {
+  display: flex;
+  margin-top: (
+    t.$layout-grid-header-top - t.$layout-toolbar-timescale-y - t.$layout-toolbar-timescale-h
+  );
+}
+
+.grid__rail {
+  width: t.$layout-grid-left-rail-w;
+  flex: none;
+}
+
+.grid__rail-header,
+.grid__header {
+  height: (t.$layout-grid-header-bottom - t.$layout-grid-header-top);
+}
+
+.grid__rail-header {
+  display: flex;
+  align-items: center;
+  font-family: t.$font-family;
+  font-size: t.$type-label-size;
+  font-weight: t.$type-label-font-weight;
+  color: t.$type-label-color;
+}
+
+.work-center-row {
+  display: flex;
+  align-items: center;
+  height: t.$layout-grid-row-height;
+  border-top: 1px solid t.$color-border-grid;
+}
+
+.work-center-name {
+  font-family: t.$font-family;
+  font-size: t.$type-body-size;
+  font-weight: t.$type-body-font-weight;
+  color: t.$type-body-color;
+}
+
+.grid__timeline {
+  flex: 1;
+  border-left: 1px solid t.$color-border-grid;
+}
+
+.grid__header {
+  display: flex;
+}
+
+.grid__body {
+  border-top: 1px solid t.$color-border-grid;
+}
+
+.grid-cell {
+  width: t.$layout-grid-header-column-width-month;
+  flex: none;
+  border-right: 1px solid t.$color-border-grid;
+  font-family: t.$font-family;
+  font-size: t.$type-label-size;
+  font-weight: t.$type-label-font-weight;
+  color: t.$type-label-color;
+}
+
+.grid-cell--row {
+  height: t.$layout-grid-row-height;
+  border-top: 1px solid t.$color-border-grid;
+}

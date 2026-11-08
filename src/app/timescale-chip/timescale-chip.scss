@@ -1,0 +1,46 @@
+@use 'sass:math';
+@use '../../styles/tokens' as t;
+
+.timescale-chip {
+  display: inline-flex;
+  align-items: stretch;
+  height: t.$component-scale-chip-height;
+  border: t.$component-scale-chip-border-width solid t.$component-scale-chip-border-color;
+  border-radius: t.$component-scale-chip-radius;
+  overflow: hidden;
+  font-family: t.$font-family;
+}
+
+.timescale-chip__label {
+  display: flex;
+  align-items: center;
+  width: t.$component-scale-chip-segments-label-w;
+  padding-left: t.$layout-badge-padding-x;
+  background: rgba(
+    t.$component-scale-chip-segments-label-fill,
+    t.$component-scale-chip-segments-label-alpha
+  );
+  font-size: t.$type-chip-label-size;
+  font-weight: t.$type-chip-label-font-weight;
+  color: t.$type-chip-label-color;
+}
+
+.timescale-chip__value {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: t.$component-scale-chip-segments-value-w;
+  padding: 0 t.$layout-badge-padding-x;
+  background: t.$component-scale-chip-segments-value-fill;
+  font-size: t.$type-chip-value-size;
+  font-weight: t.$type-chip-value-font-weight;
+  color: t.$type-chip-value-color;
+}
+
+.timescale-chip__chevron {
+  width: 0;
+  height: 0;
+  border-left: math.div(t.$layout-toolbar-timescale-chevron-w, 2) solid transparent;
+  border-right: math.div(t.$layout-toolbar-timescale-chevron-w, 2) solid transparent;
+  border-top: t.$layout-toolbar-timescale-chevron-h solid t.$color-text-secondary;
+}

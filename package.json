@@ -1,0 +1,48 @@
+{
+  "name": "work-order-schedule-timeline",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve --port 4200",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "tokens": "node tools/generate-tokens.mjs",
+    "test:unit": "vitest run",
+    "test:e2e": "playwright test",
+    "demo": "playwright test --config=playwright.demo.config.ts"
+  },
+  "prettier": {
+    "printWidth": 100,
+    "singleQuote": true,
+    "overrides": [
+      {
+        "files": "*.html",
+        "options": {
+          "parser": "angular"
+        }
+      }
+    ]
+  },
+  "dependencies": {
+    "@angular/common": "20.3.35",
+    "@angular/compiler": "20.3.35",
+    "@angular/core": "20.3.35",
+    "@angular/forms": "20.3.35",
+    "@angular/platform-browser": "20.3.35",
+    "@ng-bootstrap/ng-bootstrap": "19.0.1",
+    "@ng-select/ng-select": "20.7.0",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0",
+    "zone.js": "~0.15.0"
+  },
+  "devDependencies": {
+    "@angular/build": "20.3.42",
+    "@angular/cli": "20.3.42",
+    "@angular/compiler-cli": "20.3.35",
+    "@playwright/test": "1.65.0",
+    "playwright": "1.65.0",
+    "typescript": "~5.9.2",
+    "vitest": "5.1.0"
+  }
+}

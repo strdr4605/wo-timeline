@@ -1,0 +1,916 @@
+{
+  "meta": {
+    "task": "Work Order Schedule Timeline (Naologic front-end take-home)",
+    "created": "2026-11-08",
+    "how": "Each item is checkable. An agent may set status to pass only with an evidence command (test name, screenshot path, or measurement output). Token references point into docs/design/tokens.json.",
+    "sources": {
+      "brief": "FE-technical-test-10-2026.md",
+      "owner": "docs/videos/fe-kickoff-and-handover.md (task owner kickoff)",
+      "sketch": "docs/design/tokens.json (extracted from the Sketch file)",
+      "ref": "docs/videos/fe-reference-implementation-walkthrough.md (candidate walkthrough, Renvil Dsa)",
+      "cand": "docs/videos/fe-work-order-timeline-overview.md (candidate walkthrough, Jacob Hamel)"
+    },
+    "verifyKinds": {
+      "unit": "covered by an automated unit test",
+      "e2e": "covered by a browser test (Playwright or equivalent)",
+      "visual": "measured against docs/design/tokens.json, or screenshot compared to the design",
+      "manual": "verified by a human looking at the running app"
+    }
+  },
+  "items": [
+    {
+      "id": "A1",
+      "group": "Stack and scaffold",
+      "requirement": "Angular 17+, standalone components, TypeScript strict mode, SCSS",
+      "source": [
+        "brief"
+      ],
+      "verify": "unit",
+      "priority": "must",
+      "status": "pass",
+      "evidence": "e2e: [A1] app builds and serves the shell"
+    },
+    {
+      "id": "A2",
+      "group": "Stack and scaffold",
+      "requirement": "Drawer form uses Reactive Forms (FormGroup, FormControl, Validators)",
+      "source": [
+        "brief"
+      ],
+      "verify": "unit",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "A3",
+      "group": "Stack and scaffold",
+      "requirement": "Status dropdown uses ng-select, restyled to match the design (no system dropdown)",
+      "source": [
+        "brief",
+        "owner"
+      ],
+      "verify": "visual",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "A4",
+      "group": "Stack and scaffold",
+      "requirement": "Start and end dates use ngb-datepicker",
+      "source": [
+        "brief"
+      ],
+      "verify": "unit",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "A5",
+      "group": "Stack and scaffold",
+      "requirement": "Circular Std loaded from the CDN with the local docs/design/fonts fallback",
+      "source": [
+        "brief",
+        "sketch"
+      ],
+      "verify": "visual",
+      "priority": "must",
+      "status": "pass",
+      "evidence": "e2e: [A5] Circular Std comes from the Naologic CDN with a local fallback"
+    },
+    {
+      "id": "B1",
+      "group": "Timeline grid and zoom",
+      "requirement": "Work center panel on the left stays fixed while the timeline scrolls horizontally",
+      "source": [
+        "brief",
+        "owner",
+        "ref"
+      ],
+      "verify": "e2e",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "B2",
+      "group": "Timeline grid and zoom",
+      "requirement": "Timeline grid scrolls horizontally",
+      "source": [
+        "brief"
+      ],
+      "verify": "e2e",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "B3",
+      "group": "Timeline grid and zoom",
+      "requirement": "Timescale dropdown offers Day, Week, Month (Hour is optional extra)",
+      "source": [
+        "brief",
+        "owner",
+        "ref"
+      ],
+      "verify": "e2e",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "B4",
+      "group": "Timeline grid and zoom",
+      "requirement": "Default timescale is Month. The written brief says Day; the owner video, both candidate demos and every Sketch artboard show Month. The decision is recorded in docs/decisions/2026-11-08-grill-session.md (Q1). Month is the default; switching to Day later is a one-constant change.",
+      "source": [
+        "owner",
+        "ref",
+        "cand"
+      ],
+      "verify": "e2e",
+      "priority": "must",
+      "status": "open-decision",
+      "evidence": ""
+    },
+    {
+      "id": "B5",
+      "group": "Timeline grid and zoom",
+      "requirement": "Header row re-labels per zoom level (month names, week starts, day numbers)",
+      "source": [
+        "brief",
+        "sketch"
+      ],
+      "verify": "visual",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "B6",
+      "group": "Timeline grid and zoom",
+      "requirement": "Current period indicator: highlighted current month pill in the header plus a vertical line on the grid",
+      "source": [
+        "sketch",
+        "ref"
+      ],
+      "verify": "visual",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "B7",
+      "group": "Timeline grid and zoom",
+      "requirement": "Current day indicator line on the grid",
+      "source": [
+        "brief"
+      ],
+      "verify": "e2e",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "B8",
+      "group": "Timeline grid and zoom",
+      "requirement": "Initial view centres on today with a buffer (about two weeks either side in Day view)",
+      "source": [
+        "brief"
+      ],
+      "verify": "e2e",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "B9",
+      "group": "Timeline grid and zoom",
+      "requirement": "Row hover highlights the row background",
+      "source": [
+        "brief",
+        "owner",
+        "ref"
+      ],
+      "verify": "e2e",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "B10",
+      "group": "Timeline grid and zoom",
+      "requirement": "Row height 48, bars aligned with their work center row, left panel width 380",
+      "source": [
+        "sketch",
+        "ref"
+      ],
+      "verify": "visual",
+      "priority": "must",
+      "status": "pass",
+      "evidence": "measure: .work-center-row box = {\"width\":380,\"height\":48} (expected {\"height\":48})"
+    },
+    {
+      "id": "B11",
+      "group": "Timeline grid and zoom",
+      "requirement": "Grid lines 1px #e6ebf0, column dividers per timescale",
+      "source": [
+        "sketch"
+      ],
+      "verify": "visual",
+      "priority": "must",
+      "status": "pass",
+      "evidence": "measure: .grid-cell border-right-color = \"#e6ebf0\" (expected \"#e6ebf0\")"
+    },
+    {
+      "id": "C1",
+      "group": "Work order bars",
+      "requirement": "Bar start position equals work order start date, end position equals end date",
+      "source": [
+        "brief"
+      ],
+      "verify": "unit",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "C2",
+      "group": "Work order bars",
+      "requirement": "Bar shows the work order name and a status badge",
+      "source": [
+        "brief",
+        "sketch"
+      ],
+      "verify": "visual",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "C3",
+      "group": "Work order bars",
+      "requirement": "Status colours: open and in-progress #3e40db, complete #08a268, blocked #b13600, on the badge fills #d6d8ff / #e1ffcc / #fceeb5",
+      "source": [
+        "sketch",
+        "brief"
+      ],
+      "verify": "visual",
+      "priority": "must",
+      "status": "fail",
+      "evidence": "measure: selector not found: .work-order-bar[data-status='blocked']"
+    },
+    {
+      "id": "C4",
+      "group": "Work order bars",
+      "requirement": "Bar height 38, radius 8, 1px border #dee0ff / #d1fab3 / #fff5cf by status",
+      "source": [
+        "sketch"
+      ],
+      "verify": "visual",
+      "priority": "must",
+      "status": "fail",
+      "evidence": "measure: selector not found: .work-order-bar"
+    },
+    {
+      "id": "C5",
+      "group": "Work order bars",
+      "requirement": "Three-dot actions button appears on bar hover and opens a menu with Edit and Delete",
+      "source": [
+        "brief",
+        "owner",
+        "ref"
+      ],
+      "verify": "e2e",
+      "priority": "must",
+      "status": "fail",
+      "evidence": "measure: selector not found: .work-order-bar__actions"
+    },
+    {
+      "id": "C6",
+      "group": "Work order bars",
+      "requirement": "Menu styled like the design (width 200, rows 28, radius 5), not a system menu",
+      "source": [
+        "owner",
+        "sketch"
+      ],
+      "verify": "visual",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "C7",
+      "group": "Work order bars",
+      "requirement": "Hover tooltip on the bar shows name, status and the full date range",
+      "source": [
+        "brief",
+        "ref",
+        "cand"
+      ],
+      "verify": "e2e",
+      "priority": "bonus",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "C8",
+      "group": "Work order bars",
+      "requirement": "Drag handles at both ends of the bar on hover (design shows them)",
+      "source": [
+        "sketch",
+        "ref"
+      ],
+      "verify": "e2e",
+      "priority": "bonus",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "D1",
+      "group": "Create and edit drawer",
+      "requirement": "Drawer slides in from the right, width 591, radius 12, with the drop shadow from the design",
+      "source": [
+        "owner",
+        "sketch",
+        "ref"
+      ],
+      "verify": "visual",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "D2",
+      "group": "Create and edit drawer",
+      "requirement": "Header shows Work Order Details and the subtitle Specify the dates, name and status for this order",
+      "source": [
+        "brief",
+        "sketch"
+      ],
+      "verify": "visual",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "D3",
+      "group": "Create and edit drawer",
+      "requirement": "Clicking an empty timeline cell opens the create drawer with the start date pre-filled from the click position",
+      "source": [
+        "brief",
+        "owner",
+        "ref"
+      ],
+      "verify": "e2e",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "D4",
+      "group": "Create and edit drawer",
+      "requirement": "End date defaults to start date plus 7 days",
+      "source": [
+        "brief",
+        "ref"
+      ],
+      "verify": "unit",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "D5",
+      "group": "Create and edit drawer",
+      "requirement": "Status defaults to Open on create",
+      "source": [
+        "brief"
+      ],
+      "verify": "unit",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "D6",
+      "group": "Create and edit drawer",
+      "requirement": "Edit mode pre-fills the fields and the submit button reads Save instead of Create",
+      "source": [
+        "brief"
+      ],
+      "verify": "e2e",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "D7",
+      "group": "Create and edit drawer",
+      "requirement": "Cancel closes the drawer without saving",
+      "source": [
+        "brief"
+      ],
+      "verify": "e2e",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "D8",
+      "group": "Create and edit drawer",
+      "requirement": "Clicking outside the drawer closes it",
+      "source": [
+        "brief"
+      ],
+      "verify": "e2e",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "D9",
+      "group": "Create and edit drawer",
+      "requirement": "Escape closes the drawer",
+      "source": [
+        "ref"
+      ],
+      "verify": "e2e",
+      "priority": "bonus",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "D10",
+      "group": "Create and edit drawer",
+      "requirement": "Tab moves between the fields",
+      "source": [
+        "ref"
+      ],
+      "verify": "e2e",
+      "priority": "bonus",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "D11",
+      "group": "Create and edit drawer",
+      "requirement": "Text field shows the placeholder state and the active/focused state from the design",
+      "source": [
+        "owner",
+        "sketch"
+      ],
+      "verify": "visual",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "D12",
+      "group": "Create and edit drawer",
+      "requirement": "Date picker opens when the field is clicked; no separate calendar button",
+      "source": [
+        "owner"
+      ],
+      "verify": "e2e",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "D13",
+      "group": "Create and edit drawer",
+      "requirement": "Status dropdown is a pill when collapsed and plain text when expanded",
+      "source": [
+        "owner",
+        "sketch"
+      ],
+      "verify": "visual",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "D14",
+      "group": "Create and edit drawer",
+      "requirement": "Button geometry: primary #5659ff and secondary white, 66x32, top right of the drawer",
+      "source": [
+        "sketch"
+      ],
+      "verify": "visual",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "D15",
+      "group": "Create and edit drawer",
+      "requirement": "Overlay behind the drawer dims the timeline",
+      "source": [
+        "owner",
+        "sketch"
+      ],
+      "verify": "visual",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "E1",
+      "group": "Validation",
+      "requirement": "All fields required, end date must be after start date, invalid form blocks save",
+      "source": [
+        "brief"
+      ],
+      "verify": "unit",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "E2",
+      "group": "Validation",
+      "requirement": "Overlapping work order on the same work center is rejected and no order is created",
+      "source": [
+        "brief",
+        "owner",
+        "ref"
+      ],
+      "verify": "unit",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "E3",
+      "group": "Validation",
+      "requirement": "Edit ignores the order being edited when checking overlap",
+      "source": [
+        "brief"
+      ],
+      "verify": "unit",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "E4",
+      "group": "Validation",
+      "requirement": "Overlap error is shown to the user with a clear message",
+      "source": [
+        "brief",
+        "owner"
+      ],
+      "verify": "e2e",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "E5",
+      "group": "Validation",
+      "requirement": "Overlapping orders on different work centers are allowed",
+      "source": [
+        "brief"
+      ],
+      "verify": "unit",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "F1",
+      "group": "Data",
+      "requirement": "At least 5 work centers with realistic manufacturing names",
+      "source": [
+        "brief"
+      ],
+      "verify": "unit",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "F2",
+      "group": "Data",
+      "requirement": "At least 8 work orders across the centres, all 4 statuses present, one centre with several non-overlapping orders",
+      "source": [
+        "brief"
+      ],
+      "verify": "unit",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "F3",
+      "group": "Data",
+      "requirement": "Documents follow the docId / docType / data structure",
+      "source": [
+        "brief"
+      ],
+      "verify": "unit",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "F4",
+      "group": "Data",
+      "requirement": "Overlap detection lives in a service as a pure, testable function",
+      "source": [
+        "brief",
+        "ref"
+      ],
+      "verify": "unit",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "F5",
+      "group": "Data",
+      "requirement": "localStorage persistence: work orders survive a reload",
+      "source": [
+        "brief",
+        "ref"
+      ],
+      "verify": "e2e",
+      "priority": "bonus",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "G1",
+      "group": "Visual fidelity",
+      "requirement": "Every colour and size comes from docs/design/tokens.json, no guessed values",
+      "source": [
+        "owner",
+        "sketch"
+      ],
+      "verify": "visual",
+      "priority": "must",
+      "status": "pass",
+      "evidence": "unit: design tokens [G1] every SCSS token variable matches tokens.json"
+    },
+    {
+      "id": "G2",
+      "group": "Visual fidelity",
+      "requirement": "Timescale chip geometry: label segment 75, value segment 71, height 25, radius 5",
+      "source": [
+        "sketch"
+      ],
+      "verify": "visual",
+      "priority": "must",
+      "status": "pass",
+      "evidence": "measure: .timescale-chip border-radius = \"5px\" (expected \"5px\")"
+    },
+    {
+      "id": "G3",
+      "group": "Visual fidelity",
+      "requirement": "Logo top left with the spacing from the design",
+      "source": [
+        "ref",
+        "sketch"
+      ],
+      "verify": "visual",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "G4",
+      "group": "Visual fidelity",
+      "requirement": "Measure the rendered DOM against the token values (a script prints differences)",
+      "source": [
+        "sketch",
+        "owner"
+      ],
+      "verify": "visual",
+      "priority": "must",
+      "status": "fail",
+      "evidence": "measure: selector not found: .drawer"
+    },
+    {
+      "id": "G5",
+      "group": "Visual fidelity",
+      "requirement": "Type scale matches: body 14 Book, drawer title 20 Medium, chip 13",
+      "source": [
+        "sketch"
+      ],
+      "verify": "visual",
+      "priority": "must",
+      "status": "pass",
+      "evidence": "unit: design tokens [G5] type scale matches the token file"
+    },
+    {
+      "id": "H1",
+      "group": "Deliverables",
+      "requirement": "README with run steps, setup, approach and the libraries used with reasons",
+      "source": [
+        "brief"
+      ],
+      "verify": "manual",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "H2",
+      "group": "Deliverables",
+      "requirement": "Loom demo of 5 to 10 minutes covering every feature, overlap error and the code structure",
+      "source": [
+        "brief"
+      ],
+      "verify": "manual",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "H3",
+      "group": "Deliverables",
+      "requirement": "Public repository with a clean commit history",
+      "source": [
+        "brief"
+      ],
+      "verify": "manual",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "H4",
+      "group": "Deliverables",
+      "requirement": "Prompts used with AI saved as markdown files",
+      "source": [
+        "brief"
+      ],
+      "verify": "manual",
+      "priority": "bonus",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "H5",
+      "group": "Deliverables",
+      "requirement": "Comments explain the date maths and the key decisions",
+      "source": [
+        "brief"
+      ],
+      "verify": "manual",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "H6",
+      "group": "Deliverables",
+      "requirement": "AI prompt log for this build kept in the repo",
+      "source": [
+        "brief"
+      ],
+      "verify": "manual",
+      "priority": "bonus",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "I1",
+      "group": "Bonus features",
+      "requirement": "Infinite horizontal scroll: more columns load as the user scrolls",
+      "source": [
+        "brief",
+        "ref",
+        "cand"
+      ],
+      "verify": "e2e",
+      "priority": "bonus",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "I2",
+      "group": "Bonus features",
+      "requirement": "Today button centres the viewport on today",
+      "source": [
+        "brief",
+        "ref",
+        "cand"
+      ],
+      "verify": "e2e",
+      "priority": "bonus",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "I3",
+      "group": "Bonus features",
+      "requirement": "Smooth animations: drawer slide in and out, bar hover transitions",
+      "source": [
+        "brief"
+      ],
+      "verify": "manual",
+      "priority": "bonus",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "I4",
+      "group": "Bonus features",
+      "requirement": "Automated test suite runs headless and passes",
+      "source": [
+        "brief"
+      ],
+      "verify": "unit",
+      "priority": "bonus",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "I5",
+      "group": "Bonus features",
+      "requirement": "Accessibility: aria labels on controls, focus management, keyboard reachable menu",
+      "source": [
+        "brief"
+      ],
+      "verify": "e2e",
+      "priority": "bonus",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "I6",
+      "group": "Bonus features",
+      "requirement": "OnPush change detection and trackBy on the timeline lists",
+      "source": [
+        "brief"
+      ],
+      "verify": "manual",
+      "priority": "bonus",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "I7",
+      "group": "Bonus features",
+      "requirement": "Responsive: layout does not break on smaller screens, horizontal scroll acceptable",
+      "source": [
+        "brief"
+      ],
+      "verify": "manual",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "I8",
+      "group": "Bonus features",
+      "requirement": "The design covers Month only; Day and Week layouts are derived from the same tokens and look consistent",
+      "source": [
+        "sketch"
+      ],
+      "verify": "visual",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "J1",
+      "group": "Demo evidence",
+      "requirement": "A second Playwright config records a video per requirement test: headed Chrome, slow motion, files under docs/demo/videos/. The fast config used by verify.mjs is not affected.",
+      "source": [
+        "brief"
+      ],
+      "verify": "manual",
+      "priority": "bonus",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "J2",
+      "group": "Demo evidence",
+      "requirement": "npm run demo runs the suite headed with video recording and produces one video per requirement test.",
+      "source": [
+        "brief"
+      ],
+      "verify": "manual",
+      "priority": "bonus",
+      "status": "pending",
+      "evidence": ""
+    },
+    {
+      "id": "J3",
+      "group": "Demo evidence",
+      "requirement": "docs/demo-script.md gives the exact click path for the Loom recording, including how to trigger the overlap error.",
+      "source": [
+        "brief"
+      ],
+      "verify": "manual",
+      "priority": "must",
+      "status": "pending",
+      "evidence": ""
+    }
+  ]
+}

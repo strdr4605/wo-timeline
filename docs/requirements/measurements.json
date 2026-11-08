@@ -1,0 +1,22 @@
+{
+  "_comment": "Selectors depend on the implementation. The builder agent adjusts them once the DOM exists; values come from docs/design/tokens.json and must not be edited to match the app.",
+  "measurements": [
+    { "id": "A5", "selector": "body", "check": "font-family", "expect": "Circular-Std" },
+    { "id": "G4", "selector": ".drawer", "check": "box", "expect": { "width": 591 } },
+    { "id": "G4", "selector": ".drawer", "check": "border-radius", "expect": "12px" },
+    { "id": "B10", "selector": ".work-center-row", "check": "box", "expect": { "height": 48 } },
+    { "id": "C4", "selector": ".work-order-bar", "check": "box", "expect": { "height": 38 } },
+    { "id": "C4", "selector": ".work-order-bar", "check": "border-radius", "expect": "8px" },
+    { "id": "C4", "selector": ".work-order-bar", "check": "background-color", "expect": "#edeeff" },
+    { "id": "C4", "selector": ".work-order-bar", "check": "border-color", "expect": "#dee0ff" },
+    { "id": "C3", "selector": ".work-order-bar[data-status='complete']", "check": "background-color", "expect": "#f8fff3" },
+    { "id": "C3", "selector": ".work-order-bar[data-status='blocked']", "check": "background-color", "expect": "#fffcf1" },
+    { "id": "G2", "selector": ".timescale-chip", "check": "box", "expect": { "height": 25 } },
+    { "id": "G2", "selector": ".timescale-chip", "check": "border-radius", "expect": "5px" },
+    { "id": "G5", "selector": ".work-center-name", "check": "font-size", "expect": "14px" },
+    { "id": "G5", "selector": ".work-center-name", "check": "font-family", "expect": "Circular-Std" },
+    { "id": "G5", "selector": ".drawer__title", "check": "font-size", "expect": "20px" },
+    { "id": "B11", "selector": ".grid-cell", "check": "border-right-color", "expect": "#e6ebf0" },
+    { "id": "C5", "selector": ".work-order-bar__actions", "check": "background-color", "expect": "#f1f3f8" }
+  ]
+}
