@@ -9,5 +9,9 @@
     <app-timescale-chip [value]="timescale()" (valueChange)="timescale.set($event)" />
   </div>
 
-  <app-timeline-grid [timescale]="timescale()" [workCenters]="workCenters" />
+  <app-timeline-grid
+    [timescale]="timescale()"
+    [workCenters]="workCenters()"
+    [workOrders]="workOrders()"
+  />
 </main>

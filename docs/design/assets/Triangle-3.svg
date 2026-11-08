@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="8px" height="5px" viewBox="0 0 8 5" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Triangle</title>
+    <g id="Work-Order-Schedule" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Work-Order-Schedule---Create-New-Event---Active-Text-Field" transform="translate(-1396, -234)" fill="#687196">
+            <g id="Buttons/Alt/Dropdown" transform="translate(1392, 228)">
+                <path d="M8.3904344,6.48804301 L11.350122,10.1876525 C11.6120273,10.5150341 11.3789407,11 10.9596876,11 L5.04031242,11 C4.62105932,11 4.38797268,10.5150341 4.64987802,10.1876525 L7.6095656,6.48804301 C7.80972824,6.2378397 8.19027176,6.2378397 8.3904344,6.48804301 Z" id="Triangle" transform="translate(8, 8.5) rotate(180) translate(-8, -8.5)"></path>
+            </g>
+        </g>
+    </g>
+</svg>

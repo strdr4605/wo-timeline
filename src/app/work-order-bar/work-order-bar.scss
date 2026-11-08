@@ -1,0 +1,218 @@
+@use '../../styles/tokens' as t;
+
+// The bar is placed by the grid, so the host takes no space of its own.
+:host {
+  display: contents;
+}
+
+.work-order-bar {
+  position: absolute;
+  top: 50%;
+  // The bar starts and ends at the interpolated position of its dates, the rule of the day marker.
+  left: calc((var(--start-index) + var(--start-fraction)) * var(--column-width));
+  width: calc(
+    (var(--end-index) + var(--end-fraction) - var(--start-index) - var(--start-fraction)) *
+      var(--column-width)
+  );
+  height: t.$layout-bar-height;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  border: t.$component-bar-border-width solid t.$component-bar-border-color;
+  border-radius: t.$radius-bar;
+  background: t.$component-bar-fill;
+  font-family: t.$font-family;
+}
+
+.work-order-bar[data-status='open'],
+.work-order-bar[data-status='in-progress'] {
+  background: t.$color-status-open-bar-fill;
+  border-color: t.$color-status-open-bar-border;
+}
+
+.work-order-bar[data-status='complete'] {
+  background: t.$color-status-complete-bar-fill;
+  border-color: t.$color-status-complete-bar-border;
+}
+
+.work-order-bar[data-status='blocked'] {
+  background: t.$color-status-blocked-bar-fill;
+  border-color: t.$color-status-blocked-bar-border;
+}
+
+.work-order-bar__name {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  padding-left: t.$layout-bar-text-padding-left;
+  font-size: t.$type-body-size;
+  font-weight: t.$type-body-font-weight;
+  color: t.$type-body-color;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// The badge keeps the space of the three-dot button free, so it never moves when it appears.
+.work-order-bar__badge {
+  flex: none;
+  display: flex;
+  align-items: center;
+  height: t.$layout-badge-height;
+  margin-right: t.$layout-badge-offset-from-bar-end;
+  padding: 0 t.$layout-badge-padding-x;
+  border-radius: t.$radius-badge;
+  background: t.$color-status-open-badge-fill;
+  font-size: t.$component-badge-text-size;
+  font-weight: t.$type-body-font-weight;
+  color: t.$color-status-open-text;
+  white-space: nowrap;
+}
+
+.work-order-bar[data-status='complete'] .work-order-bar__badge {
+  background: t.$color-status-complete-badge-fill;
+  color: t.$color-status-complete-text;
+}
+
+.work-order-bar[data-status='blocked'] .work-order-bar__badge {
+  background: t.$color-status-blocked-badge-fill;
+  color: t.$color-status-blocked-text;
+}
+
+// The drag handles sit at both ends of the bar and show on hover.
+.work-order-bar__handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: t.$layout-bar-handle-width;
+  background: t.$layout-bar-handle-fill;
+  opacity: 0;
+}
+
+.work-order-bar__handle--start {
+  // The handle covers the border of the bar, as in the design.
+  left: -#{t.$component-bar-border-width};
+  border-radius: t.$radius-bar 0 0 t.$radius-bar;
+}
+
+.work-order-bar__handle--end {
+  right: -#{t.$component-bar-border-width};
+  border-radius: 0 t.$radius-bar t.$radius-bar 0;
+}
+
+.work-order-bar--hovered .work-order-bar__handle {
+  opacity: 1;
+}
+
+.work-order-bar__actions {
+  position: absolute;
+  top: 50%;
+  right: t.$layout-bar-actions-button-gap-to-bar-end;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: t.$layout-bar-actions-button-width;
+  height: t.$layout-bar-actions-button-height;
+  padding: 0;
+  border: 0;
+  background: t.$layout-bar-actions-button-fill;
+  opacity: 0;
+  pointer-events: none;
+  cursor: pointer;
+}
+
+.work-order-bar--hovered .work-order-bar__actions {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.work-order-bar__dots {
+  display: flex;
+  justify-content: space-between;
+  width: t.$layout-bar-actions-button-dot-group-width;
+}
+
+.work-order-bar__dots span {
+  width: t.$layout-bar-actions-button-dot-size;
+  height: t.$layout-bar-actions-button-dot-size;
+  border-radius: 50%;
+  background: t.$layout-bar-actions-button-dot-color;
+}
+
+// The menu of the design, not a system menu.
+.work-order-menu {
+  position: absolute;
+  top: 100%;
+  left: calc(
+    100% - (t.$layout-bar-actions-button-width + t.$layout-bar-actions-button-gap-to-bar-end)
+  );
+  z-index: 10;
+  width: t.$layout-dropdown-menu-width;
+  padding: t.$layout-dropdown-menu-padding-y 0;
+  border: t.$layout-grid-vertical-grid-line-width solid rgba(t.$color-text-secondary, 0.1);
+  border-radius: t.$layout-dropdown-menu-radius;
+  background: t.$color-surface-panel;
+  box-shadow:
+    0 t.$layout-dropdown-menu-shadow-y t.$layout-dropdown-menu-shadow-blur
+    t.$layout-dropdown-menu-shadow-color;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.work-order-menu--open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.work-order-menu__item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: t.$layout-dropdown-menu-row-height;
+  padding: 0 t.$layout-dropdown-menu-row-padding-x;
+  border: 0;
+  background: t.$color-surface-chip-bg;
+  font-family: t.$font-family;
+  font-size: t.$component-menu-item-size;
+  font-weight: t.$type-body-font-weight;
+  color: t.$component-menu-item-default;
+  text-align: left;
+  cursor: pointer;
+}
+
+.work-order-menu__item:hover {
+  background: t.$layout-dropdown-menu-row-hover-fill;
+}
+
+.work-order-menu__item--danger {
+  color: t.$component-menu-item-danger;
+}
+
+.work-order-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  z-index: 9;
+  display: flex;
+  align-items: center;
+  gap: t.$layout-tooltip-gap;
+  height: t.$layout-tooltip-height;
+  padding: 0 t.$layout-tooltip-padding-x;
+  border-radius: t.$layout-tooltip-radius;
+  background: t.$layout-tooltip-bg;
+  font-family: t.$font-family;
+  font-size: t.$type-tooltip-size;
+  font-weight: t.$type-tooltip-font-weight;
+  color: t.$type-tooltip-color;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.work-order-tooltip--visible {
+  opacity: 1;
+}
+
+.work-order-tooltip__name {
+  font-weight: t.$type-tooltip-bold-font-weight;
+}

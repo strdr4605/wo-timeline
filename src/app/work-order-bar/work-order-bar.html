@@ -1,0 +1,56 @@
+<div
+  class="work-order-bar"
+  [attr.data-status]="order().status"
+  [class.work-order-bar--hovered]="hovered()"
+  [class.work-order-bar--menu-open]="menuOpen()"
+  [style.--start-index]="start().index"
+  [style.--start-fraction]="start().fraction"
+  [style.--end-index]="end().index"
+  [style.--end-fraction]="end().fraction"
+  (mouseenter)="hovered.set(true)"
+  (mouseleave)="hovered.set(false)"
+>
+  <span class="work-order-bar__handle work-order-bar__handle--start" aria-hidden="true"></span>
+
+  <span class="work-order-bar__name">{{ order().name }}</span>
+
+  <span class="work-order-bar__badge">{{ statusLabel() }}</span>
+
+  <span class="work-order-bar__handle work-order-bar__handle--end" aria-hidden="true"></span>
+
+  <button
+    type="button"
+    class="work-order-bar__actions"
+    aria-label="Work order actions"
+    [attr.aria-expanded]="menuOpen()"
+    (click)="toggleMenu($event)"
+  >
+    <span class="work-order-bar__dots" aria-hidden="true">
+      <span></span>
+      <span></span>
+      <span></span>
+    </span>
+  </button>
+
+  <div class="work-order-menu" role="menu" [class.work-order-menu--open]="menuOpen()">
+    <!-- Edit and Delete do nothing yet: the drawer arrives in the next wave. -->
+    <button type="button" class="work-order-menu__item" role="menuitem">Edit</button>
+    <button
+      type="button"
+      class="work-order-menu__item work-order-menu__item--danger"
+      role="menuitem"
+    >
+      Delete
+    </button>
+  </div>
+
+  <div
+    class="work-order-tooltip"
+    role="tooltip"
+    [class.work-order-tooltip--visible]="hovered() && !menuOpen()"
+  >
+    <span class="work-order-tooltip__name">{{ order().name }}</span>
+    <span class="work-order-tooltip__status">{{ statusLabel() }}</span>
+    <span class="work-order-tooltip__dates">{{ dateRange() }}</span>
+  </div>
+</div>

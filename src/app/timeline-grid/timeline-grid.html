@@ -47,6 +47,14 @@
             @for (column of columns(); track column.key) {
               <div class="grid-cell grid-cell--row"></div>
             }
+
+            @for (bar of barsOf(center.id); track bar.order.docId) {
+              <app-work-order-bar
+                [order]="bar.order"
+                [start]="bar.start"
+                [end]="bar.end"
+              />
+            }
           </div>
         }
       </div>

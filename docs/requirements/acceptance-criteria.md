@@ -2,7 +2,7 @@
 
 Work Order Schedule Timeline (Naologic front-end take-home). Generated from `acceptance-criteria.json` - edit the JSON, then run `node docs/requirements/render.mjs`.
 
-Progress: 16 pass, 4 fail, 0 open decision, 51 pending.
+Progress: 28 pass, 1 fail, 0 open decision, 42 pending.
 
 Legend: `[x]` pass, `[ ]` pending, `[?]` open decision. An item may only be marked pass with an evidence command (test name, screenshot path or measurement output) in the JSON `evidence` field.
 
@@ -36,14 +36,14 @@ Legend: `[x]` pass, `[ ]` pending, `[?]` open decision. An item may only be mark
 
 | | id | requirement | source | verify | priority | evidence |
 |---|---|---|---|---|---|---|
-| [ ] | C1 | Bar start position equals work order start date, end position equals end date | brief | unit | must |  |
-| [ ] | C2 | Bar shows the work order name and a status badge | brief, sketch | visual | must |  |
-| [ ] | C3 | Status colours: open and in-progress #3e40db, complete #08a268, blocked #b13600, on the badge fills #d6d8ff / #e1ffcc / #fceeb5 | sketch, brief | visual | must | measure: selector not found: .work-order-bar[data-status='blocked'] |
-| [ ] | C4 | Bar height 38, radius 8, 1px border #dee0ff / #d1fab3 / #fff5cf by status | sketch | visual | must | measure: selector not found: .work-order-bar |
-| [ ] | C5 | Three-dot actions button appears on bar hover and opens a menu with Edit and Delete | brief, owner, ref | e2e | must | measure: selector not found: .work-order-bar__actions |
-| [ ] | C6 | Menu styled like the design (width 200, rows 28, radius 5), not a system menu | owner, sketch | visual | must |  |
-| [ ] | C7 | Hover tooltip on the bar shows name, status and the full date range | brief, ref, cand | e2e | bonus |  |
-| [ ] | C8 | Drag handles at both ends of the bar on hover (design shows them) | sketch, ref | e2e | bonus |  |
+| [x] | C1 | Bar start position equals work order start date, end position equals end date | brief | unit | must | unit: timeline positions [C1] a date is placed at the interpolated position of its column |
+| [x] | C2 | Bar shows the work order name and a status badge | brief, sketch | visual | must | e2e: [C2] the bar shows the work order name and a status badge |
+| [x] | C3 | Status colours: open and in-progress #3e40db, complete #08a268, blocked #b13600, on the badge fills #d6d8ff / #e1ffcc / #fceeb5 | sketch, brief | visual | must | e2e: [C3] every status has the colours of the design |
+| [x] | C4 | Bar height 38, radius 8, 1px border #dee0ff / #d1fab3 / #fff5cf by status | sketch | visual | must | e2e: [C4] the bar is 38 high, has a radius of 8 and a 1px border |
+| [x] | C5 | Three-dot actions button appears on bar hover and opens a menu with Edit and Delete | brief, owner, ref | e2e | must | e2e: [C5] the three-dot button appears on hover and opens a menu with Edit and Delete |
+| [x] | C6 | Menu styled like the design (width 200, rows 28, radius 5), not a system menu | owner, sketch | visual | must | e2e: [C6] the menu is the menu of the design, not a system menu |
+| [x] | C7 | Hover tooltip on the bar shows name, status and the full date range | brief, ref, cand | e2e | bonus | e2e: [C7] the bar shows a tooltip with name, status and the full date range |
+| [x] | C8 | Drag handles at both ends of the bar on hover (design shows them) | sketch, ref | e2e | bonus | e2e: [C8] the bar shows a drag handle at both ends on hover |
 
 ## Create and edit drawer
 
@@ -79,10 +79,10 @@ Legend: `[x]` pass, `[ ]` pending, `[?]` open decision. An item may only be mark
 
 | | id | requirement | source | verify | priority | evidence |
 |---|---|---|---|---|---|---|
-| [ ] | F1 | At least 5 work centers with realistic manufacturing names | brief | unit | must |  |
-| [ ] | F2 | At least 8 work orders across the centres, all 4 statuses present, one centre with several non-overlapping orders | brief | unit | must |  |
-| [ ] | F3 | Documents follow the docId / docType / data structure | brief | unit | must |  |
-| [ ] | F4 | Overlap detection lives in a service as a pure, testable function | brief, ref | unit | must |  |
+| [x] | F1 | At least 5 work centers with realistic manufacturing names | brief | unit | must | unit: sample data [F1] at least 5 work centers with realistic manufacturing names |
+| [x] | F2 | At least 8 work orders across the centres, all 4 statuses present, one centre with several non-overlapping orders | brief | unit | must | unit: sample data [F2] at least 8 work orders, all 4 statuses, one centre with several orders |
+| [x] | F3 | Documents follow the docId / docType / data structure | brief | unit | must | unit: sample data [F3] the documents follow the docId / docType / data structure |
+| [x] | F4 | Overlap detection lives in a service as a pure, testable function | brief, ref | unit | must | unit: sample data [F4] the overlap detection is a pure function of the service |
 | [ ] | F5 | localStorage persistence: work orders survive a reload | brief, ref | e2e | bonus |  |
 
 ## Visual fidelity

@@ -8,22 +8,35 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
+import { WorkOrder } from '../data/sample-data';
 import {
   Timescale,
   TimelineColumn,
   WorkCenter,
   buildColumns,
+  parseIsoDate,
+  positionInColumns,
   todayPosition,
 } from '../timeline/timeline';
+import { BarPosition, WorkOrderBar } from '../work-order-bar/work-order-bar';
+
+/** A bar with the two positions it is placed by. */
+interface BarPlacement {
+  order: WorkOrder;
+  start: BarPosition;
+  end: BarPosition;
+}
 
 @Component({
   selector: 'app-timeline-grid',
+  imports: [WorkOrderBar],
   templateUrl: './timeline-grid.html',
   styleUrl: './timeline-grid.scss',
 })
 export class TimelineGrid implements AfterViewInit {
   readonly timescale = input.required<Timescale>();
   readonly workCenters = input.required<WorkCenter[]>();
+  readonly workOrders = input.required<WorkOrder[]>();
 
   /** Captured once, so every column of one render speaks about the same day. */
   private readonly now = new Date();
@@ -35,6 +48,24 @@ export class TimelineGrid implements AfterViewInit {
   protected readonly currentIndex = computed(() =>
     this.columns().findIndex((column) => column.current),
   );
+
+  /** The bars of every work centre, placed by the dates of the order. */
+  private readonly barsByCenter = computed(() => {
+    const columns = this.columns();
+    const timescale = this.timescale();
+    const bars = new Map<string, BarPlacement[]>();
+
+    for (const order of this.workOrders()) {
+      const placement: BarPlacement = {
+        order,
+        start: positionInColumns(columns, timescale, parseIsoDate(order.startDate)),
+        end: positionInColumns(columns, timescale, parseIsoDate(order.endDate)),
+      };
+      bars.set(order.workCenterId, [...(bars.get(order.workCenterId) ?? []), placement]);
+    }
+
+    return bars;
+  });
 
   /** The work centre whose row is hovered. The rail row and the timeline row hover together. */
   protected readonly hovered = signal<string | null>(null);
@@ -53,6 +84,11 @@ export class TimelineGrid implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.centerOnToday();
+  }
+
+  /** The bars of one work centre. */
+  protected barsOf(workCenterId: string): BarPlacement[] {
+    return this.barsByCenter().get(workCenterId) ?? [];
   }
 
   /** Scrolls the timeline so that today sits in the middle of the visible grid. */

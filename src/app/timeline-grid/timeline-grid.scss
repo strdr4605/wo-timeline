@@ -117,6 +117,7 @@
 }
 
 .grid-row {
+  position: relative;
   display: flex;
   height: t.$layout-grid-row-height;
   border-top: t.$layout-grid-horizontal-grid-line-width solid

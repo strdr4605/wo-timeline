@@ -3,8 +3,7 @@
  *
  * The grid has one column per period: a day, a week or a month. Every column
  * has a fixed pixel width, so a date inside a column is placed by the fraction
- * of the period that has passed. A later wave reuses that fraction to place the
- * work order bars.
+ * of the period that has passed. The work order bars use the same fraction.
  */
 
 export type Timescale = 'Day' | 'Week' | 'Month';
@@ -88,6 +87,68 @@ export function todayPosition(
   const elapsed = dayNumber(today) - dayNumber(column.start);
 
   return { index, fraction: span > 0 ? elapsed / span : 0 };
+}
+
+/**
+ * Where a date sits in the timeline: the index of its column and the fraction of that column.
+ *
+ * The rule is the one of the current day marker, so a bar starts and ends at the same place as
+ * the marker of that day. A date outside the rendered columns keeps its index: the columns are
+ * consecutive periods, so the index is a distance from the first column.
+ */
+export function positionInColumns(
+  columns: TimelineColumn[],
+  timescale: Timescale,
+  date: Date,
+): { index: number; fraction: number } {
+  const first = columns[0].start;
+  const index = periodNumber(timescale, date) - periodNumber(timescale, first);
+
+  const start = periodStart(timescale, date);
+  const end = periodEnd(timescale, date);
+  const span = dayNumber(end) - dayNumber(start);
+  const elapsed = dayNumber(date) - dayNumber(start);
+
+  return { index, fraction: span > 0 ? elapsed / span : 0 };
+}
+
+/** An ISO date, yyyy-mm-dd, as a local date. The app works with local calendar days. */
+export function parseIsoDate(isoDate: string): Date {
+  const [year, month, day] = isoDate.split('-').map(Number);
+  return new Date(year, month - 1, day);
+}
+
+/** The number of the period a date belongs to, counted from an arbitrary origin. */
+function periodNumber(timescale: Timescale, date: Date): number {
+  if (timescale === 'Day') {
+    return dayNumber(startOfDay(date));
+  }
+  if (timescale === 'Week') {
+    return Math.floor(dayNumber(startOfWeek(date)) / 7);
+  }
+  return date.getFullYear() * 12 + date.getMonth();
+}
+
+/** The first day of the period a date belongs to. */
+function periodStart(timescale: Timescale, date: Date): Date {
+  if (timescale === 'Day') {
+    return startOfDay(date);
+  }
+  if (timescale === 'Week') {
+    return startOfWeek(date);
+  }
+  return new Date(date.getFullYear(), date.getMonth(), 1);
+}
+
+/** The first day after the period a date belongs to. */
+function periodEnd(timescale: Timescale, date: Date): Date {
+  if (timescale === 'Day') {
+    return addDays(startOfDay(date), 1);
+  }
+  if (timescale === 'Week') {
+    return addDays(startOfWeek(date), 7);
+  }
+  return new Date(date.getFullYear(), date.getMonth() + 1, 1);
 }
 
 function startOfDay(date: Date): Date {
