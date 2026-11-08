@@ -31,6 +31,8 @@ A builder must not repeat this work. Use these numbers.
 | Rows 3 to 5 | 48 high each. Background `#f7f9fc`, the same as the page. |
 | Hovered row | the row under the pointer is `#eef0ff` (`brand.surfaceStrong`) in the timeline. In the rail the same row is `#fafbfd`. |
 | Hovered empty cell | 113 x 38 at (675, 303), rounded 8, fill `#eef0ff`. |
+| Row separator | The design draws the separator at the bottom of a row. The first row is 60 high and its separator sits inside the box (the row 1 ends at y 298). The rows 2 and up are 48 high and their separator sits below the box (the row 2 is 298 to 346, the line is at 346). So: the first row needs a bottom border, the other rows need a line outside the box. The height of the box stays 60 and 48. |
+| Column separator | 1px line at the start of every column, from y 238 down to the bottom of the grid. |
 
 ## Rail
 
