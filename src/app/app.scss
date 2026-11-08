@@ -4,7 +4,7 @@
   position: relative;
   height: t.$layout-top-bar-height;
   background: t.$color-surface-panel;
-  border-bottom: 1px solid t.$color-border-grid;
+  border-bottom: t.$layout-grid-vertical-grid-line-width solid t.$color-border-grid;
 }
 
 .logo {
@@ -18,7 +18,6 @@
 
 .page {
   padding-left: t.$layout-grid-left-rail-x;
-  padding-right: t.$layout-grid-left-rail-x;
 }
 
 .page__title {
@@ -36,73 +35,16 @@
 }
 
 .toolbar {
+  position: relative;
+  // The design puts the chip one pixel left of the grid rail.
+  left: -1px;
   height: t.$layout-toolbar-timescale-h;
 }
 
-.grid {
-  display: flex;
+app-timeline-grid {
+  display: block;
+  // The grid starts at the header band of the design.
   margin-top: (
     t.$layout-grid-header-top - t.$layout-toolbar-timescale-y - t.$layout-toolbar-timescale-h
   );
-}
-
-.grid__rail {
-  width: t.$layout-grid-left-rail-w;
-  flex: none;
-}
-
-.grid__rail-header,
-.grid__header {
-  height: (t.$layout-grid-header-bottom - t.$layout-grid-header-top);
-}
-
-.grid__rail-header {
-  display: flex;
-  align-items: center;
-  font-family: t.$font-family;
-  font-size: t.$type-label-size;
-  font-weight: t.$type-label-font-weight;
-  color: t.$type-label-color;
-}
-
-.work-center-row {
-  display: flex;
-  align-items: center;
-  height: t.$layout-grid-row-height;
-  border-top: 1px solid t.$color-border-grid;
-}
-
-.work-center-name {
-  font-family: t.$font-family;
-  font-size: t.$type-body-size;
-  font-weight: t.$type-body-font-weight;
-  color: t.$type-body-color;
-}
-
-.grid__timeline {
-  flex: 1;
-  border-left: 1px solid t.$color-border-grid;
-}
-
-.grid__header {
-  display: flex;
-}
-
-.grid__body {
-  border-top: 1px solid t.$color-border-grid;
-}
-
-.grid-cell {
-  width: t.$layout-grid-header-column-width-month;
-  flex: none;
-  border-right: 1px solid t.$color-border-grid;
-  font-family: t.$font-family;
-  font-size: t.$type-label-size;
-  font-weight: t.$type-label-font-weight;
-  color: t.$type-label-color;
-}
-
-.grid-cell--row {
-  height: t.$layout-grid-row-height;
-  border-top: 1px solid t.$color-border-grid;
 }

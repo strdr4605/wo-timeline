@@ -5,6 +5,7 @@
     { "id": "G4", "selector": ".drawer", "check": "box", "expect": { "width": 591 } },
     { "id": "G4", "selector": ".drawer", "check": "border-radius", "expect": "12px" },
     { "id": "B10", "selector": ".work-center-row", "check": "box", "expect": { "height": 48 } },
+    { "id": "B10", "selector": ".grid__rail", "check": "box", "expect": { "width": 380 } },
     { "id": "C4", "selector": ".work-order-bar", "check": "box", "expect": { "height": 38 } },
     { "id": "C4", "selector": ".work-order-bar", "check": "border-radius", "expect": "8px" },
     { "id": "C4", "selector": ".work-order-bar", "check": "background-color", "expect": "#edeeff" },
@@ -17,6 +18,11 @@
     { "id": "G5", "selector": ".work-center-name", "check": "font-family", "expect": "Circular-Std" },
     { "id": "G5", "selector": ".drawer__title", "check": "font-size", "expect": "20px" },
     { "id": "B11", "selector": ".grid-cell", "check": "border-right-color", "expect": "#e6ebf0" },
+    { "id": "B11", "selector": ".grid-cell", "check": "border-right-width", "expect": "1px" },
+    { "id": "B5", "selector": ".grid-header-cell", "check": "box", "expect": { "width": 114 } },
+    { "id": "B6", "selector": ".grid-header-cell--current .grid-header-cell__label", "check": "background-color", "expect": "#d4d7ff" },
+    { "id": "B6", "selector": ".grid-current-marker", "check": "box", "expect": { "width": 3 } },
+    { "id": "B6", "selector": ".grid-current-marker", "check": "background-color", "expect": "#d4d7ff" },
     { "id": "C5", "selector": ".work-order-bar__actions", "check": "background-color", "expect": "#f1f3f8" }
   ]
 }

@@ -1,6 +1,11 @@
 @use 'sass:math';
 @use '../../styles/tokens' as t;
 
+:host {
+  display: inline-block;
+  position: relative;
+}
+
 .timescale-chip {
   display: inline-flex;
   align-items: stretch;
@@ -31,10 +36,18 @@
   justify-content: space-between;
   width: t.$component-scale-chip-segments-value-w;
   padding: 0 t.$layout-badge-padding-x;
+  border: 0;
   background: t.$component-scale-chip-segments-value-fill;
+  font-family: t.$font-family;
   font-size: t.$type-chip-value-size;
   font-weight: t.$type-chip-value-font-weight;
   color: t.$type-chip-value-color;
+  cursor: pointer;
+}
+
+.timescale-chip__value:focus-visible {
+  outline: t.$color-border-focus solid t.$layout-grid-vertical-grid-line-width;
+  outline-offset: -1px;
 }
 
 .timescale-chip__chevron {
@@ -43,4 +56,43 @@
   border-left: math.div(t.$layout-toolbar-timescale-chevron-w, 2) solid transparent;
   border-right: math.div(t.$layout-toolbar-timescale-chevron-w, 2) solid transparent;
   border-top: t.$layout-toolbar-timescale-chevron-h solid t.$color-text-secondary;
+}
+
+// The menu hangs under the value segment of the chip.
+.timescale-menu {
+  position: absolute;
+  top: 100%;
+  left: t.$component-scale-chip-segments-label-w;
+  z-index: 3;
+  width: t.$layout-dropdown-menu-width;
+  background: t.$color-surface-panel;
+  border: t.$layout-grid-vertical-grid-line-width solid rgba(t.$color-text-secondary, 0.1);
+  border-radius: t.$layout-dropdown-menu-radius;
+  box-shadow:
+    0 t.$layout-dropdown-menu-shadow-y t.$layout-dropdown-menu-shadow-blur
+    t.$layout-dropdown-menu-shadow-color;
+}
+
+.timescale-menu__item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: t.$layout-dropdown-menu-row-height;
+  padding: 0 t.$layout-dropdown-menu-row-padding-x;
+  border: 0;
+  background: transparent;
+  font-family: t.$font-family;
+  font-size: t.$component-menu-item-size;
+  font-weight: t.$type-body-font-weight;
+  color: t.$component-menu-item-default;
+  text-align: left;
+  cursor: pointer;
+}
+
+.timescale-menu__item:hover {
+  background: t.$color-surface-chip-bg;
+}
+
+.timescale-menu__item--selected {
+  color: t.$color-brand-primary;
 }

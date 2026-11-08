@@ -2,7 +2,7 @@
 
 Work Order Schedule Timeline (Naologic front-end take-home). Generated from `acceptance-criteria.json` - edit the JSON, then run `node docs/requirements/render.mjs`.
 
-Progress: 7 pass, 4 fail, 1 open decision, 59 pending.
+Progress: 16 pass, 4 fail, 0 open decision, 51 pending.
 
 Legend: `[x]` pass, `[ ]` pending, `[?]` open decision. An item may only be marked pass with an evidence command (test name, screenshot path or measurement output) in the JSON `evidence` field.
 
@@ -20,17 +20,17 @@ Legend: `[x]` pass, `[ ]` pending, `[?]` open decision. An item may only be mark
 
 | | id | requirement | source | verify | priority | evidence |
 |---|---|---|---|---|---|---|
-| [ ] | B1 | Work center panel on the left stays fixed while the timeline scrolls horizontally | brief, owner, ref | e2e | must |  |
-| [ ] | B2 | Timeline grid scrolls horizontally | brief | e2e | must |  |
-| [ ] | B3 | Timescale dropdown offers Day, Week, Month (Hour is optional extra) | brief, owner, ref | e2e | must |  |
-| [?] | B4 | Default timescale is Month. The written brief says Day; the owner video, both candidate demos and every Sketch artboard show Month. The decision is recorded in docs/decisions/2026-11-08-grill-session.md (Q1). Month is the default; switching to Day later is a one-constant change. | owner, ref, cand | e2e | must |  |
-| [ ] | B5 | Header row re-labels per zoom level (month names, week starts, day numbers) | brief, sketch | visual | must |  |
-| [ ] | B6 | Current period indicator: highlighted current month pill in the header plus a vertical line on the grid | sketch, ref | visual | must |  |
-| [ ] | B7 | Current day indicator line on the grid | brief | e2e | must |  |
-| [ ] | B8 | Initial view centres on today with a buffer (about two weeks either side in Day view) | brief | e2e | must |  |
-| [ ] | B9 | Row hover highlights the row background | brief, owner, ref | e2e | must |  |
-| [x] | B10 | Row height 48, bars aligned with their work center row, left panel width 380 | sketch, ref | visual | must | measure: .work-center-row box = {"width":380,"height":48} (expected {"height":48}) |
-| [x] | B11 | Grid lines 1px #e6ebf0, column dividers per timescale | sketch | visual | must | measure: .grid-cell border-right-color = "#e6ebf0" (expected "#e6ebf0") |
+| [x] | B1 | Work center panel on the left stays fixed while the timeline scrolls horizontally | brief, owner, ref | e2e | must | e2e: [B1] the work center panel stays fixed while the timeline scrolls sideways |
+| [x] | B2 | Timeline grid scrolls horizontally | brief | e2e | must | e2e: [B2] the timeline grid scrolls horizontally |
+| [x] | B3 | Timescale dropdown offers Day, Week, Month (Hour is optional extra) | brief, owner, ref | e2e | must | e2e: [B3] the timescale dropdown offers Day, Week and Month |
+| [x] | B4 | Default timescale is Month. The written brief says Day; the owner video, both candidate demos and every Sketch artboard show Month. The decision is recorded in docs/decisions/2026-11-08-grill-session.md (Q1). Month is the default; switching to Day later is a one-constant change. | owner, ref, cand | e2e | must | e2e: [B4] the default timescale is Month |
+| [x] | B5 | Header row re-labels per zoom level (month names, week starts, day numbers) | brief, sketch | visual | must | e2e: [B5] the header row re-labels per zoom level |
+| [x] | B6 | Current period indicator: highlighted current month pill in the header plus a vertical line on the grid | sketch, ref | visual | must | e2e: [B6] the current period shows a pill in the header and a vertical line |
+| [x] | B7 | Current day indicator line on the grid | brief | e2e | must | e2e: [B7] the grid shows a line for the current day |
+| [x] | B8 | Initial view centres on today with a buffer (about two weeks either side in Day view) | brief | e2e | must | e2e: [B8] the initial view centres on today with a buffer |
+| [x] | B9 | Row hover highlights the row background | brief, owner, ref | e2e | must | e2e: [B9] hovering a row highlights the row background |
+| [x] | B10 | Row height 48, bars aligned with their work center row, left panel width 380 | sketch, ref | visual | must | e2e: [B10] rows are 48 high and the work center panel is 380 wide |
+| [x] | B11 | Grid lines 1px #e6ebf0, column dividers per timescale | sketch | visual | must | e2e: [B11] grid lines are 1px #e6ebf0 and columns follow the timescale |
 
 ## Work order bars
 

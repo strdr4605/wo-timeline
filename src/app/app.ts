@@ -1,21 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
+import { Timescale, WorkCenter } from './timeline/timeline';
 import { TimescaleChip } from './timescale-chip/timescale-chip';
-
-interface WorkCenter {
-  id: string;
-  name: string;
-}
+import { TimelineGrid } from './timeline-grid/timeline-grid';
 
 @Component({
   selector: 'app-root',
-  imports: [TimescaleChip],
+  imports: [TimescaleChip, TimelineGrid],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
 export class App {
-  protected readonly timescale = 'Month';
-
-  protected readonly months = ['Nov 2026', 'Dec 2026', 'Jan 2027', 'Feb 2027'];
+  /** Month is the default of the design and of the owner demo. See decision Q1. */
+  protected readonly timescale = signal<Timescale>('Month');
 
   // Placeholder rows. The sample data set belongs to a later wave.
   protected readonly workCenters: WorkCenter[] = [

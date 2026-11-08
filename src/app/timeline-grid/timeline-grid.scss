@@ -1,0 +1,173 @@
+@use '../../styles/tokens' as t;
+
+.grid {
+  // The grid fills the space under the header band and scrolls in both directions.
+  height: calc(100vh - #{t.$layout-grid-header-top});
+  overflow: auto;
+}
+
+.grid__inner {
+  display: flex;
+  width: max-content;
+  min-width: 100%;
+}
+
+// The rail stays put while the timeline scrolls sideways.
+.grid__rail {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  flex: none;
+  width: t.$layout-grid-left-rail-w;
+  background: t.$color-surface-panel;
+}
+
+.grid__rail-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  height: (t.$layout-grid-header-bottom - t.$layout-grid-header-top);
+  padding-left: t.$layout-grid-left-rail-name-padding-x;
+  border-top: t.$layout-grid-horizontal-grid-line-width solid
+    t.$layout-grid-horizontal-grid-line-color;
+  border-bottom: t.$layout-grid-horizontal-grid-line-width solid
+    t.$layout-grid-horizontal-grid-line-color;
+  background: t.$color-surface-panel;
+  font-family: t.$font-family;
+  font-size: t.$type-label-secondary-size;
+  font-weight: t.$type-label-secondary-font-weight;
+  color: t.$type-label-secondary-color;
+}
+
+.work-center-row {
+  display: flex;
+  align-items: center;
+  height: t.$layout-grid-row-height;
+  padding-left: t.$layout-grid-left-rail-name-padding-x;
+  border-top: t.$layout-grid-horizontal-grid-line-width solid
+    t.$layout-grid-horizontal-grid-line-color;
+}
+
+.work-center-name {
+  font-family: t.$font-family;
+  font-size: t.$type-body-size;
+  font-weight: t.$type-body-font-weight;
+  color: t.$type-body-color;
+}
+
+.work-center-row--alternate {
+  background: t.$color-surface-row-alternate;
+}
+
+.work-center-row:hover {
+  background: rgba(t.$color-surface-row-hover, t.$color-surface-row-hover-alpha);
+}
+
+.grid__timeline {
+  position: relative;
+  flex: none;
+  border-left: t.$layout-grid-vertical-grid-line-width solid
+    t.$layout-grid-vertical-grid-line-color;
+}
+
+// The column width is the only size the grid needs per zoom level.
+.grid__timeline--month {
+  --column-width: #{t.$layout-grid-header-column-width-month};
+}
+
+.grid__timeline--week {
+  --column-width: #{t.$layout-grid-header-column-width-week};
+}
+
+.grid__timeline--day {
+  --column-width: #{t.$layout-grid-header-column-width-day};
+}
+
+.grid__header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  height: (t.$layout-grid-header-bottom - t.$layout-grid-header-top);
+  border-top: t.$layout-grid-horizontal-grid-line-width solid
+    t.$layout-grid-horizontal-grid-line-color;
+  border-bottom: t.$layout-grid-horizontal-grid-line-width solid
+    t.$layout-grid-horizontal-grid-line-color;
+  background: t.$color-surface-page;
+}
+
+.grid-cell {
+  flex: none;
+  width: var(--column-width);
+  border-right: t.$layout-grid-vertical-grid-line-width solid
+    t.$layout-grid-vertical-grid-line-color;
+  font-family: t.$font-family;
+}
+
+.grid-header-cell {
+  display: flex;
+  align-items: center;
+  padding-left: t.$layout-grid-header-label-padding-x;
+  font-size: t.$type-label-secondary-size;
+  font-weight: t.$type-label-secondary-font-weight;
+  color: t.$type-label-secondary-color;
+}
+
+.grid-header-cell__label--pill {
+  display: inline-flex;
+  align-items: center;
+  height: t.$layout-badge-height;
+  padding: 0 t.$layout-badge-padding-x;
+  border-radius: t.$radius-badge;
+  background: t.$color-brand-tint;
+  color: t.$color-brand-primary;
+}
+
+.grid-row {
+  display: flex;
+  height: t.$layout-grid-row-height;
+  border-top: t.$layout-grid-horizontal-grid-line-width solid
+    t.$layout-grid-horizontal-grid-line-color;
+}
+
+.grid-cell--row {
+  height: t.$layout-grid-row-height;
+}
+
+.grid-row--alternate {
+  background: t.$color-surface-row-alternate;
+}
+
+.grid-row:hover {
+  background: rgba(t.$color-surface-row-hover, t.$color-surface-row-hover-alpha);
+}
+
+// The markers sit over the rows, from the header band down to the last row.
+.grid__markers {
+  position: absolute;
+  top: (t.$layout-grid-header-bottom - t.$layout-grid-header-top);
+  right: 0;
+  bottom: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+.grid-current-marker {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--col-index) * var(--column-width));
+  width: t.$layout-grid-current-month-marker-width;
+  background: t.$layout-grid-current-month-marker-color;
+}
+
+.grid-today-marker {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc((var(--col-index) + var(--col-fraction)) * var(--column-width));
+  width: t.$layout-grid-today-marker-width;
+  background: t.$layout-grid-today-marker-color;
+}

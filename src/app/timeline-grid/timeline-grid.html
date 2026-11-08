@@ -1,0 +1,60 @@
+<section class="grid" #scroller>
+  <div class="grid__inner">
+    <div class="grid__rail" #rail>
+      <div class="grid__rail-header">Work Center</div>
+      <div class="grid__rail-body">
+        @for (center of workCenters(); track center.id; let index = $index) {
+          <div
+            class="work-center-row"
+            [class.work-center-row--alternate]="index % 2 === 1"
+          >
+            <span class="work-center-name">{{ center.name }}</span>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div
+      class="grid__timeline"
+      #timeline
+      [class.grid__timeline--day]="timescale() === 'Day'"
+      [class.grid__timeline--week]="timescale() === 'Week'"
+      [class.grid__timeline--month]="timescale() === 'Month'"
+    >
+      <div class="grid__header">
+        @for (column of columns(); track column.key) {
+          <div
+            class="grid-cell grid-header-cell"
+            [class.grid-header-cell--current]="column.current"
+          >
+            <span
+              class="grid-header-cell__label"
+              [class.grid-header-cell__label--pill]="column.current"
+            >
+              {{ column.label }}
+            </span>
+          </div>
+        }
+      </div>
+
+      <div class="grid__body">
+        @for (center of workCenters(); track center.id; let index = $index) {
+          <div class="grid-row" [class.grid-row--alternate]="index % 2 === 1">
+            @for (column of columns(); track column.key) {
+              <div class="grid-cell grid-cell--row"></div>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="grid__markers">
+        <div class="grid-current-marker" [style.--col-index]="currentIndex()"></div>
+        <div
+          class="grid-today-marker"
+          [style.--col-index]="today().index"
+          [style.--col-fraction]="today().fraction"
+        ></div>
+      </div>
+    </div>
+  </div>
+</section>
