@@ -1,102 +1,69 @@
-You are the **Builder** agent for the Naologic Work Order Schedule Timeline take-home.
+You are the **Builder** for one atomic unit of the Naologic Work Order Schedule Timeline.
 
 Repo (your cwd): /Users/strdr4605/P/interviews/2026-11-08-naologic
-The repo uses **jj** (colocated with git). Commit with `jj describe` + `jj new`. Never push.
+Version control is **jj** (colocated with git). Commit with `jj describe -m "..."` then `jj new`.
+Never push.
 
-Environment: the system `node` on PATH is too old for Angular 20. Prefix every command with
+Node on PATH is too old for Angular 20. Prefix every command with
 `export PATH="/opt/homebrew/opt/node@26/bin:$PATH";`.
 
-Read first:
+## Your unit: visual parity with the exported artboard
 
-0. `docs/requirements/DESIGN-PARITY.md` — the parity mode, the masks, the measured deviations
-1. `docs/requirements/notes/builder-wave2.md` — what wave 2 built
-2. `docs/design/tokens.json` — every value comes from here
-3. `docs/requirements/acceptance-criteria.json` — items B6, B9, G2, G3, G4
+Items: **B3, B6, B9, B10, G2, G3**.
 
-Your job: make the app pixel-identical to the exported Sketch artboards, and prove it with the
-diff script. Items touched: **B6, B9, G2, G3** and the visual part of **B4, B5, B10, B11**.
+Read these two files and nothing else:
+- `docs/requirements/notes/design-measurements.md` — every number you need, already measured
+- `docs/requirements/DESIGN-PARITY.md` — the parity mode and the masks
 
-## Step 1, parity mode
+Do not scan the artboard again. Do not read the token file for research; read it only to change a
+value.
 
-Add the parity mode of `docs/requirements/DESIGN-PARITY.md` to the app: the query parameter
-`?parity=1` freezes today at 2024-09-01, starts the timeline at the left edge, and loads the
-design fixture data set instead of the sample data set. It is a test hook, it needs no UI, and the
-normal app must not change.
+## The work
 
-Keep it small: one fixture file, one place that reads the query parameter.
-
-## Step 2, fix the measured deviations
-
-Each line below was measured pixel by pixel against `docs/design/assets/Work Order Schedule - Default.png`.
-
-1. **Logo (G3).** The artboard has the NAOLOGIC wordmark, 80 x 10 at (101, 20). The export holds it
-   as `docs/design/assets/Group 3.png`, 800 x 100, that is 10 times the size. Put that file in the
-   app as an image of exactly 80 x 10 at (101, 20). Do not draw the wordmark with text.
-2. **Page title.** The design text box is at x 102, y 104. The app has it at x 103, y 110. The font
-   size is right, the position is 6px too low. Fix the position, not the size.
-3. **Timescale chip (G2).** The value segment of the design is `#ffffff`, the app has `#e6ebf0`.
-   The design has no dark border on the chip: the top edge of the chip is `#f5f6fa`. The
-   `#979797` stroke in the token file is the Sketch placeholder stroke, so it must not be drawn.
-   Keep the chip 146 wide, label segment 75 at x 101, value segment 71 at x 176.
-4. **First row height (B10).** The first row of the design is 60 high (`layout.grid.firstRowHeight`),
-   the app renders 48. Every row below then sits 12px too high. Fix the first row.
-5. **Row hover (B9).** The hovered row of the design is `#eef0ff`, that is `brand.surfaceStrong`,
-   not `#f1f3f8` at 75% alpha. The rail keeps its own row colours: row 1 `#ffffff`, row 2
-   `#fafbfd`, rows 3 to 5 `#ffffff`. The timeline row that the pointer is on is `#eef0ff`.
-6. **Timescale dropdown (B3).** The design offers Hour, Day, Week, Month, in that order. Add Hour.
-   The chip value shows the current timescale. Hour renders like the other levels; the column
-   width for Hour is an agent choice, 48, like Day.
-
-## Step 3, prove it with the diff
+1. **Parity mode.** The query parameter `?parity=1` freezes today at 2024-09-01, starts the
+   timeline at the left edge, and loads the design fixture data set from
+   `docs/requirements/DESIGN-PARITY.md`. It is a test hook with no UI. The normal app does not
+   change.
+2. **The six fixes**, each with the measured target in `design-measurements.md`:
+   - G3: the logo is the exported wordmark `docs/design/assets/sketch-layers/Group 3.png`, drawn at
+     80 x 10 at (101, 20). Not a text logo, not a blue box.
+   - the page title text box at x 102, y 104.
+   - G2: the chip value segment fill `#ffffff`, the chip has no `#979797` border, the chip stays
+     146 wide with the segments 75 and 71.
+   - B10: the first row is 60 high, the other rows 48.
+   - B9: the hovered timeline row is `#eef0ff`, the hovered rail row is `#fafbfd`.
+   - B3: the timescale dropdown offers Hour, Day, Week, Month, in that order. Hour uses the Day
+     column width (48).
+3. **One diff pass.** Start the app on port 4200. Take a screenshot of the parity mode at
+   1440 x 1024, device scale factor 1, with Playwright (`scripts/screenshot.mjs` exists). Run:
 
 ```bash
-export PATH="/opt/homebrew/opt/node@26/bin:$PATH"
-npm start &                                     # the app on 4200
 node scripts/design-diff.mjs /tmp/app-parity.png "docs/design/assets/Work Order Schedule - Default.png" \
   --regions=top,rail,grid \
   --masks=437,249,463,38;556,352,463,38;945,352,463,38;677,401,533,38;660,268,140,34;700,310,60,60;670,300,125,45;483,298,957,48 \
   --out=/tmp/diff.png
 ```
 
-Take the screenshot of the app in parity mode at 1440 x 1024, device scale factor 1, with
-Playwright. Write a small script for it, for example `scripts/screenshot.mjs`, that takes the URL
-and the output path.
-
-Then work through the report: every region must be under 1% different, and the diff image must
-show no red that is not explained. For each remaining difference, decide whether the design or the
-app is right. The design wins. If a value is only in the artboard, add it to
-`docs/design/tokens.json` with a note that says it was measured from the export, then run
-`npm run tokens`.
-
-Text antialiasing differs between the Sketch renderer and the browser. A difference of a few
-percent inside a text block is allowed. A shifted line, a wrong colour or a missing element is
-not.
-
-Also compare the two other artboards that have no cursor in them:
-`Work Order Schedule - View Selection.png` (the timescale dropdown open) and
-`Work Order Schedule - Create New Event - With Selection.png` (the drawer open). The drawer is not
-built yet, so that one waits for wave 3. The dropdown one you can do now: open the dropdown in
-the app and compare with the mask of the cursor and of the tooltip.
+   Write one Playwright test that takes the screenshot itself and asserts that the regions `top`
+   and `rail` differ by less than 1%. The title carries the item id, for example
+   `test('[G3] the app matches the exported artboard', ...)`.
+4. **One commit** with a message that names the item ids, and the notes in
+   `docs/requirements/notes/builder-parity.md`: what you changed, the diff numbers per region, the
+   path of the diff image, and what still differs and why.
 
 ## Rules
 
-- Never type a colour or a size into a component. The tokens live in `src/styles/_tokens.scss`,
-  generated by `npm run tokens` from `docs/design/tokens.json`.
-- Keep the wave 0, wave 1 and wave 2 tests green. `npx playwright test` and `npx vitest run`.
-- Add one Playwright test that runs the diff for the parity mode and asserts that the top and the
-  rail region differ by less than 1%. The test title carries the item id, for example
-  `test('[G3] the app matches the exported artboard', ...)`. The test needs the screenshot of the
-  app; take it inside the test.
-- Write files as you go. One file, one command, then the next.
-- **No subagents.** Stay under about 100k tokens of context. If you approach that limit, stop, write
-  your state to `docs/requirements/notes/builder-parity.md`, and report.
-- Never edit `acceptance-criteria.json` by hand, and never mark an item pass yourself.
+- Colours and sizes live in `docs/design/tokens.json`. Change them there, run `npm run tokens`,
+  and add a note that says the value was measured from the exported artboard. Never type a colour
+  into a component.
+- The tests of wave 0, 1 and 2 must stay green: `npx vitest run` and `npx playwright test`.
+- One file, one command, then the next. Write as you go.
+- **No subagents.** Stay under 60k tokens of context. If you approach that limit, stop, write
+  `docs/requirements/notes/builder-parity.md` with your state and report.
+- Do not touch the acceptance criteria file. Do not add features. Do not work on the drawer.
+- Do not iterate the diff more than once. Report the numbers you get; the verifier decides what
+  is next.
 
 ## Report
 
-Write the details to `docs/requirements/notes/builder-parity.md`: the deviations you fixed, the
-final diff numbers per region, the diff image path, and what is still different and why.
-
-Then send one line:
-
-    hc send $HC_TERMINAL_ID "parity done: <diff numbers> | commit <id> | <one line status>"
+    hc send $HC_TERMINAL_ID "parity done: top <x>% rail <y>% grid <z>% | commit <id> | <one line status>"
