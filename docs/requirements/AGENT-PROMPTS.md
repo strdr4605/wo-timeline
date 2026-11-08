@@ -93,3 +93,26 @@ Never mark an item pass yourself. Only the harness writes status and evidence.
 When every must item passes, write the README and the demo script, then tell the human
 what still needs their eyes: the Loom recording and the public repository.
 ```
+
+## 2026-11-08: one atomic unit per builder, verifier after every builder
+
+The wave prompts in `docs/requirements/prompts/` are split into atomic units. A builder gets one
+unit, a fresh verifier checks that unit, and only then the next unit starts.
+
+| Unit | Scope | Items |
+|---|---|---|
+| `builder-parity.md` | parity mode, six measured deviations, one diff pass | B3, B6, B9, B10, G2, G3 |
+| `builder-drawer-shell.md` | drawer opens, panel layout, name field | D1, D2, D3, D10 |
+| `builder-drawer-fields.md` | status dropdown, date pickers, validation | D4 to D9, D11 to D13 |
+| `builder-drawer-actions.md` | save, edit, delete, cancel | D14, D15, E1 to E6 |
+| `builder-scroll.md` | infinite scroll | A2, A3, A4 |
+| `builder-storybook.md` | Storybook catalog | bonus |
+
+Rules for every prompt in this folder:
+
+1. One unit per builder, and one builder per unit. Never two units in one prompt.
+2. The builder runs its own tests and writes the notes file, then stops. It does not look for new
+   work.
+3. A fresh verifier runs after the builder, with `docs/requirements/prompts/verifier.md` and the
+   unit in scope. The verifier reads the exported artboard PNG, not only the token file.
+4. The next unit starts only after the verifier has reported.

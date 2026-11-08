@@ -109,6 +109,14 @@ marker, C6 menu geometry, C7 tooltip geometry, D11 field placeholder and focus s
 with the item id in brackets in the test title. It runs `node docs/requirements/verify.mjs` and
 `node docs/requirements/measure.mjs`. It never edits the acceptance criteria file.
 
+One builder gets one atomic unit of work. A unit is small enough to finish in one turn of about
+50k tokens of context: one screen, one component, one group of items that share a file. A builder
+never gets a wave that spans the drawer, the toolbar, the grid and the data set.
+
+Every builder is followed by a fresh **Verifier** that checks the unit against the sources. The
+next builder starts only after the verifier has reported on the unit. The verifier never writes
+features.
+
 **Verifier** writes no features. It checks each item against the source order: written spec, then
 owner video, then tokens, then the prior art. It quotes the source line for each verdict. It
 reports one line per item.
