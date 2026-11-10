@@ -726,8 +726,8 @@
       ],
       "verify": "manual",
       "priority": "must",
-      "status": "pending",
-      "evidence": ""
+      "status": "pass",
+      "evidence": "manual: README.md has requirements, setup and run, parity mode, tests, approach, libraries with reasons, bonus items, AI workflow and known limits; every command in it was run (b15-readme)"
     },
     {
       "id": "H2",
@@ -958,8 +958,8 @@
       ],
       "verify": "manual",
       "priority": "must",
-      "status": "pending",
-      "evidence": ""
+      "status": "pass",
+      "evidence": "manual: docs/demo-script.md, 14 timed sections (9:40), overlap trigger on Genesis Hardware (Tab 2 times from Work Order Name to End date, Cmd+A, 01.11.2026 vs Concentrix Ltd); full script walked in order in headless Playwright at 400 ms per step from clean localStorage on 2026-11-11, 46/46 checks pass incl. S4 and S6 errors (b16-fix, docs/requirements/notes/b16-script.md)"
     }
   ]
 }
