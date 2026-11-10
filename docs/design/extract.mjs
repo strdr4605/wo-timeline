@@ -39,7 +39,7 @@ const styleOf = (s) => {
   const borders = (s.borders || []).filter((b) => b.isEnabled !== false);
   if (borders.length) out.borders = borders.map((b) => ({ thickness: b.thickness, color: rgba(b.color), position: b.position }));
   const shadows = (s.shadows || []).filter((sh) => sh.isEnabled !== false);
-  if (shadows.length) out.shadows = shadows.map((sh) => ({ blur: sh.blurRadius, x: sh.offsetX, y: sh.offsetY, color: rgba(sh.color), inner: sh.isInnerShadow }));
+  if (shadows.length) out.shadows = shadows.map((sh) => ({ blur: sh.blurRadius, x: sh.offsetX, y: sh.offsetY, spread: sh.spread ?? 0, color: rgba(sh.color), inner: sh.isInnerShadow }));
   const ts = s.textStyle && s.textStyle.encodedAttributes;
   if (ts && ts.MSAttributedStringFontAttribute) {
     out.font = ts.MSAttributedStringFontAttribute.attributes.name;

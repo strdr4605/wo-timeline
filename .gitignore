@@ -10,3 +10,4 @@ vitest-report.json
 test-results/
 docs/demo/videos/
 .DS_Store
+.pixel-check

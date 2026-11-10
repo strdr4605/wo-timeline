@@ -53,6 +53,7 @@
                     "blur": 0.5,
                     "x": 0,
                     "y": 1,
+                    "spread": -1,
                     "color": "#d8dceb",
                     "inner": false
                   },
@@ -60,6 +61,7 @@
                     "blur": 3,
                     "x": 0,
                     "y": 1.5,
+                    "spread": -1.5,
                     "color": "#c8cfe9",
                     "inner": false
                   }
@@ -146,6 +148,7 @@
                     "blur": 0.8,
                     "x": 0,
                     "y": 1,
+                    "spread": 0,
                     "color": "#00000080",
                     "inner": false
                   }
@@ -357,6 +360,7 @@
                     "blur": 3,
                     "x": 0,
                     "y": 1,
+                    "spread": 0,
                     "color": "#c8cfe9",
                     "inner": false
                   }
@@ -448,6 +452,7 @@
                     "blur": 3,
                     "x": 0,
                     "y": 1,
+                    "spread": 0,
                     "color": "#c8cfe9",
                     "inner": false
                   }
@@ -504,6 +509,7 @@
                     "blur": 5,
                     "x": 0,
                     "y": 4.5,
+                    "spread": -1,
                     "color": "#d8dceb",
                     "inner": false
                   },
@@ -511,6 +517,7 @@
                     "blur": 3,
                     "x": 0,
                     "y": 2.5,
+                    "spread": -1.5,
                     "color": "#c8cfe9",
                     "inner": false
                   }
@@ -997,6 +1004,7 @@
                     "blur": 3,
                     "x": 1,
                     "y": 2.5,
+                    "spread": -1.5,
                     "color": "#c8cfe9",
                     "inner": false
                   }
@@ -2207,6 +2215,7 @@
                     "blur": 16,
                     "x": 0,
                     "y": 0,
+                    "spread": -8,
                     "color": "#e6ebf0",
                     "inner": false
                   },
@@ -2214,6 +2223,7 @@
                     "blur": 4,
                     "x": 0,
                     "y": 2,
+                    "spread": -2,
                     "color": "#c8cfe9",
                     "inner": false
                   }
@@ -2652,6 +2662,7 @@
                     "blur": 3,
                     "x": 1,
                     "y": 2.5,
+                    "spread": -1.5,
                     "color": "#c8cfe9",
                     "inner": false
                   }
@@ -4512,6 +4523,7 @@
                     "blur": 3,
                     "x": 1,
                     "y": 2.5,
+                    "spread": -1.5,
                     "color": "#c8cfe9",
                     "inner": false
                   }
@@ -6139,6 +6151,7 @@
                     "blur": 5,
                     "x": 0,
                     "y": 4.5,
+                    "spread": -1,
                     "color": "#d8dceb",
                     "inner": false
                   },
@@ -6146,6 +6159,7 @@
                     "blur": 3,
                     "x": 0,
                     "y": 2.5,
+                    "spread": -1.5,
                     "color": "#c8cfe9",
                     "inner": false
                   }
@@ -6331,6 +6345,7 @@
                     "blur": 3,
                     "x": 1,
                     "y": 2.5,
+                    "spread": -1.5,
                     "color": "#c8cfe9",
                     "inner": false
                   }
@@ -7541,6 +7556,7 @@
                     "blur": 16,
                     "x": 0,
                     "y": 0,
+                    "spread": -8,
                     "color": "#e6ebf0",
                     "inner": false
                   },
@@ -7548,6 +7564,7 @@
                     "blur": 4,
                     "x": 0,
                     "y": 2,
+                    "spread": -2,
                     "color": "#c8cfe9",
                     "inner": false
                   }
@@ -7996,6 +8013,7 @@
                     "blur": 3,
                     "x": 1,
                     "y": 2.5,
+                    "spread": -1.5,
                     "color": "#c8cfe9",
                     "inner": false
                   }
@@ -9492,6 +9510,7 @@
                     "blur": 5,
                     "x": 0,
                     "y": 4.5,
+                    "spread": -1,
                     "color": "#d8dceb",
                     "inner": false
                   },
@@ -9499,6 +9518,7 @@
                     "blur": 3,
                     "x": 0,
                     "y": 2.5,
+                    "spread": -1.5,
                     "color": "#c8cfe9",
                     "inner": false
                   },
@@ -9506,6 +9526,7 @@
                     "blur": 15,
                     "x": 0,
                     "y": 5,
+                    "spread": 0,
                     "color": "#d8dceb",
                     "inner": false
                   }
@@ -9826,6 +9847,7 @@
                     "blur": 3,
                     "x": 1,
                     "y": 2.5,
+                    "spread": -1.5,
                     "color": "#c8cfe9",
                     "inner": false
                   }
@@ -11322,6 +11344,7 @@
                     "blur": 5,
                     "x": 0,
                     "y": 4.5,
+                    "spread": -1,
                     "color": "#d8dceb",
                     "inner": false
                   },
@@ -11329,6 +11352,7 @@
                     "blur": 3,
                     "x": 0,
                     "y": 2.5,
+                    "spread": -1.5,
                     "color": "#c8cfe9",
                     "inner": false
                   },
@@ -11336,6 +11360,7 @@
                     "blur": 15,
                     "x": 0,
                     "y": 5,
+                    "spread": 0,
                     "color": "#d8dceb",
                     "inner": false
                   }
@@ -11675,6 +11700,7 @@
                     "blur": 3,
                     "x": 1,
                     "y": 2.5,
+                    "spread": -1.5,
                     "color": "#c8cfe9",
                     "inner": false
                   }
@@ -13171,6 +13197,7 @@
                     "blur": 5,
                     "x": 0,
                     "y": 4.5,
+                    "spread": -1,
                     "color": "#d8dceb",
                     "inner": false
                   },
@@ -13178,6 +13205,7 @@
                     "blur": 3,
                     "x": 0,
                     "y": 2.5,
+                    "spread": -1.5,
                     "color": "#c8cfe9",
                     "inner": false
                   },
@@ -13185,6 +13213,7 @@
                     "blur": 15,
                     "x": 0,
                     "y": 5,
+                    "spread": 0,
                     "color": "#d8dceb",
                     "inner": false
                   }
@@ -13629,6 +13658,7 @@
                     "blur": 3,
                     "x": 1,
                     "y": 2.5,
+                    "spread": -1.5,
                     "color": "#c8cfe9",
                     "inner": false
                   }
@@ -15125,6 +15155,7 @@
                     "blur": 5,
                     "x": 0,
                     "y": 4.5,
+                    "spread": -1,
                     "color": "#d8dceb",
                     "inner": false
                   },
@@ -15132,6 +15163,7 @@
                     "blur": 3,
                     "x": 0,
                     "y": 2.5,
+                    "spread": -1.5,
                     "color": "#c8cfe9",
                     "inner": false
                   },
@@ -15139,6 +15171,7 @@
                     "blur": 15,
                     "x": 0,
                     "y": 5,
+                    "spread": 0,
                     "color": "#d8dceb",
                     "inner": false
                   }
@@ -15406,6 +15439,7 @@
                     "blur": 5,
                     "x": 0,
                     "y": 4.5,
+                    "spread": -1,
                     "color": "#d8dceb",
                     "inner": false
                   },
@@ -15413,6 +15447,7 @@
                     "blur": 3,
                     "x": 0,
                     "y": 2.5,
+                    "spread": -1.5,
                     "color": "#c8cfe9",
                     "inner": false
                   }
@@ -15964,6 +15999,7 @@
                     "blur": 1,
                     "x": 0,
                     "y": 1,
+                    "spread": 0,
                     "color": "#0000003d",
                     "inner": false
                   },
@@ -15971,6 +16007,7 @@
                     "blur": 1,
                     "x": 0,
                     "y": 0,
+                    "spread": 0,
                     "color": "#0000001f",
                     "inner": false
                   }
@@ -16503,6 +16540,7 @@
                     "blur": 3,
                     "x": 1,
                     "y": 2.5,
+                    "spread": -1.5,
                     "color": "#c8cfe9",
                     "inner": false
                   }
@@ -16561,6 +16599,7 @@
                     "blur": 3,
                     "x": 1,
                     "y": 2.5,
+                    "spread": -1.5,
                     "color": "#c8cfe9",
                     "inner": false
                   }
@@ -16619,6 +16658,7 @@
                     "blur": 3,
                     "x": 1,
                     "y": 2.5,
+                    "spread": -1.5,
                     "color": "#c8cfe9",
                     "inner": false
                   }
@@ -16677,6 +16717,7 @@
                     "blur": 3,
                     "x": 1,
                     "y": 2.5,
+                    "spread": -1.5,
                     "color": "#c8cfe9",
                     "inner": false
                   }
@@ -16744,6 +16785,7 @@
                     "blur": 3,
                     "x": 0,
                     "y": 1,
+                    "spread": 0,
                     "color": "#c8cfe9",
                     "inner": false
                   }
@@ -16866,6 +16908,7 @@
                     "blur": 3,
                     "x": 0,
                     "y": 1,
+                    "spread": 0,
                     "color": "#c8cfe9",
                     "inner": false
                   }
@@ -16982,6 +17025,7 @@
                     "blur": 3,
                     "x": 0,
                     "y": 1,
+                    "spread": 0,
                     "color": "#c8cfe9",
                     "inner": false
                   }
@@ -17520,6 +17564,7 @@
                     "blur": 3,
                     "x": 1,
                     "y": 2.5,
+                    "spread": -1.5,
                     "color": "#c8cfe9",
                     "inner": false
                   }
@@ -17620,6 +17665,7 @@
                     "blur": 3,
                     "x": 1,
                     "y": 2.5,
+                    "spread": -1.5,
                     "color": "#c8cfe9",
                     "inner": false
                   }
@@ -19139,6 +19185,7 @@
                     "blur": 16,
                     "x": 0,
                     "y": 0,
+                    "spread": -8,
                     "color": "#e6ebf0",
                     "inner": false
                   },
@@ -19146,6 +19193,7 @@
                     "blur": 4,
                     "x": 0,
                     "y": 2,
+                    "spread": -2,
                     "color": "#c8cfe9",
                     "inner": false
                   }
@@ -19469,6 +19517,7 @@
                     "blur": 16,
                     "x": 0,
                     "y": 0,
+                    "spread": -8,
                     "color": "#e6ebf0",
                     "inner": false
                   },
@@ -19476,6 +19525,7 @@
                     "blur": 4,
                     "x": 0,
                     "y": 2,
+                    "spread": -2,
                     "color": "#c8cfe9",
                     "inner": false
                   }
@@ -19526,6 +19576,7 @@
                     "blur": 16,
                     "x": 0,
                     "y": 0,
+                    "spread": -8,
                     "color": "#e6ebf0",
                     "inner": false
                   },
@@ -19533,6 +19584,7 @@
                     "blur": 4,
                     "x": 0,
                     "y": 2,
+                    "spread": -2,
                     "color": "#c8cfe9",
                     "inner": false
                   }
