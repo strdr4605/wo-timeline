@@ -15,5 +15,10 @@
     [timescale]="timescale()"
     [workCenters]="workCenters()"
     [workOrders]="workOrders()"
+    [selectedCenterId]="selectedCenterId()"
+    (cellPick)="openCreate($event)"
+    (editOrder)="openEdit($event)"
   />
 </main>
+
+<app-work-order-drawer [request]="drawer()" (closed)="drawer.set(null)" />

@@ -1,4 +1,4 @@
-import { Component, HostListener, computed, input, signal } from '@angular/core';
+import { Component, HostListener, computed, input, output, signal } from '@angular/core';
 import { WorkOrder } from '../data/sample-data';
 import { parseIsoDate } from '../timeline/timeline';
 
@@ -8,7 +8,7 @@ export interface BarPosition {
   fraction: number;
 }
 
-const STATUS_LABELS: Record<WorkOrder['status'], string> = {
+export const STATUS_LABELS: Record<WorkOrder['status'], string> = {
   open: 'Open',
   'in-progress': 'In progress',
   complete: 'Complete',
@@ -30,6 +30,8 @@ export class WorkOrderBar {
   readonly order = input.required<WorkOrder>();
   readonly start = input.required<BarPosition>();
   readonly end = input.required<BarPosition>();
+
+  readonly edit = output<void>();
 
   /** The bar is hovered. The row hover is a class of its own, this one is the bar. */
   protected readonly hovered = signal(false);

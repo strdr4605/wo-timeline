@@ -5,6 +5,7 @@ import {
   afterRenderEffect,
   computed,
   input,
+  output,
   signal,
   viewChild,
 } from '@angular/core';
@@ -27,6 +28,12 @@ interface CellHover {
   x: number;
 }
 
+/** An empty cell that was clicked: the row and the day under the pointer. */
+export interface CellPick {
+  workCenterId: string;
+  date: Date;
+}
+
 /** A bar with the two positions it is placed by. */
 interface BarPlacement {
   order: WorkOrder;
@@ -44,6 +51,12 @@ export class TimelineGrid implements AfterViewInit {
   readonly timescale = input.required<Timescale>();
   readonly workCenters = input.required<WorkCenter[]>();
   readonly workOrders = input.required<WorkOrder[]>();
+
+  /** The row of the open create drawer. It stays highlighted while the overlay covers the grid. */
+  readonly selectedCenterId = input<string | null>(null);
+
+  readonly cellPick = output<CellPick>();
+  readonly editOrder = output<WorkOrder>();
 
   /** Captured once, so every column of one render speaks about the same day. */
   private readonly now = PARITY_MODE ? PARITY_TODAY : new Date();
@@ -122,6 +135,30 @@ export class TimelineGrid implements AfterViewInit {
     this.cellHover.set({ workCenterId, x: event.clientX - row.getBoundingClientRect().left });
   }
 
+  /** A row is highlighted while the pointer is on it or while its create drawer is open. */
+  protected isHighlighted(workCenterId: string): boolean {
+    return this.hovered() === workCenterId || this.selectedCenterId() === workCenterId;
+  }
+
+  /** A click on the empty part of a row asks for a new order that starts on the day under the pointer. */
+  protected pickCell(workCenterId: string, event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    const timeline = this.timeline()?.nativeElement;
+    if (target.closest('.work-order-bar') || !timeline) {
+      return;
+    }
+
+    const row = event.currentTarget as HTMLElement;
+    const columnWidth = parseFloat(getComputedStyle(timeline).getPropertyValue('--column-width'));
+    const position = (event.clientX - row.getBoundingClientRect().left) / columnWidth;
+    const column = this.columns()[Math.floor(position)];
+    if (!column) {
+      return;
+    }
+
+    this.cellPick.emit({ workCenterId, date: dayInColumn(column, position % 1) });
+  }
+
   protected leaveRow(): void {
     this.hovered.set(null);
     this.cellHover.set(null);
@@ -178,6 +215,13 @@ export class TimelineGrid implements AfterViewInit {
     const target = (rail.getBoundingClientRect().right + scroller.getBoundingClientRect().right) / 2;
     scroller.scrollLeft += contentLeft + markerX - target;
   }
+}
+
+/** The day at a fraction of a column. An hour column sits inside one day. */
+function dayInColumn(column: TimelineColumn, fraction: number): Date {
+  const days = Math.round((column.end.getTime() - column.start.getTime()) / 86_400_000);
+  const start = column.start;
+  return new Date(start.getFullYear(), start.getMonth(), start.getDate() + Math.floor(fraction * days));
 }
 
 /** The chip text per zoom level. Hour columns sit inside today, so Hour names the day. */

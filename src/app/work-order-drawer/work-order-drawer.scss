@@ -1,0 +1,163 @@
+@use '../../styles/tokens' as t;
+@use '../../styles/control-shadows' as *;
+
+$field-gap: (t.$layout-panel-field-h - t.$layout-panel-field-label-h - t.$layout-panel-field-control-h);
+$slide: transform #{t.$layout-panel-slide-duration} ease-out;
+
+// The overlay dims the page under the drawer and takes the click outside the drawer.
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  background: rgba(t.$layout-panel-overlay-fill, t.$layout-panel-overlay-alpha);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity #{t.$layout-panel-slide-duration},
+    visibility 0s #{t.$layout-panel-slide-duration};
+}
+
+.drawer-overlay--open {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity #{t.$layout-panel-slide-duration};
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 11;
+  width: t.$layout-panel-width;
+  border-radius: t.$layout-panel-radius 0 0 t.$layout-panel-radius;
+  background: t.$color-surface-panel;
+  box-shadow:
+    0 t.$layout-panel-shadow-y t.$layout-panel-shadow-blur t.$layout-panel-shadow-spread t.$layout-panel-shadow-color,
+    0 t.$layout-panel-shadow-y2 t.$layout-panel-shadow-blur2 t.$layout-panel-shadow-spread2 t.$layout-panel-shadow-color2,
+    0 t.$layout-panel-shadow-y3 t.$layout-panel-shadow-blur3 t.$layout-panel-shadow-spread3 t.$layout-panel-shadow-color3;
+  transform: translateX(calc(100% + #{t.$layout-panel-shadow-blur3}));
+  visibility: hidden;
+  transition:
+    $slide,
+    visibility 0s #{t.$layout-panel-slide-duration};
+}
+
+.drawer--open {
+  transform: none;
+  visibility: visible;
+  transition: $slide;
+}
+
+// The head: title and subtitle on the left, the buttons on the right, a line under it.
+.drawer__head {
+  display: flex;
+  justify-content: space-between;
+  height: (t.$layout-panel-divider-y + t.$layout-panel-divider-width);
+  padding: t.$layout-panel-title-y t.$layout-panel-pad-x 0;
+  border-bottom: t.$layout-panel-divider-width solid t.$layout-panel-divider-color;
+}
+
+.drawer__title {
+  margin: 0;
+  font-family: t.$font-family;
+  font-size: t.$type-panel-title-size;
+  line-height: t.$layout-panel-title-line-height;
+  font-weight: t.$type-panel-title-font-weight;
+  color: t.$type-panel-title-color;
+}
+
+.drawer__subtitle {
+  margin: (t.$layout-panel-subtitle-y - t.$layout-panel-title-y - t.$layout-panel-title-line-height) 0 0;
+  font-family: t.$font-family;
+  font-size: t.$layout-panel-subtitle-size;
+  line-height: t.$layout-panel-subtitle-line-height;
+  font-weight: t.$type-body-font-weight;
+  color: t.$layout-panel-subtitle-color;
+}
+
+.drawer__actions {
+  display: flex;
+  gap: t.$layout-panel-button-gap;
+  margin-top: (t.$layout-panel-buttons-primary-y - t.$layout-panel-title-y);
+}
+
+.drawer-button {
+  width: t.$layout-panel-buttons-primary-w;
+  height: t.$layout-panel-buttons-primary-h;
+  // The design text sits one pixel under the centre of the Chromium line box.
+  padding: t.$component-button-text-offset-y 0 0;
+  border: t.$component-button-border-width solid;
+  border-radius: t.$radius-input;
+  box-shadow: 0 t.$component-button-shadow-y t.$component-button-shadow-blur t.$component-button-shadow-color;
+  font-family: t.$font-family;
+  font-size: t.$type-button-size;
+  font-weight: t.$type-button-font-weight;
+  cursor: pointer;
+}
+
+.drawer-button--primary {
+  border-color: t.$component-button-primary-bg;
+  background: t.$component-button-primary-bg;
+  color: t.$component-button-primary-text;
+}
+
+.drawer-button--secondary {
+  border-color: t.$component-button-secondary-bg;
+  background: t.$component-button-secondary-bg;
+  color: t.$component-button-secondary-text;
+}
+
+.drawer__fields {
+  display: flex;
+  flex-direction: column;
+  gap: t.$layout-panel-field-gap;
+  padding: t.$layout-panel-field-gap t.$layout-panel-pad-x 0;
+}
+
+.drawer-field {
+  display: flex;
+  flex-direction: column;
+  gap: $field-gap;
+}
+
+// The design puts the name field one pixel right of the other fields.
+.drawer-field--name {
+  margin-left: (t.$layout-panel-name-field-x - t.$layout-panel-field-x);
+}
+
+.drawer-field__label {
+  height: t.$layout-panel-field-label-h;
+  font-family: t.$font-family;
+  font-size: t.$type-control-label-size;
+  line-height: t.$layout-panel-field-label-h;
+  font-weight: t.$type-control-label-font-weight;
+  color: t.$type-control-label-color;
+}
+
+// The text field and the date fields.
+.drawer-field__control {
+  width: 100%;
+  height: t.$layout-panel-field-control-h;
+  // The design measures the text inset from the outer edge, CSS from inside the border.
+  padding: 0 (t.$component-text-field-value-inset-x - t.$component-text-field-border-width);
+  border: t.$component-text-field-border-width solid t.$component-text-field-border-color;
+  border-radius: t.$component-text-field-radius;
+  outline: none;
+  background: t.$color-surface-panel;
+  box-shadow: $control-shadow;
+  font-family: t.$font-family;
+  font-size: t.$type-label-size;
+  font-weight: t.$type-label-font-weight;
+  color: t.$component-text-field-value-color;
+
+  &::placeholder {
+    color: t.$component-text-field-placeholder-color;
+    opacity: 1;
+  }
+
+  &:focus {
+    border-color: t.$color-surface-panel;
+    box-shadow: $focus-ring;
+  }
+}

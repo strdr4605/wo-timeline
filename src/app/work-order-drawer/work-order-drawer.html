@@ -1,0 +1,89 @@
+<div class="drawer-overlay" [class.drawer-overlay--open]="open()" (click)="cancel()"></div>
+
+<aside
+  class="drawer"
+  role="dialog"
+  aria-labelledby="drawer-title"
+  [class.drawer--open]="open()"
+  [attr.inert]="open() ? null : ''"
+>
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <header class="drawer__head">
+      <div>
+        <h2 id="drawer-title" class="drawer__title">Work Order Details</h2>
+        <p class="drawer__subtitle">Specify the dates, name and status for this order</p>
+      </div>
+
+      <div class="drawer__actions">
+        <button type="button" class="drawer-button drawer-button--secondary" (click)="cancel()">
+          Cancel
+        </button>
+        <button type="submit" class="drawer-button drawer-button--primary">
+          {{ submitLabel() }}
+        </button>
+      </div>
+    </header>
+
+    <div class="drawer__fields">
+      <div class="drawer-field drawer-field--name">
+        <label class="drawer-field__label" for="drawer-name">Work Order Name</label>
+        <input
+          id="drawer-name"
+          class="drawer-field__control"
+          formControlName="name"
+          placeholder="Acme Inc."
+          autocomplete="off"
+        />
+      </div>
+
+      <div class="drawer-field">
+        <label class="drawer-field__label" for="drawer-status">Status</label>
+        <ng-select
+          class="drawer-status"
+          labelForId="drawer-status"
+          formControlName="status"
+          bindValue="value"
+          bindLabel="label"
+          [items]="statusOptions"
+          [clearable]="false"
+          [searchable]="false"
+        >
+          <ng-template ng-label-tmp let-item="item">
+            <span class="drawer-status__pill" [attr.data-status]="item.value">{{ item.label }}</span>
+          </ng-template>
+        </ng-select>
+      </div>
+
+      <!-- The design puts End date above Start date. -->
+      <div class="drawer-field">
+        <label class="drawer-field__label" for="drawer-end">End date</label>
+        <input
+          class="drawer-field__control"
+          id="drawer-end"
+          formControlName="endDate"
+          placeholder="dd.mm.yyyy"
+          ngbDatepicker
+          navigation="arrows"
+          #endPicker="ngbDatepicker"
+          (click)="endPicker.toggle()"
+          autocomplete="off"
+        />
+      </div>
+
+      <div class="drawer-field">
+        <label class="drawer-field__label" for="drawer-start">Start date</label>
+        <input
+          class="drawer-field__control"
+          id="drawer-start"
+          formControlName="startDate"
+          placeholder="dd.mm.yyyy"
+          ngbDatepicker
+          navigation="arrows"
+          #startPicker="ngbDatepicker"
+          (click)="startPicker.toggle()"
+          autocomplete="off"
+        />
+      </div>
+    </div>
+  </form>
+</aside>

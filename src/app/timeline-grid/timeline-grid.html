@@ -6,7 +6,7 @@
         @for (center of workCenters(); track center.id) {
           <div
             class="work-center-row"
-            [class.work-center-row--hovered]="hovered() === center.id"
+            [class.work-center-row--hovered]="isHighlighted(center.id)"
             (mouseenter)="hovered.set(center.id)"
             (mouseleave)="hovered.set(null)"
           >
@@ -54,10 +54,11 @@
           <div
             class="grid-row"
             [class.grid-row--first]="first"
-            [class.grid-row--hovered]="hovered() === center.id"
+            [class.grid-row--hovered]="isHighlighted(center.id)"
             (mouseenter)="hovered.set(center.id)"
             (mousemove)="trackCellHover(center.id, $event)"
             (mouseleave)="leaveRow()"
+            (click)="pickCell(center.id, $event)"
           >
             @if (cellHover(); as hover) {
               @if (hover.workCenterId === center.id) {
@@ -68,7 +69,12 @@
             }
 
             @for (bar of barsOf(center.id); track bar.order.docId) {
-              <app-work-order-bar [order]="bar.order" [start]="bar.start" [end]="bar.end" />
+              <app-work-order-bar
+                [order]="bar.order"
+                [start]="bar.start"
+                [end]="bar.end"
+                (edit)="editOrder.emit(bar.order)"
+              />
             }
           </div>
         }

@@ -44,8 +44,10 @@
   </button>
 
   <div class="work-order-menu" role="menu" [class.work-order-menu--open]="menuOpen()">
-    <!-- Edit and Delete do nothing yet: the drawer arrives in the next wave. -->
-    <button type="button" class="work-order-menu__item" role="menuitem">Edit</button>
+    <!-- Delete does nothing yet: it belongs to the next unit. -->
+    <button type="button" class="work-order-menu__item" role="menuitem" (click)="edit.emit()">
+      Edit
+    </button>
     <button
       type="button"
       class="work-order-menu__item work-order-menu__item--danger"

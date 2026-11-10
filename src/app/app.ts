@@ -1,12 +1,15 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { ScheduleService } from './data/schedule.service';
 import { Timescale } from './timeline/timeline';
 import { TimescaleChip } from './timescale-chip/timescale-chip';
-import { TimelineGrid } from './timeline-grid/timeline-grid';
+import { CellPick, TimelineGrid } from './timeline-grid/timeline-grid';
+import { WorkOrder } from './data/sample-data';
+import { DrawerRequest } from './work-order-drawer/drawer-form';
+import { WorkOrderDrawer } from './work-order-drawer/work-order-drawer';
 
 @Component({
   selector: 'app-root',
-  imports: [TimescaleChip, TimelineGrid],
+  imports: [TimescaleChip, TimelineGrid, WorkOrderDrawer],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
@@ -18,4 +21,21 @@ export class App {
 
   protected readonly workCenters = this.schedule.workCenters;
   protected readonly workOrders = this.schedule.workOrders;
+
+  /** The open drawer, or null. */
+  protected readonly drawer = signal<DrawerRequest | null>(null);
+
+  /** The design keeps the clicked row highlighted under the overlay. */
+  protected readonly selectedCenterId = computed(() => {
+    const request = this.drawer();
+    return request?.mode === 'create' ? request.workCenterId : null;
+  });
+
+  protected openCreate(pick: CellPick): void {
+    this.drawer.set({ mode: 'create', workCenterId: pick.workCenterId, startDate: pick.date });
+  }
+
+  protected openEdit(order: WorkOrder): void {
+    this.drawer.set({ mode: 'edit', order });
+  }
 }

@@ -1,0 +1,221 @@
+@use 'tokens' as t;
+@use 'control-shadows' as *;
+
+// ng-select and the ngb-datepicker popup of the work order drawer.
+// They render DOM that the component styles cannot reach, so the rules live here, scoped by class.
+
+// ng-select: the collapsed field shows the status as a pill, the open list shows plain text.
+.drawer-status.ng-select {
+  font-family: t.$font-family;
+
+  .ng-select-container {
+    height: t.$layout-panel-field-control-h;
+    min-height: 0;
+    padding: 0
+      (t.$component-text-field-chevron-inset-right - t.$component-text-field-border-width) 0
+      t.$component-status-pill-inset-x;
+    border: t.$component-text-field-border-width solid t.$component-text-field-border-color;
+    border-radius: t.$component-text-field-radius;
+    background: t.$color-surface-panel;
+    box-shadow: $control-shadow;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .ng-value-container {
+    align-items: center;
+    padding: 0;
+  }
+
+  .ng-value {
+    display: flex;
+  }
+
+  .ng-arrow-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: t.$component-text-field-chevron-triangle-w;
+    height: t.$component-text-field-chevron-h;
+    padding: 0;
+  }
+
+  .ng-arrow {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: t.$component-text-field-chevron-triangle-h (t.$component-text-field-chevron-triangle-w * 0.5) 0;
+    border-color: t.$component-text-field-chevron-triangle-color transparent transparent;
+  }
+
+  // The design lifts the pill 1px while the list is open.
+  &.ng-select-opened .drawer-status__pill {
+    margin-top: (2 * t.$component-status-pill-open-offset-y);
+  }
+
+  &.ng-select-opened .ng-select-container,
+  &.ng-select-focused:not(.ng-select-opened) .ng-select-container {
+    border-color: t.$color-surface-panel;
+    box-shadow: $focus-ring;
+  }
+
+  .ng-dropdown-panel {
+    margin-top: t.$component-status-menu-gap;
+    padding: t.$component-status-menu-padding-y 0;
+    border-radius: t.$layout-dropdown-menu-radius;
+    background: t.$color-surface-panel;
+    box-shadow: $menu-shadow;
+  }
+
+  // The ng-select core rule for options has three classes, so this one needs as many.
+  .ng-dropdown-panel-items .ng-option {
+    display: flex;
+    align-items: center;
+    height: t.$component-status-menu-row-height;
+    // The design text sits one pixel under the centre of the Chromium line box.
+    padding: t.$component-status-menu-text-offset-y t.$component-status-menu-padding-x 0;
+    font-size: t.$type-body-size;
+    font-weight: t.$type-body-font-weight;
+    color: t.$component-status-menu-text-color;
+  }
+
+  // The hovered row of the design ('Blocked' in 'Status Dropdown') has darker text and, in the
+  // export, no fill. ng-select marks the selected row on open, so the selected row keeps its colour.
+  .ng-dropdown-panel-items .ng-option:hover,
+  .ng-dropdown-panel-items .ng-option-marked:not(.ng-option-selected) {
+    color: t.$component-status-menu-hover-color;
+  }
+
+  .ng-dropdown-panel-items .ng-option-selected,
+  .ng-dropdown-panel-items .ng-option-selected:hover {
+    color: t.$component-status-menu-selected-color;
+  }
+}
+
+.drawer-status__pill {
+  display: inline-flex;
+  align-items: center;
+  height: t.$component-status-pill-height;
+  padding: 0 (t.$component-status-pill-padding-x - t.$component-status-pill-border-width);
+  border: t.$component-status-pill-border-width solid;
+  border-radius: t.$component-status-pill-radius;
+  // ng-select centres the pill, so half of this margin moves it down.
+  margin-top: (2 * t.$component-status-pill-offset-y);
+  font-size: t.$type-label-size;
+  font-weight: t.$type-label-font-weight;
+
+  // Only the Open pill of the design has a border. The others have the fill only.
+  &[data-status='open'] {
+    border-color: t.$color-status-open-bar-border;
+    background: t.$color-status-open-badge-fill;
+    color: t.$color-status-open-text;
+  }
+
+  &[data-status='in-progress'] {
+    border-color: t.$color-status-in-progress-badge-fill;
+    background: t.$color-status-in-progress-badge-fill;
+    color: t.$color-status-in-progress-text;
+  }
+
+  &[data-status='complete'] {
+    border-color: t.$color-status-complete-badge-fill;
+    background: t.$color-status-complete-badge-fill;
+    color: t.$color-status-complete-text;
+  }
+
+  &[data-status='blocked'] {
+    border-color: t.$color-status-blocked-badge-fill;
+    background: t.$color-status-blocked-badge-fill;
+    color: t.$color-status-blocked-text;
+  }
+}
+
+// The datepicker popup. No artboard shows it: it takes the menu tokens and stays plain.
+.drawer ngb-datepicker.dropdown-menu {
+  z-index: 1;
+  margin-top: t.$component-status-menu-gap;
+  padding: t.$component-datepicker-padding;
+  border: 0;
+  border-radius: t.$layout-dropdown-menu-radius;
+  background: t.$color-surface-panel;
+  box-shadow: $menu-shadow;
+  font-family: t.$font-family;
+  font-size: t.$type-body-size;
+  color: t.$color-text-heading;
+
+  .ngb-dp-header {
+    padding-bottom: t.$component-datepicker-padding * 0.5;
+    background: none;
+  }
+
+  .ngb-dp-arrow-btn {
+    padding: 0 t.$component-datepicker-nav-padding-x;
+    border: 0;
+    border-radius: t.$component-datepicker-day-radius;
+    background: none;
+    color: t.$component-datepicker-muted-color;
+    cursor: pointer;
+
+    &:hover {
+      background: t.$layout-dropdown-menu-row-hover-fill;
+    }
+  }
+
+  .ngb-dp-month-name {
+    font-size: t.$type-datepicker-month-size;
+    font-weight: t.$type-datepicker-month-font-weight;
+    background: none;
+  }
+
+  // ng-bootstrap labels its controls with the Bootstrap class. The app has no Bootstrap CSS.
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .ngb-dp-weekdays {
+    border-bottom: t.$layout-panel-divider-width solid t.$layout-panel-divider-color;
+    background: none;
+  }
+
+  .ngb-dp-weekday {
+    font-style: normal;
+    color: t.$component-datepicker-muted-color;
+  }
+
+  .ngb-dp-weekday,
+  .ngb-dp-day {
+    width: t.$component-datepicker-day-size;
+    height: t.$component-datepicker-day-size;
+  }
+
+  .ngb-dp-day .btn-light {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    border-radius: t.$component-datepicker-day-radius;
+
+    &:hover {
+      background: t.$layout-dropdown-menu-row-hover-fill;
+    }
+
+    &.bg-primary {
+      background: t.$component-datepicker-selected-fill;
+      color: t.$component-datepicker-selected-text;
+    }
+
+    &.text-muted {
+      color: t.$component-datepicker-muted-color;
+    }
+  }
+
+  .ngb-dp-today .btn-light:not(.bg-primary) {
+    color: t.$component-datepicker-today-color;
+  }
+}
