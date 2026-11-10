@@ -638,8 +638,8 @@
       ],
       "verify": "e2e",
       "priority": "bonus",
-      "status": "pending",
-      "evidence": ""
+      "status": "pass",
+      "evidence": "e2e: [F5] parity mode neither reads nor writes the storage"
     },
     {
       "id": "G1",

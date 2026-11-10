@@ -2,7 +2,7 @@
 
 Work Order Schedule Timeline (Naologic front-end take-home). Generated from `acceptance-criteria.json` - edit the JSON, then run `node docs/requirements/render.mjs`.
 
-Progress: 55 pass, 0 fail, 0 open decision, 16 pending.
+Progress: 56 pass, 0 fail, 0 open decision, 15 pending.
 
 Legend: `[x]` pass, `[ ]` pending, `[?]` open decision. An item may only be marked pass with an evidence command (test name, screenshot path or measurement output) in the JSON `evidence` field.
 
@@ -83,7 +83,7 @@ Legend: `[x]` pass, `[ ]` pending, `[?]` open decision. An item may only be mark
 | [x] | F2 | At least 8 work orders across the centres, all 4 statuses present, one centre with several non-overlapping orders | brief | unit | must | unit: sample data [F2] at least 8 work orders, all 4 statuses, one centre with several orders |
 | [x] | F3 | Documents follow the docId / docType / data structure | brief | unit | must | unit: sample data [F3] the documents follow the docId / docType / data structure |
 | [x] | F4 | Overlap detection lives in a service as a pure, testable function | brief, ref | unit | must | unit: sample data [F4] the overlap detection is a pure function of the service |
-| [ ] | F5 | localStorage persistence: work orders survive a reload | brief, ref | e2e | bonus |  |
+| [x] | F5 | localStorage persistence: work orders survive a reload | brief, ref | e2e | bonus | e2e: [F5] parity mode neither reads nor writes the storage |
 
 ## Visual fidelity
 

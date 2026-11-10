@@ -6,6 +6,8 @@ import {
   SAMPLE_WORK_CENTER_DOCUMENTS,
   SAMPLE_WORK_ORDER_DOCUMENTS,
   WorkOrder,
+  WorkOrderDocument,
+  WorkOrderStatus,
 } from './sample-data';
 
 // The overlap function is re-exported here: the service owns it, the sibling file keeps it pure.
@@ -21,11 +23,12 @@ export class ScheduleService {
     })),
   ).asReadonly();
 
+  /**
+   * Parity mode always shows the design fixture and never touches the storage, so the parity
+   * screenshots do not depend on what a user saved before.
+   */
   private readonly orders = signal<WorkOrder[]>(
-    (PARITY_MODE ? PARITY_WORK_ORDER_DOCUMENTS : SAMPLE_WORK_ORDER_DOCUMENTS).map((document) => ({
-      docId: document.docId,
-      ...document.data,
-    })),
+    PARITY_MODE ? toWorkOrders(PARITY_WORK_ORDER_DOCUMENTS) : loadWorkOrders(),
   );
 
   readonly workOrders = this.orders.asReadonly();
@@ -56,11 +59,19 @@ export class ScheduleService {
         orders.map((order) => (order.docId === docId ? { docId, ...draft } : order)),
       );
     }
+    this.persist();
     return 'saved';
   }
 
   remove(docId: string): void {
     this.orders.update((orders) => orders.filter((order) => order.docId !== docId));
+    this.persist();
+  }
+
+  private persist(): void {
+    if (!PARITY_MODE) {
+      storeWorkOrders(this.orders());
+    }
   }
 
   private nextDocId(): string {
@@ -77,3 +88,81 @@ export class ScheduleService {
 export type WorkOrderDraft = Omit<WorkOrder, 'docId'>;
 
 export type SaveResult = 'saved' | 'overlap';
+
+/** The storage key. The version suffix lets a later data shape ignore old entries. */
+export const WORK_ORDERS_STORAGE_KEY = 'naologic.workOrders.v1';
+
+const STATUSES: readonly WorkOrderStatus[] = ['open', 'in-progress', 'complete', 'blocked'];
+
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+
+/**
+ * The saved orders, or the sample data when nothing is saved. A corrupt entry also gives the
+ * sample data: the next save then replaces it.
+ */
+function loadWorkOrders(): WorkOrder[] {
+  const saved = readStorage();
+  if (saved !== null) {
+    try {
+      const documents: unknown = JSON.parse(saved);
+      if (Array.isArray(documents) && documents.every(isWorkOrderDocument)) {
+        return toWorkOrders(documents);
+      }
+    } catch {
+      // Not JSON: fall through to the sample data.
+    }
+  }
+  return toWorkOrders(SAMPLE_WORK_ORDER_DOCUMENTS);
+}
+
+/** Saves the orders in the document structure of the brief. */
+function storeWorkOrders(orders: readonly WorkOrder[]): void {
+  const documents: WorkOrderDocument[] = orders.map(({ docId, ...data }) => ({
+    docId,
+    docType: 'workOrder',
+    data,
+  }));
+  try {
+    storage()?.setItem(WORK_ORDERS_STORAGE_KEY, JSON.stringify(documents));
+  } catch {
+    // Full or blocked storage: the change stays in memory for this session.
+  }
+}
+
+function toWorkOrders(documents: readonly WorkOrderDocument[]): WorkOrder[] {
+  return documents.map((document) => ({ docId: document.docId, ...document.data }));
+}
+
+function readStorage(): string | null {
+  try {
+    return storage()?.getItem(WORK_ORDERS_STORAGE_KEY) ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/** Undefined outside a browser (unit tests) and where the browser blocks the storage. */
+function storage(): Storage | undefined {
+  try {
+    return typeof window === 'undefined' ? undefined : window.localStorage;
+  } catch {
+    return undefined;
+  }
+}
+
+function isWorkOrderDocument(value: unknown): value is WorkOrderDocument {
+  if (typeof value !== 'object' || value === null) {
+    return false;
+  }
+  const { docId, docType, data } = value as Partial<WorkOrderDocument>;
+  if (typeof docId !== 'string' || docType !== 'workOrder' || typeof data !== 'object' || !data) {
+    return false;
+  }
+  return (
+    typeof data.name === 'string' &&
+    SAMPLE_WORK_CENTER_DOCUMENTS.some((center) => center.docId === data.workCenterId) &&
+    STATUSES.includes(data.status) &&
+    ISO_DATE.test(String(data.startDate)) &&
+    ISO_DATE.test(String(data.endDate))
+  );
+}
