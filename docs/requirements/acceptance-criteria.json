@@ -799,8 +799,8 @@
       ],
       "verify": "e2e",
       "priority": "bonus",
-      "status": "pending",
-      "evidence": ""
+      "status": "pass",
+      "evidence": "e2e: [I1] in Hour a scroll to the right end keeps adding columns, no empty area"
     },
     {
       "id": "I2",

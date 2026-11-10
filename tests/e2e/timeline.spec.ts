@@ -103,14 +103,15 @@ test('[B5] the header row re-labels per zoom level', async ({ page }) => {
   }
 
   await chooseTimescale(page, 'Day');
-  await expect(page.locator('.grid-header-cell')).toHaveCount(29);
+  // The count is no wait condition: I1 extends the range after the render.
+  await expect(page.locator('.grid-header-cell').first()).toHaveText(DAY_LABEL);
   const dayLabels = await page.locator('.grid-header-cell').allTextContents();
   for (const label of dayLabels) {
     expect(label.trim()).toMatch(DAY_LABEL);
   }
 
   await chooseTimescale(page, 'Week');
-  await expect(page.locator('.grid-header-cell')).toHaveCount(13);
+  await expect(page.locator('.grid-header-cell').first()).toHaveText(WEEK_LABEL);
   const weekLabels = await page.locator('.grid-header-cell').allTextContents();
   for (const label of weekLabels) {
     expect(label.trim()).toMatch(WEEK_LABEL);
@@ -127,14 +128,20 @@ test('[B8] the initial view centres on today with a buffer', async ({ page }) =>
   const centre = (rail!.x + rail!.width + grid!.x + grid!.width) / 2;
   expect(Math.abs(marker!.x + marker!.width / 2 - centre)).toBeLessThan(10);
 
-  // Two weeks of days on each side of today in Day view.
+  // At least two weeks of days on each side of today in Day view. I1 adds more at the edges.
   await chooseTimescale(page, 'Day');
-  await expect(page.locator('.grid-header-cell')).toHaveCount(29);
-  const days = await page.locator('.grid-header-cell').allTextContents();
-
-  const today = new Date().getDate();
-  const todayIndex = days.findIndex((label) => label.trim() === String(today));
-  expect(todayIndex).toBe(14);
+  const cells = page.locator('.grid-header-cell');
+  await expect(cells.and(page.locator('.grid-header-cell--current'))).toHaveText(
+    String(new Date().getDate()),
+  );
+  const { todayIndex, count } = await cells.evaluateAll((elements) => ({
+    todayIndex: elements.findIndex((element) =>
+      element.classList.contains('grid-header-cell--current'),
+    ),
+    count: elements.length,
+  }));
+  expect(todayIndex).toBeGreaterThanOrEqual(14);
+  expect(count - 1 - todayIndex).toBeGreaterThanOrEqual(14);
 });
 
 test('[G2] the timescale chip is 146 wide with the segments at 75 and 71', async ({ page }) => {

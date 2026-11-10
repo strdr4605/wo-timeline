@@ -99,6 +99,9 @@ $rail-line-left: math.div(t.$layout-rail-resize-handle-width + t.$layout-grid-ve
   flex: 1 0 auto;
   // After the rail edge, which is last in the DOM.
   order: 2;
+  // A bar past the last column must not make the scroll area wider. It is cut until the range
+  // extends. Clip, not hidden: clip makes no scroll container, so the sticky header still works.
+  overflow-x: clip;
   border-left: t.$layout-grid-vertical-grid-line-width solid
     t.$layout-grid-vertical-grid-line-color;
   // The body fill of the design stops 2px above the page bottom. The page under it is white.

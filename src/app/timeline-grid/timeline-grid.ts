@@ -2,14 +2,20 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   ElementRef,
   HostListener,
+  Injector,
+  NgZone,
   afterNextRender,
   afterRenderEffect,
   computed,
+  inject,
   input,
+  linkedSignal,
   output,
   signal,
+  untracked,
   viewChild,
 } from '@angular/core';
 import { WorkOrder } from '../data/sample-data';
@@ -17,8 +23,9 @@ import {
   Timescale,
   TimelineColumn,
   WorkCenter,
+  BUFFER,
   addDays,
-  buildColumns,
+  columnsInRange,
   dateAtPosition,
   isoDate,
   parseIsoDate,
@@ -102,8 +109,15 @@ export class TimelineGrid implements AfterViewInit {
   /** Captured once, so every column of one render speaks about the same day. */
   private readonly now = PARITY_MODE ? PARITY_TODAY : new Date();
 
+  /**
+   * The rendered range as column offsets from today. A scroll near an edge extends it, a new
+   * timescale and the Today button put it back to the buffer around today.
+   */
+  private readonly firstOffset = linkedSignal(() => -BUFFER[this.timescale()]);
+  private readonly lastOffset = linkedSignal(() => BUFFER[this.timescale()]);
+
   protected readonly columns = computed<TimelineColumn[]>(() =>
-    buildColumns(this.timescale(), this.now),
+    columnsInRange(this.timescale(), this.now, this.firstOffset(), this.lastOffset()),
   );
   protected readonly today = computed(() => todayPosition(this.columns(), this.now));
   protected readonly currentIndex = computed(() =>
@@ -176,13 +190,27 @@ export class TimelineGrid implements AfterViewInit {
   private readonly timeline = viewChild<ElementRef<HTMLElement>>('timeline');
   private readonly railDivider = viewChild<ElementRef<HTMLElement>>('railDivider');
 
-  constructor() {
-    afterNextRender(() => this.readRailLimits());
+  private readonly injector = inject(Injector);
+  private readonly zone = inject(NgZone);
+  private readonly destroyRef = inject(DestroyRef);
 
-    // Runs after the render, so the columns of the new zoom level are in the DOM.
+  /** True from an extend to the render of its columns, so one edge adds one chunk at a time. */
+  private extending = false;
+
+  /** True during the smooth scroll of the Today button: a left extend would stop that scroll. */
+  private extendPaused = false;
+
+  constructor() {
+    afterNextRender(() => {
+      this.readRailLimits();
+      this.listenForEdges();
+    });
+
+    // Runs after the render, so the columns of the new zoom level are in the DOM. Only the
+    // timescale triggers it: an extend changes the columns but must not move the view.
     afterRenderEffect(() => {
       this.timescale();
-      this.scrollToStart();
+      untracked(() => this.scrollToStart());
     });
   }
 
@@ -195,6 +223,14 @@ export class TimelineGrid implements AfterViewInit {
    * The Today button asks for a smooth scroll. Reduced motion jumps at once.
    */
   centerOnToday(smooth = false): void {
+    if (this.resetRange()) {
+      afterNextRender({ write: () => this.scrollToToday(smooth) }, { injector: this.injector });
+      return;
+    }
+    this.scrollToToday(smooth);
+  }
+
+  private scrollToToday(smooth: boolean): void {
     const scroller = this.scroller()?.nativeElement;
     const rail = this.rail()?.nativeElement;
     const timeline = this.timeline()?.nativeElement;
@@ -212,12 +248,19 @@ export class TimelineGrid implements AfterViewInit {
     const markerX = (index + fraction) * columnWidth;
     const contentLeft = timeline.getBoundingClientRect().left + timeline.clientLeft;
 
-    // The rail is sticky, so the visible grid area starts at its right edge.
-    const target = (rail.getBoundingClientRect().right + scroller.getBoundingClientRect().right) / 2;
+    // The visible grid area starts at the right edge of the sticky rail. The rail box is not used:
+    // after a reset shrinks the range, the old scroll is past the content and the rail moves away.
+    const scrollerBox = scroller.getBoundingClientRect();
+    const railRight = scrollerBox.left + scroller.clientLeft + rail.getBoundingClientRect().width;
+    const target = (railRight + scrollerBox.right) / 2;
     const left = scroller.scrollLeft + contentLeft + markerX - target;
 
     const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    scroller.scrollTo({ left, behavior: smooth && !reducedMotion ? 'smooth' : 'instant' });
+    const animate = smooth && !reducedMotion;
+
+    // The scrollend event ends the pause. A scroll of less than a pixel fires no scrollend.
+    this.extendPaused = animate && Math.abs(left - scroller.scrollLeft) >= 1;
+    scroller.scrollTo({ left, behavior: animate ? 'smooth' : 'instant' });
   }
 
   /**
@@ -406,6 +449,98 @@ export class TimelineGrid implements AfterViewInit {
     this.defaultRailWidth.set(read('--rail-default-width'));
   }
 
+  /**
+   * A scroll event fires many times a second. The listener runs outside Angular, so only an
+   * extend starts change detection. Parity mode keeps the fixed range of the design.
+   */
+  private listenForEdges(): void {
+    const scroller = this.scroller()?.nativeElement;
+    if (PARITY_MODE || !scroller) {
+      return;
+    }
+
+    const onScroll = () => this.extendAtEdges();
+    const onScrollEnd = () => {
+      this.extendPaused = false;
+      this.extendAtEdges();
+    };
+
+    this.zone.runOutsideAngular(() => {
+      scroller.addEventListener('scroll', onScroll, { passive: true });
+      scroller.addEventListener('scrollend', onScrollEnd, { passive: true });
+    });
+    this.destroyRef.onDestroy(() => {
+      scroller.removeEventListener('scroll', onScroll);
+      scroller.removeEventListener('scrollend', onScrollEnd);
+    });
+  }
+
+  /**
+   * Adds a chunk of columns when less than one viewport of columns is left at an edge. After the
+   * render it checks again, so a wide screen gets as many chunks as it needs.
+   */
+  private extendAtEdges(): void {
+    const scroller = this.scroller()?.nativeElement;
+    const timeline = this.timeline()?.nativeElement;
+    if (this.extending || this.extendPaused || !scroller || !timeline) {
+      return;
+    }
+
+    // A short range is near both edges. Both extend in one pass: with only the left one, the
+    // short right side would clamp the scroll that keeps the view in place.
+    const margin = scroller.clientWidth;
+    const scrollLeft = scroller.scrollLeft;
+    const columnWidth = parseFloat(getComputedStyle(timeline).getPropertyValue('--column-width'));
+    const atLeft = scrollLeft < margin;
+    const atRight = columnsRightGap(scroller, timeline, this.columns().length * columnWidth) < margin;
+    if (!atLeft && !atRight) {
+      return;
+    }
+
+    const shift = atLeft ? EXTEND_CHUNK * columnWidth : 0;
+    const timescale = this.timescale();
+    const firstOffset = atLeft ? this.firstOffset() - EXTEND_CHUNK : this.firstOffset();
+
+    this.extending = true;
+    this.zone.run(() => {
+      if (atLeft) {
+        this.firstOffset.set(firstOffset);
+        // The row moves left under a still pointer, so the placeholder moves with the content.
+        this.cellHover.update((hover) => hover && { ...hover, x: hover.x + shift });
+      }
+      if (atRight) {
+        this.lastOffset.update((offset) => offset + EXTEND_CHUNK);
+      }
+
+      // The write runs before the paint, so the new left columns never show as a jump.
+      afterNextRender(
+        {
+          write: () => {
+            // A reset by the Today button or a new timescale already placed the view.
+            const sameRange = this.timescale() === timescale && this.firstOffset() === firstOffset;
+            if (atLeft && sameRange) {
+              scroller.scrollLeft = scrollLeft + shift;
+            }
+            this.extending = false;
+            this.extendAtEdges();
+          },
+        },
+        { injector: this.injector },
+      );
+    });
+  }
+
+  /** Puts the range back to the buffer around today. True when the range changed. */
+  private resetRange(): boolean {
+    const buffer = BUFFER[this.timescale()];
+    if (this.firstOffset() === -buffer && this.lastOffset() === buffer) {
+      return false;
+    }
+    this.firstOffset.set(-buffer);
+    this.lastOffset.set(buffer);
+    return true;
+  }
+
   /** The design view in parity mode, today in the middle otherwise. */
   private scrollToStart(): void {
     if (PARITY_MODE && this.timescale() === 'Month') {
@@ -433,6 +568,20 @@ export class TimelineGrid implements AfterViewInit {
     const visibleLeft = rail.getBoundingClientRect().right + timeline.clientLeft;
     scroller.scrollLeft += contentLeft + index * columnWidth - visibleLeft;
   }
+}
+
+/** The columns that one extend adds at an edge. A chunk of day columns is wider than the screen. */
+const EXTEND_CHUNK = 30;
+
+/**
+ * The width from the right edge of the visible grid to the end of the last column. The
+ * scrollWidth is not used: a bar can end far past the last column, and then the right edge
+ * never comes near.
+ */
+function columnsRightGap(scroller: HTMLElement, timeline: HTMLElement, columnsWidth: number): number {
+  const contentLeft = timeline.getBoundingClientRect().left + timeline.clientLeft;
+  const visibleRight = scroller.getBoundingClientRect().left + scroller.clientLeft + scroller.clientWidth;
+  return contentLeft + columnsWidth - visibleRight;
 }
 
 /** The day at a fraction of a column. An hour column sits inside one day. */

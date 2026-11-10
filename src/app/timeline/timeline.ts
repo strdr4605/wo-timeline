@@ -28,7 +28,7 @@ export interface TimelineColumn {
 }
 
 /** Columns rendered on each side of today: two days in Hour view, six months in Month view. */
-const BUFFER: Record<Timescale, number> = { Hour: 48, Day: 14, Week: 6, Month: 6 };
+export const BUFFER: Record<Timescale, number> = { Hour: 48, Day: 14, Week: 6, Month: 6 };
 
 const HOUR_MS = 3_600_000;
 
@@ -36,9 +36,19 @@ const MONTH_NAME = new Intl.DateTimeFormat('en-US', { month: 'short' });
 
 export function buildColumns(timescale: Timescale, today: Date): TimelineColumn[] {
   const buffer = BUFFER[timescale];
+  return columnsInRange(timescale, today, -buffer, buffer);
+}
+
+/** The columns from one offset to another offset from today, both included. */
+export function columnsInRange(
+  timescale: Timescale,
+  today: Date,
+  firstOffset: number,
+  lastOffset: number,
+): TimelineColumn[] {
   const columns: TimelineColumn[] = [];
 
-  for (let offset = -buffer; offset <= buffer; offset++) {
+  for (let offset = firstOffset; offset <= lastOffset; offset++) {
     columns.push(columnFor(timescale, today, offset));
   }
 
