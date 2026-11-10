@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   afterRenderEffect,
@@ -64,6 +65,7 @@ interface BarPlacement {
   imports: [WorkOrderBar],
   templateUrl: './timeline-grid.html',
   styleUrl: './timeline-grid.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TimelineGrid implements AfterViewInit {
   readonly timescale = input.required<Timescale>();

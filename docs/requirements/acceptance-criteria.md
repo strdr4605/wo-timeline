@@ -2,7 +2,7 @@
 
 Work Order Schedule Timeline (Naologic front-end take-home). Generated from `acceptance-criteria.json` - edit the JSON, then run `node docs/requirements/render.mjs`.
 
-Progress: 61 pass, 0 fail, 0 open decision, 11 pending.
+Progress: 62 pass, 0 fail, 0 open decision, 10 pending.
 
 Legend: `[x]` pass, `[ ]` pending, `[?]` open decision. An item may only be marked pass with an evidence command (test name, screenshot path or measurement output) in the JSON `evidence` field.
 
@@ -116,7 +116,7 @@ Legend: `[x]` pass, `[ ]` pending, `[?]` open decision. An item may only be mark
 | [ ] | I3 | Smooth animations: drawer slide in and out, bar hover transitions | brief | manual | bonus |  |
 | [ ] | I4 | Automated test suite runs headless and passes | brief | unit | bonus |  |
 | [x] | I5 | Accessibility: aria labels on controls, focus management, keyboard reachable menu | brief | e2e | bonus | e2e: [I5] controls have names, bars and menus work with the keyboard, the drawer keeps the focus |
-| [ ] | I6 | OnPush change detection and trackBy on the timeline lists | brief | manual | bonus |  |
+| [x] | I6 | OnPush change detection and trackBy on the timeline lists | brief | manual | bonus | e2e: [I6] every component uses OnPush and no template tracks by $index |
 | [x] | I7 | Responsive: layout does not break on smaller screens, horizontal scroll acceptable | brief | manual | must | e2e: [I7] a phone screen keeps the timeline, the scroll and the drawer usable |
 | [x] | I8 | The design covers Month only; Day and Week layouts are derived from the same tokens and look consistent | sketch | visual | must | e2e: [I8] Day and Week reuse the Month rows, bars and header of the design |
 

@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   HostListener,
@@ -17,6 +18,7 @@ import { menuKeyTarget } from '../keyboard';
   selector: 'app-timescale-chip',
   templateUrl: './timescale-chip.html',
   styleUrl: './timescale-chip.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TimescaleChip {
   readonly label = input('Timescale');

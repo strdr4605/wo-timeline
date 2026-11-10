@@ -861,8 +861,8 @@
       ],
       "verify": "manual",
       "priority": "bonus",
-      "status": "pending",
-      "evidence": ""
+      "status": "pass",
+      "evidence": "e2e: [I6] every component uses OnPush and no template tracks by $index"
     },
     {
       "id": "I7",

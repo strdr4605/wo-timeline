@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   HostListener,
@@ -57,6 +58,7 @@ const DATE_FORMAT = new Intl.DateTimeFormat('en-US', {
   selector: 'app-work-order-bar',
   templateUrl: './work-order-bar.html',
   styleUrl: './work-order-bar.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WorkOrderBar {
   readonly order = input.required<WorkOrder>();

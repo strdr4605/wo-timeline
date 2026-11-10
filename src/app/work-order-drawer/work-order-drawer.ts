@@ -1,4 +1,6 @@
 import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   DestroyRef,
   ElementRef,
@@ -58,6 +60,7 @@ type DateField = 'startDate' | 'endDate';
   templateUrl: './work-order-drawer.html',
   styleUrl: './work-order-drawer.scss',
   providers: [{ provide: NgbDateParserFormatter, useFactory: () => new DottedDateFormatter() }],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WorkOrderDrawer {
   /** The open request, or null when the drawer is closed. */
@@ -95,6 +98,7 @@ export class WorkOrderDrawer {
   protected readonly overlapCenter = signal<string | null>(null);
 
   private readonly schedule = inject(ScheduleService);
+  private readonly changeDetector = inject(ChangeDetectorRef);
   private readonly statusSelect = viewChildren(NgSelectComponent);
   private readonly datepickers = viewChildren(NgbInputDatepicker);
   private readonly panel = viewChild.required<ElementRef<HTMLElement>>('panel');
@@ -110,10 +114,12 @@ export class WorkOrderDrawer {
       }
     });
 
-    // The overlap message is about the old values. A changed value makes it stale.
-    this.form.valueChanges
-      .pipe(takeUntilDestroyed())
-      .subscribe(() => this.overlapCenter.set(null));
+    // The overlap message is about the old values. A changed value makes it stale. The datepicker
+    // popup and the ng-select panel write the value from outside this view, so OnPush must be told.
+    this.form.valueChanges.pipe(takeUntilDestroyed()).subscribe(() => {
+      this.overlapCenter.set(null);
+      this.changeDetector.markForCheck();
+    });
 
     this.closeOnEscape();
     this.manageFocus();

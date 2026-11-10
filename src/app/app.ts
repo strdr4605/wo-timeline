@@ -1,4 +1,4 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { ScheduleService } from './data/schedule.service';
 import { Timescale } from './timeline/timeline';
 import { TimescaleChip } from './timescale-chip/timescale-chip';
@@ -13,6 +13,7 @@ import { WorkOrderDrawer } from './work-order-drawer/work-order-drawer';
   imports: [TimescaleChip, TimelineGrid, WorkOrderDrawer],
   templateUrl: './app.html',
   styleUrl: './app.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class App {
   /** Month is the default of the design and of the owner demo. See decision Q1. */
