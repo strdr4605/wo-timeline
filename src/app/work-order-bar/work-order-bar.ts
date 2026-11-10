@@ -33,6 +33,8 @@ export class WorkOrderBar {
 
   /** The bar is hovered. The row hover is a class of its own, this one is the bar. */
   protected readonly hovered = signal(false);
+  /** The pointer is on a drag handle: the design then shows both handles and the dates at once. */
+  protected readonly edgeHovered = signal(false);
   /** The three-dot menu is open. */
   protected readonly menuOpen = signal(false);
 

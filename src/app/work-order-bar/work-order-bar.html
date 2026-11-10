@@ -2,6 +2,7 @@
   class="work-order-bar"
   [attr.data-status]="order().status"
   [class.work-order-bar--hovered]="hovered()"
+  [class.work-order-bar--edge-hovered]="edgeHovered()"
   [class.work-order-bar--menu-open]="menuOpen()"
   [style.--start-index]="start().index"
   [style.--start-fraction]="start().fraction"
@@ -10,13 +11,23 @@
   (mouseenter)="hovered.set(true)"
   (mouseleave)="hovered.set(false)"
 >
-  <span class="work-order-bar__handle work-order-bar__handle--start" aria-hidden="true"></span>
+  <span
+    class="work-order-bar__handle work-order-bar__handle--start"
+    aria-hidden="true"
+    (mouseenter)="edgeHovered.set(true)"
+    (mouseleave)="edgeHovered.set(false)"
+  ></span>
 
   <span class="work-order-bar__name">{{ order().name }}</span>
 
   <span class="work-order-bar__badge">{{ statusLabel() }}</span>
 
-  <span class="work-order-bar__handle work-order-bar__handle--end" aria-hidden="true"></span>
+  <span
+    class="work-order-bar__handle work-order-bar__handle--end"
+    aria-hidden="true"
+    (mouseenter)="edgeHovered.set(true)"
+    (mouseleave)="edgeHovered.set(false)"
+  ></span>
 
   <button
     type="button"
@@ -48,6 +59,7 @@
     class="work-order-tooltip"
     role="tooltip"
     [class.work-order-tooltip--visible]="hovered() && !menuOpen()"
+    [class.work-order-tooltip--now]="edgeHovered()"
   >
     <span class="work-order-tooltip__name">{{ order().name }}</span>
     <span class="work-order-tooltip__status">{{ statusLabel() }}</span>
