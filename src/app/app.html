@@ -29,10 +29,12 @@
     [workCenters]="workCenters()"
     [workOrders]="workOrders()"
     [selectedCenterId]="selectedCenterId()"
+    [railWidth]="railWidth()"
     (cellPick)="openCreate($event)"
     (editOrder)="openEdit($event)"
     (deleteOrder)="deleteOrder($event)"
     (resizeOrder)="resizeOrder($event)"
+    (railWidthChange)="resizeRail($event)"
   />
 </main>
 

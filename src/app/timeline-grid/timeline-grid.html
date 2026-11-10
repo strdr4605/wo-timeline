@@ -5,8 +5,8 @@
     arrow key move the start date one day.
   </p>
 
-  <div class="grid__inner">
-    <div class="grid__rail" #rail>
+  <div class="grid__inner" [style.--rail-width.px]="shownRailWidth()">
+    <div class="grid__rail" id="work-center-rail" #rail>
       <div class="grid__rail-header">Work Center</div>
       <div class="grid__rail-body">
         @for (center of workCenters(); track center.id) {
@@ -90,6 +90,36 @@
 
         <!-- Over the rows: the chip names the current column over the first row. -->
         <div class="grid-current-chip" [style.--col-index]="currentIndex()">{{ chipLabel() }}</div>
+      </div>
+    </div>
+
+    <!--
+      The rail edge. CSS order puts it between the rail and the timeline. It comes last in the DOM,
+      so Tab still reaches the bars right after the toolbar.
+    -->
+    <div
+      class="grid-rail-divider"
+      [class.grid-rail-divider--dragging]="railDrag() !== null"
+      tabindex="0"
+      role="separator"
+      aria-orientation="vertical"
+      aria-label="Work center column width"
+      aria-controls="work-center-rail"
+      [attr.aria-valuenow]="railValue()"
+      [attr.aria-valuemin]="railLimits()?.min"
+      [attr.aria-valuemax]="railLimits()?.max"
+      [style.--pointer-y.px]="railPointerY()"
+      (pointerdown)="startRailResize($event)"
+      (pointermove)="moveRailResize($event)"
+      (pointerup)="endRailResize()"
+      (pointercancel)="cancelRailResize()"
+      (pointerleave)="railPointerY.set(null)"
+      (keydown)="onRailKeydown($event)"
+      #railDivider
+    >
+      <!-- "Helpers/Button-Hover/Label" of "Timeline - Hover Options", right of the rail edge. -->
+      <div class="grid-rail-divider__label" aria-hidden="true">
+        <span><span class="grid-rail-divider__strong">Drag</span> to resize</span>
       </div>
     </div>
   </div>

@@ -25,6 +25,7 @@ export class App {
 
   protected readonly workCenters = this.schedule.workCenters;
   protected readonly workOrders = this.schedule.workOrders;
+  protected readonly railWidth = this.schedule.railWidth;
 
   /** The reason the last resize was refused. It hides after a few seconds. */
   protected readonly resizeError = signal<string | null>(null);
@@ -69,6 +70,10 @@ export class App {
     }
 
     this.resizeError.set(null);
+  }
+
+  protected resizeRail(width: number): void {
+    this.schedule.saveRailWidth(width);
   }
 
   private showResizeError(message: string): void {

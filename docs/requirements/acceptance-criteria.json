@@ -889,6 +889,18 @@
       "evidence": "e2e: [I8] Day and Week reuse the Month rows, bars and header of the design"
     },
     {
+      "id": "I10",
+      "group": "Bonus features",
+      "requirement": "Drag the rail divider to resize the work center column (\"Drag to resize\" label at the rail edge of Timeline - Hover Options): blue line and label on hover, pointer drag with min and max width, Escape cancels, separator keys, width saved (not in parity mode)",
+      "source": [
+        "sketch"
+      ],
+      "verify": "e2e",
+      "priority": "bonus",
+      "status": "pass",
+      "evidence": "e2e: [I10] a drag on the rail edge resizes the rail, with limits, Escape, keys and storage"
+    },
+    {
       "id": "J1",
       "group": "Demo evidence",
       "requirement": "A second Playwright config records a video per requirement test: headed Chrome, slow motion, files under docs/demo/videos/. The fast config used by verify.mjs is not affected.",

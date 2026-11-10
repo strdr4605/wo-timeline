@@ -7,6 +7,16 @@ $line: t.$layout-grid-horizontal-grid-line-width solid t.$layout-grid-horizontal
 // The design draws the 3px today line centred on the 1px column line left of the current month.
 $today-offset: math.div(t.$layout-grid-today-marker-width + t.$layout-grid-vertical-grid-line-width, 2);
 
+// The user can drag the rail edge. A narrow screen keeps part of the timeline visible next to
+// the sticky rail.
+$rail-width: min(
+  clamp(#{t.$layout-rail-resize-min-width}, var(--rail-width, #{t.$layout-grid-left-rail-w}), #{t.$layout-rail-resize-max-width}),
+  40vw
+);
+
+// The resize line is centred on the 1px timeline border right of the rail, as in the design.
+$rail-line-left: math.div(t.$layout-rail-resize-handle-width + t.$layout-grid-vertical-grid-line-width - t.$layout-rail-resize-line-width, 2);
+
 // The grid is the card under the page head: it runs to the page bottom and scrolls both ways.
 .grid {
   height: calc(100vh - #{t.$layout-grid-header-top});
@@ -27,8 +37,7 @@ $today-offset: math.div(t.$layout-grid-today-marker-width + t.$layout-grid-verti
   left: 0;
   z-index: 2;
   flex: none;
-  // A narrow screen keeps part of the timeline visible next to the sticky rail.
-  width: min(#{t.$layout-grid-left-rail-w}, 40vw);
+  width: $rail-width;
   background: t.$layout-grid-rail-row-fill;
 }
 
@@ -88,6 +97,8 @@ $today-offset: math.div(t.$layout-grid-today-marker-width + t.$layout-grid-verti
   isolation: isolate;
   // The rows and their hover run to the right edge of the page, past the last column.
   flex: 1 0 auto;
+  // After the rail edge, which is last in the DOM.
+  order: 2;
   border-left: t.$layout-grid-vertical-grid-line-width solid
     t.$layout-grid-vertical-grid-line-color;
   // The body fill of the design stops 2px above the page bottom. The page under it is white.
@@ -272,4 +283,86 @@ $today-offset: math.div(t.$layout-grid-today-marker-width + t.$layout-grid-verti
   font-weight: t.$type-body-font-weight;
   color: t.$color-brand-primary;
   pointer-events: none;
+}
+
+// The rail edge: a zone of zero layout width on the line between the rail and the timeline. It
+// sticks with the rail while the timeline scrolls sideways.
+.grid-rail-divider {
+  // The script reads the limits here, because they are tokens.
+  --rail-default-width: #{t.$layout-grid-left-rail-w};
+  --rail-min-width: #{t.$layout-rail-resize-min-width};
+  --rail-max-width: #{t.$layout-rail-resize-max-width};
+  --rail-key-step: #{t.$layout-rail-resize-key-step};
+
+  position: sticky;
+  left: calc(#{$rail-width} - #{math.div(t.$layout-rail-resize-handle-width, 2)});
+  z-index: 3;
+  order: 1;
+  flex: none;
+  width: t.$layout-rail-resize-handle-width;
+  margin: 0 (-1 * math.div(t.$layout-rail-resize-handle-width, 2));
+  cursor: ew-resize;
+  touch-action: none;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: $rail-line-left;
+    width: t.$layout-rail-resize-line-width;
+    background: t.$layout-rail-resize-line-color;
+    opacity: 0;
+    transition: opacity t.$layout-motion-duration-fast t.$layout-motion-easing;
+  }
+
+  &:hover::before,
+  &:focus-visible::before,
+  &--dragging::before {
+    opacity: 1;
+  }
+
+  &:focus-visible {
+    outline: t.$layout-focus-ring-width solid t.$color-border-focus;
+    outline-offset: t.$layout-focus-ring-offset;
+  }
+}
+
+// The rules of the "Drag to resize" label of a bar (b4-resize): the tooltip box, "Drag" in Bold.
+// It sits right of the line, at the pointer, or at the design place for the keyboard focus.
+.grid-rail-divider__label {
+  position: absolute;
+  top: calc(
+    var(--pointer-y, #{t.$layout-rail-resize-label-top + math.div(t.$layout-tooltip-height, 2)}) -
+      #{math.div(t.$layout-tooltip-height, 2)}
+  );
+  left: ($rail-line-left + t.$layout-rail-resize-line-width + t.$layout-rail-resize-label-gap);
+  display: flex;
+  width: max-content;
+  align-items: center;
+  height: t.$layout-tooltip-height;
+  padding: 0 t.$layout-tooltip-padding-x;
+  border-radius: t.$layout-tooltip-radius;
+  background: t.$layout-tooltip-bg;
+  box-shadow:
+    0 0 t.$layout-grid-cell-hover-tooltip-shadow-blur t.$layout-grid-cell-hover-tooltip-shadow-spread
+      t.$layout-grid-cell-hover-tooltip-shadow-color,
+    0 t.$layout-grid-cell-hover-tooltip-shadow2-y t.$layout-grid-cell-hover-tooltip-shadow2-blur
+      t.$layout-grid-cell-hover-tooltip-shadow2-spread t.$layout-grid-cell-hover-tooltip-shadow2-color;
+  font-family: t.$font-family;
+  font-size: t.$type-tooltip-size;
+  font-weight: t.$type-tooltip-font-weight;
+  color: t.$type-tooltip-color;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+
+  // The label hides during a drag, as the bar label does.
+  .grid-rail-divider:is(:hover, :focus-visible):not(.grid-rail-divider--dragging) & {
+    opacity: 1;
+  }
+}
+
+.grid-rail-divider__strong {
+  font-weight: t.$type-tooltip-bold-font-weight;
 }

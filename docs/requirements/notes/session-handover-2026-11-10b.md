@@ -85,7 +85,13 @@ The lead kept this text in a scratchpad file. It is lost now, so copy it from he
 5. J1 and J2: a second Playwright config that records one video for each requirement test
    (headed Chrome, slow motion, files under `docs/demo/videos/`), and `npm run demo`. The fast
    config must not change.
-6. Two units, in this order (plan change from the human, 2026-11-10). Same flow for each.
+6. I10 (new item, from the human, 2026-11-11): rail resize. The rail edge (right side of
+   `grid__rail`) is the drag handle. Hover shows the 3px blue line and the "Drag to resize"
+   label of "Timeline - Hover Options" (489,531). Pointer drag with min and max width, Escape
+   cancels, `role="separator"` with arrow keys. The width is saved through the F5 storage path.
+   Parity mode keeps 380 and saves nothing. Evidence: an e2e test titled `[I10]`. Unit b11-rail,
+   notes `notes/b11-rail.md`.
+7. Two units, in this order (plan change from the human, 2026-11-10). Same flow for each.
    a. I1: infinite horizontal scroll. More columns load when the user scrolls near an edge.
       Store the range as logical column offsets from today (`firstOffset..lastOffset`), not as
       an array of columns. Build columns with `columnFor(timescale, today, offset)`. Keep the
@@ -109,7 +115,7 @@ The lead kept this text in a scratchpad file. It is lost now, so copy it from he
         count stays at or below a bound. Far bars are not in the DOM. The scroll position stays
         the same on prepend. The focus stays after a scroll. A drag across the window edge
         works. Then run the full suite again (a11y, resize and today touch this code).
-7. Storybook. It has no item id. Give it a new id in `acceptance-criteria.md` (bonus). Stories
+8. Storybook. It has no item id. Give it a new id in `acceptance-criteria.md` (bonus). Stories
    for the bar (each status), the timescale chip and the drawer. Storybook must not change the
    app build.
 

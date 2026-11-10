@@ -33,6 +33,11 @@ export class ScheduleService {
 
   readonly workOrders = this.orders.asReadonly();
 
+  /** The width of the work centre rail set by the user, or null for the design width. */
+  private readonly savedRailWidth = signal<number | null>(PARITY_MODE ? null : loadRailWidth());
+
+  readonly railWidth = this.savedRailWidth.asReadonly();
+
   /** The orders of one work centre, in the order of the sample data. */
   ordersOf(workCenterId: string): WorkOrder[] {
     return this.workOrders().filter((order) => order.workCenterId === workCenterId);
@@ -68,6 +73,14 @@ export class ScheduleService {
     this.persist();
   }
 
+  /** Parity mode keeps the new width for this page only. */
+  saveRailWidth(width: number): void {
+    this.savedRailWidth.set(width);
+    if (!PARITY_MODE) {
+      writeStorage(RAIL_WIDTH_STORAGE_KEY, String(width));
+    }
+  }
+
   private persist(): void {
     if (!PARITY_MODE) {
       storeWorkOrders(this.orders());
@@ -92,6 +105,8 @@ export type SaveResult = 'saved' | 'overlap';
 /** The storage key. The version suffix lets a later data shape ignore old entries. */
 export const WORK_ORDERS_STORAGE_KEY = 'naologic.workOrders.v1';
 
+export const RAIL_WIDTH_STORAGE_KEY = 'naologic.railWidth.v1';
+
 const STATUSES: readonly WorkOrderStatus[] = ['open', 'in-progress', 'complete', 'blocked'];
 
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
@@ -101,7 +116,7 @@ const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
  * sample data: the next save then replaces it.
  */
 function loadWorkOrders(): WorkOrder[] {
-  const saved = readStorage();
+  const saved = readStorage(WORK_ORDERS_STORAGE_KEY);
   if (saved !== null) {
     try {
       const documents: unknown = JSON.parse(saved);
@@ -122,22 +137,32 @@ function storeWorkOrders(orders: readonly WorkOrder[]): void {
     docType: 'workOrder',
     data,
   }));
-  try {
-    storage()?.setItem(WORK_ORDERS_STORAGE_KEY, JSON.stringify(documents));
-  } catch {
-    // Full or blocked storage: the change stays in memory for this session.
-  }
+  writeStorage(WORK_ORDERS_STORAGE_KEY, JSON.stringify(documents));
+}
+
+/** The saved rail width. A value that is not a positive number gives the design width. */
+function loadRailWidth(): number | null {
+  const width = Number(readStorage(RAIL_WIDTH_STORAGE_KEY) ?? NaN);
+  return Number.isFinite(width) && width > 0 ? width : null;
 }
 
 function toWorkOrders(documents: readonly WorkOrderDocument[]): WorkOrder[] {
   return documents.map((document) => ({ docId: document.docId, ...document.data }));
 }
 
-function readStorage(): string | null {
+function readStorage(key: string): string | null {
   try {
-    return storage()?.getItem(WORK_ORDERS_STORAGE_KEY) ?? null;
+    return storage()?.getItem(key) ?? null;
   } catch {
     return null;
+  }
+}
+
+function writeStorage(key: string, value: string): void {
+  try {
+    storage()?.setItem(key, value);
+  } catch {
+    // Full or blocked storage: the change stays in memory for this session.
   }
 }
 

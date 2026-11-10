@@ -3,6 +3,8 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  HostListener,
+  afterNextRender,
   afterRenderEffect,
   computed,
   input,
@@ -50,6 +52,19 @@ export interface ResizeRequest {
   endDate: string;
 }
 
+/** The rail width limits and key step, read from the tokens in the CSS. */
+interface RailLimits {
+  min: number;
+  max: number;
+  step: number;
+}
+
+/** A pointer drag of the rail edge: the press x and the rail width at the press. */
+interface RailDrag {
+  originX: number;
+  originWidth: number;
+}
+
 /** A bar with the two positions it is placed by. */
 interface BarPlacement {
   /** The order as drawn: during a drag it has the preview dates. */
@@ -75,10 +90,14 @@ export class TimelineGrid implements AfterViewInit {
   /** The row of the open create drawer. It stays highlighted while the overlay covers the grid. */
   readonly selectedCenterId = input<string | null>(null);
 
+  /** The rail width chosen by the user, or null for the design width. */
+  readonly railWidth = input<number | null>(null);
+
   readonly cellPick = output<CellPick>();
   readonly editOrder = output<WorkOrder>();
   readonly deleteOrder = output<WorkOrder>();
   readonly resizeOrder = output<ResizeRequest>();
+  readonly railWidthChange = output<number>();
 
   /** Captured once, so every column of one render speaks about the same day. */
   private readonly now = PARITY_MODE ? PARITY_TODAY : new Date();
@@ -134,11 +153,32 @@ export class TimelineGrid implements AfterViewInit {
   /** The placeholder box follows the pointer over the empty part of a timeline row. */
   protected readonly cellHover = signal<CellHover | null>(null);
 
+  /** The rail width during a pointer drag. The release asks the parent to save it. */
+  private readonly railPreview = signal<number | null>(null);
+  protected readonly railDrag = signal<RailDrag | null>(null);
+  protected readonly shownRailWidth = computed(() => this.railPreview() ?? this.railWidth());
+
+  /** Null until the first render, because the CSS holds the limits. */
+  protected readonly railLimits = signal<RailLimits | null>(null);
+  /** The design width, read from the CSS with the limits. */
+  private readonly defaultRailWidth = signal<number | null>(null);
+  /** The width that the CSS draws: a saved width out of the limits is clamped there too. */
+  protected readonly railValue = computed(() => {
+    const width = this.shownRailWidth() ?? this.defaultRailWidth();
+    return width === null ? null : this.clampRailWidth(width);
+  });
+
+  /** The resize label follows the pointer along the rail edge. */
+  protected readonly railPointerY = signal<number | null>(null);
+
   private readonly scroller = viewChild<ElementRef<HTMLElement>>('scroller');
   private readonly rail = viewChild<ElementRef<HTMLElement>>('rail');
   private readonly timeline = viewChild<ElementRef<HTMLElement>>('timeline');
+  private readonly railDivider = viewChild<ElementRef<HTMLElement>>('railDivider');
 
   constructor() {
+    afterNextRender(() => this.readRailLimits());
+
     // Runs after the render, so the columns of the new zoom level are in the DOM.
     afterRenderEffect(() => {
       this.timescale();
@@ -178,6 +218,72 @@ export class TimelineGrid implements AfterViewInit {
 
     const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
     scroller.scrollTo({ left, behavior: smooth && !reducedMotion ? 'smooth' : 'instant' });
+  }
+
+  /**
+   * A press on the rail edge starts a resize. Pointer capture keeps the drag alive when the
+   * pointer leaves the edge. The default is prevented, so the press selects no text.
+   */
+  protected startRailResize(event: PointerEvent): void {
+    const rail = this.rail()?.nativeElement;
+    if (event.button !== 0 || !rail) {
+      return;
+    }
+    event.preventDefault();
+    (event.currentTarget as HTMLElement).setPointerCapture(event.pointerId);
+    this.railDrag.set({ originX: event.clientX, originWidth: rail.getBoundingClientRect().width });
+  }
+
+  protected moveRailResize(event: PointerEvent): void {
+    const drag = this.railDrag();
+    if (drag === null) {
+      const divider = event.currentTarget as HTMLElement;
+      this.railPointerY.set(event.clientY - divider.getBoundingClientRect().top);
+      return;
+    }
+    this.railPreview.set(this.clampRailWidth(drag.originWidth + event.clientX - drag.originX));
+  }
+
+  protected endRailResize(): void {
+    const width = this.railPreview();
+    if (this.railDrag() !== null && width !== null) {
+      this.railWidthChange.emit(width);
+    }
+    this.cancelRailResize();
+  }
+
+  /** The browser took the pointer away, or Escape: the rail keeps its width. */
+  protected cancelRailResize(): void {
+    this.railDrag.set(null);
+    this.railPreview.set(null);
+  }
+
+  /** Escape during a drag puts the rail back. The edge may not have the focus, so this is global. */
+  @HostListener('document:keydown.escape', ['$event'])
+  protected cancelRailResizeOnEscape(event: Event): void {
+    if (this.railDrag() !== null) {
+      event.preventDefault();
+      this.cancelRailResize();
+    }
+  }
+
+  /** The arrows change the width by one step, Home and End go to the limits. */
+  protected onRailKeydown(event: KeyboardEvent): void {
+    const limits = this.railLimits();
+    const width = this.railValue();
+    if (limits === null || width === null) {
+      return;
+    }
+
+    const next = railKeyTarget(event.key, width, limits);
+    if (next === null) {
+      return;
+    }
+    // The arrows would scroll the grid.
+    event.preventDefault();
+    if (next !== width) {
+      this.railWidthChange.emit(next);
+    }
   }
 
   /** The bars of one work centre. */
@@ -277,6 +383,29 @@ export class TimelineGrid implements AfterViewInit {
       : { startDate: order.startDate, endDate: moved };
   }
 
+  private clampRailWidth(width: number): number {
+    const limits = this.railLimits();
+    const rounded = Math.round(width);
+    return limits ? Math.min(limits.max, Math.max(limits.min, rounded)) : rounded;
+  }
+
+  /** The limits live in the tokens. The CSS gives them to the divider as custom properties. */
+  private readRailLimits(): void {
+    const divider = this.railDivider()?.nativeElement;
+    if (!divider) {
+      return;
+    }
+    const style = getComputedStyle(divider);
+    const read = (name: string) => parseFloat(style.getPropertyValue(name));
+
+    this.railLimits.set({
+      min: read('--rail-min-width'),
+      max: read('--rail-max-width'),
+      step: read('--rail-key-step'),
+    });
+    this.defaultRailWidth.set(read('--rail-default-width'));
+  }
+
   /** The design view in parity mode, today in the middle otherwise. */
   private scrollToStart(): void {
     if (PARITY_MODE && this.timescale() === 'Month') {
@@ -311,6 +440,23 @@ function dayInColumn(column: TimelineColumn, fraction: number): Date {
   const days = Math.round((column.end.getTime() - column.start.getTime()) / 86_400_000);
   const start = column.start;
   return new Date(start.getFullYear(), start.getMonth(), start.getDate() + Math.floor(fraction * days));
+}
+
+/** The width that a key asks for, or null for a key that does not resize. */
+function railKeyTarget(key: string, width: number, limits: RailLimits): number | null {
+  const clamp = (value: number) => Math.min(limits.max, Math.max(limits.min, value));
+  switch (key) {
+    case 'ArrowLeft':
+      return clamp(width - limits.step);
+    case 'ArrowRight':
+      return clamp(width + limits.step);
+    case 'Home':
+      return limits.min;
+    case 'End':
+      return limits.max;
+    default:
+      return null;
+  }
 }
 
 function sameDates(order: WorkOrder, dates: { startDate: string; endDate: string }): boolean {
