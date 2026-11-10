@@ -100,6 +100,9 @@ export class TimelineGrid implements AfterViewInit {
   /** The rail width chosen by the user, or null for the design width. */
   readonly railWidth = input<number | null>(null);
 
+  /** The order of the open edit drawer. Its bar stays in the DOM: the drawer gives it the focus back. */
+  readonly drawerOrderId = input<string | null>(null);
+
   readonly cellPick = output<CellPick>();
   readonly editOrder = output<WorkOrder>();
   readonly deleteOrder = output<WorkOrder>();
@@ -123,6 +126,34 @@ export class TimelineGrid implements AfterViewInit {
   protected readonly currentIndex = computed(() =>
     this.columns().findIndex((column) => column.current),
   );
+
+  /**
+   * The columns in the DOM, as column offsets from today: the visible columns and about one
+   * viewport on each side. Null renders every column: before the first measure, after a new
+   * timescale and always in parity mode.
+   */
+  private readonly columnWindow = linkedSignal<Timescale, ColumnWindow | null>({
+    source: this.timescale,
+    computation: () => null,
+  });
+
+  /** The window as indices into the columns, clamped to the rendered range. The end is excluded. */
+  protected readonly windowStart = computed(() => this.windowIndices().start);
+  protected readonly windowColumns = computed(() => {
+    const { start, end } = this.windowIndices();
+    return this.columns().slice(start, end);
+  });
+
+  private readonly windowIndices = computed(() => {
+    const count = this.columns().length;
+    const columnWindow = this.columnWindow();
+    if (columnWindow === null) {
+      return { start: 0, end: count };
+    }
+    const first = this.firstOffset();
+    const clamp = (index: number) => Math.min(count, Math.max(0, index));
+    return { start: clamp(columnWindow.first - first), end: clamp(columnWindow.last - first + 1) };
+  });
 
   /** The chip names the current month, week or day. */
   protected readonly chipLabel = computed(() => CHIP_LABELS[this.timescale()]);
@@ -154,6 +185,12 @@ export class TimelineGrid implements AfterViewInit {
 
     return bars;
   });
+
+  /** The bar with the keyboard focus. It stays in the DOM when a scroll moves it out of the window. */
+  protected readonly focusedOrderId = signal<string | null>(null);
+
+  /** The bar that a pointer drag holds, from the press to the release. */
+  private readonly draggedOrderId = signal<string | null>(null);
 
   /** The dates of the bar that a pointer drag resizes, before the release commits them. */
   private readonly resizePreview = signal<{
@@ -329,9 +366,31 @@ export class TimelineGrid implements AfterViewInit {
     }
   }
 
-  /** The bars of one work centre. */
+  /**
+   * The bars of one work centre that overlap the column window. The focused bar, the bar in a
+   * drag and the bar of the open drawer are always there.
+   */
   protected barsOf(workCenterId: string): BarPlacement[] {
-    return this.barsByCenter().get(workCenterId) ?? [];
+    const bars = this.barsByCenter().get(workCenterId) ?? [];
+    if (this.columnWindow() === null) {
+      return bars;
+    }
+
+    const { start, end } = this.windowIndices();
+    const pinned = [this.focusedOrderId(), this.draggedOrderId(), this.drawerOrderId()];
+    return bars.filter(
+      (bar) =>
+        pinned.includes(bar.source.docId) ||
+        (bar.end.index + bar.end.fraction >= start && bar.start.index + bar.start.fraction <= end),
+    );
+  }
+
+  protected onBarFocusOut(docId: string, event: FocusEvent): void {
+    const next = event.relatedTarget as Node | null;
+    const host = event.currentTarget as HTMLElement;
+    if ((!next || !host.contains(next)) && this.focusedOrderId() === docId) {
+      this.focusedOrderId.set(null);
+    }
   }
 
   /**
@@ -339,6 +398,11 @@ export class TimelineGrid implements AfterViewInit {
    * show the preview. The release asks the app to save it, Escape drops it.
    */
   protected onBarResize(bar: BarPlacement, resize: BarResize): void {
+    if (resize.phase === 'start') {
+      this.draggedOrderId.set(bar.source.docId);
+      return;
+    }
+
     const dates = this.resizedDates(bar.source, resize);
 
     if (resize.phase === 'move') {
@@ -350,6 +414,7 @@ export class TimelineGrid implements AfterViewInit {
       this.resizeOrder.emit({ order: bar.source, ...dates });
     }
     this.resizePreview.set(null);
+    this.draggedOrderId.set(null);
   }
 
   /** Shift+Arrow and Alt+Shift+Arrow move one edge by one day. */
@@ -459,20 +524,63 @@ export class TimelineGrid implements AfterViewInit {
       return;
     }
 
-    const onScroll = () => this.extendAtEdges();
+    const onScroll = () => {
+      this.updateWindow();
+      this.extendAtEdges();
+    };
     const onScrollEnd = () => {
       this.extendPaused = false;
       this.extendAtEdges();
     };
+    // A wider viewport needs more columns in the window.
+    const resizeObserver = new ResizeObserver(() => this.updateWindow());
 
     this.zone.runOutsideAngular(() => {
       scroller.addEventListener('scroll', onScroll, { passive: true });
       scroller.addEventListener('scrollend', onScrollEnd, { passive: true });
+      resizeObserver.observe(scroller);
     });
     this.destroyRef.onDestroy(() => {
       scroller.removeEventListener('scroll', onScroll);
       scroller.removeEventListener('scrollend', onScrollEnd);
+      resizeObserver.disconnect();
     });
+    this.updateWindow();
+  }
+
+  /**
+   * Measures the visible columns and moves the window when they come near its edge. The window
+   * snaps to steps of one viewport, so a scroll changes the DOM only once a viewport. The total
+   * width does not change, so a new window cannot scroll the grid again.
+   */
+  private updateWindow(): void {
+    const scroller = this.scroller()?.nativeElement;
+    const rail = this.rail()?.nativeElement;
+    const timeline = this.timeline()?.nativeElement;
+    if (!scroller || !rail || !timeline) {
+      return;
+    }
+
+    const columnWidth = parseFloat(getComputedStyle(timeline).getPropertyValue('--column-width'));
+    const contentLeft = timeline.getBoundingClientRect().left + timeline.clientLeft;
+    const scrollerLeft = scroller.getBoundingClientRect().left + scroller.clientLeft;
+    const visibleLeft = scrollerLeft + rail.getBoundingClientRect().width;
+    const visibleRight = scrollerLeft + scroller.clientWidth;
+
+    const origin = this.firstOffset();
+    const firstVisible = origin + Math.floor((visibleLeft - contentLeft) / columnWidth);
+    const lastVisible = origin + Math.ceil((visibleRight - contentLeft) / columnWidth);
+    const step = Math.max(1, lastVisible - firstVisible);
+    const next: ColumnWindow = {
+      first: (Math.floor(firstVisible / step) - 1) * step,
+      last: (Math.ceil(lastVisible / step) + 1) * step,
+    };
+
+    const current = this.columnWindow();
+    if (current?.first === next.first && current?.last === next.last) {
+      return;
+    }
+    this.zone.run(() => this.columnWindow.set(next));
   }
 
   /**
@@ -522,6 +630,7 @@ export class TimelineGrid implements AfterViewInit {
               scroller.scrollLeft = scrollLeft + shift;
             }
             this.extending = false;
+            this.updateWindow();
             this.extendAtEdges();
           },
         },
@@ -538,6 +647,8 @@ export class TimelineGrid implements AfterViewInit {
     }
     this.firstOffset.set(-buffer);
     this.lastOffset.set(buffer);
+    // The old window can be out of the new range. The short range renders whole until the scroll.
+    this.columnWindow.set(null);
     return true;
   }
 
@@ -568,6 +679,12 @@ export class TimelineGrid implements AfterViewInit {
     const visibleLeft = rail.getBoundingClientRect().right + timeline.clientLeft;
     scroller.scrollLeft += contentLeft + index * columnWidth - visibleLeft;
   }
+}
+
+/** A range of columns as offsets from today, both ends included. */
+interface ColumnWindow {
+  first: number;
+  last: number;
 }
 
 /** The columns that one extend adds at an edge. A chunk of day columns is wider than the screen. */

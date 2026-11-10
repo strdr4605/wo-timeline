@@ -43,10 +43,11 @@ test('[F5] create, edit and delete survive a reload', async ({ page }) => {
   await page.reload();
   await expect(barNames(page)).toHaveCount(0);
 
-  await page
-    .locator('.grid-row')
-    .nth(1)
-    .click({ position: { x: 300, y: 20 } });
+  // A click under the today line: I9 renders only the bars near the visible columns.
+  const row = page.locator('.grid-row').nth(1);
+  const rowX = (await row.boundingBox())!.x;
+  const todayX = (await page.locator('.grid-today-marker').boundingBox())!.x;
+  await row.click({ position: { x: todayX - rowX + 20, y: 20 } });
   await expect(page.locator('.drawer')).toHaveClass(/drawer--open/);
   await page.locator('#drawer-name').fill('Stored Order');
   await page.getByRole('button', { name: 'Create' }).click();

@@ -127,6 +127,19 @@ $rail-line-left: math.div(t.$layout-rail-resize-handle-width + t.$layout-grid-ve
   --column-width: #{t.$layout-grid-header-column-width-day};
 }
 
+// The track is as wide as all columns, so the scroll width is the same with only a window of
+// them in the DOM. The window sits at its first column.
+.grid__track {
+  flex: none;
+  width: calc(var(--column-count) * var(--column-width));
+}
+
+.grid__window {
+  display: flex;
+  height: 100%;
+  transform: translateX(calc(var(--window-start) * var(--column-width)));
+}
+
 // The header lines end with the last column. The header has no column separators.
 .grid__header {
   position: sticky;
@@ -185,8 +198,6 @@ $rail-line-left: math.div(t.$layout-rail-resize-handle-width + t.$layout-grid-ve
 
 .grid__columns {
   position: relative;
-  display: flex;
-  width: max-content;
   height: 100%;
 }
 

@@ -27,11 +27,12 @@ export type BarEdge = 'start' | 'end';
 
 /**
  * One step of a pointer resize. `deltaX` is the pointer travel in pixels since the press. The
- * grid turns it into a date, because only the grid knows the columns.
+ * grid turns it into a date, because only the grid knows the columns. The grid keeps a bar in a
+ * drag in the DOM from the `start` step, so the pointer capture stays alive.
  */
 export interface BarResize {
   edge: BarEdge;
-  phase: 'move' | 'end' | 'cancel';
+  phase: 'start' | 'move' | 'end' | 'cancel';
   deltaX: number;
 }
 
@@ -114,6 +115,7 @@ export class WorkOrderBar {
     (event.currentTarget as HTMLElement).setPointerCapture(event.pointerId);
     this.dragOriginX = event.clientX;
     this.resizing.set(edge);
+    this.resize.emit({ edge, phase: 'start', deltaX: 0 });
   }
 
   protected moveResize(event: PointerEvent): void {

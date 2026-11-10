@@ -2,7 +2,7 @@
 
 Work Order Schedule Timeline (Naologic front-end take-home). Generated from `acceptance-criteria.json` - edit the JSON, then run `node docs/requirements/render.mjs`.
 
-Progress: 68 pass, 0 fail, 0 open decision, 5 pending.
+Progress: 69 pass, 0 fail, 0 open decision, 5 pending.
 
 Legend: `[x]` pass, `[ ]` pending, `[?]` open decision. An item may only be marked pass with an evidence command (test name, screenshot path or measurement output) in the JSON `evidence` field.
 
@@ -119,6 +119,7 @@ Legend: `[x]` pass, `[ ]` pending, `[?]` open decision. An item may only be mark
 | [x] | I6 | OnPush change detection and trackBy on the timeline lists | brief | manual | bonus | e2e: [I6] every component uses OnPush and no template tracks by $index |
 | [x] | I7 | Responsive: layout does not break on smaller screens, horizontal scroll acceptable | brief | manual | must | e2e: [I7] a phone screen keeps the timeline, the scroll and the drawer usable |
 | [x] | I8 | The design covers Month only; Day and Week layouts are derived from the same tokens and look consistent | sketch | visual | must | e2e: [I8] Day and Week reuse the Month rows, bars and header of the design |
+| [x] | I9 | Virtual scrolling for large ranges (brief l.439 "Consider virtual scrolling for performance with large ranges"): only the columns and bars near the view are in the DOM, the scroll position and the focus stay, a drag works across the window edge, parity mode renders every column | brief | e2e | bonus | e2e: [I9] parity mode renders every column |
 | [x] | I10 | Drag the rail divider to resize the work center column ("Drag to resize" label at the rail edge of Timeline - Hover Options): blue line and label on hover, pointer drag with min and max width, Escape cancels, separator keys, width saved (not in parity mode) | sketch | e2e | bonus | e2e: [I10] a drag on the rail edge resizes the rail, with limits, Escape, keys and storage |
 
 ## Demo evidence

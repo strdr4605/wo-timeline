@@ -40,6 +40,12 @@ export class App {
     return request?.mode === 'create' ? request.workCenterId : null;
   });
 
+  /** The bar of the open edit drawer stays in the DOM of the grid. */
+  protected readonly drawerOrderId = computed(() => {
+    const request = this.drawer();
+    return request?.mode === 'edit' ? request.order.docId : null;
+  });
+
   protected openCreate(pick: CellPick): void {
     this.drawer.set({ mode: 'create', workCenterId: pick.workCenterId, startDate: pick.date });
   }

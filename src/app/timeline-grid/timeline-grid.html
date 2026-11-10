@@ -29,13 +29,20 @@
       [class.grid__timeline--day]="timescale() === 'Day'"
       [class.grid__timeline--week]="timescale() === 'Week'"
       [class.grid__timeline--month]="timescale() === 'Month'"
+      [style.--column-count]="columns().length"
+      [style.--window-start]="windowStart()"
     >
+      <!-- Only the columns of the window are in the DOM. The track is as wide as all columns. -->
       <div class="grid__header">
-        @for (column of columns(); track column.key) {
-          <div class="grid-header-cell" [class.grid-header-cell--current]="column.current">
-            <span class="grid-header-cell__label">{{ column.label }}</span>
+        <div class="grid__track">
+          <div class="grid__window">
+            @for (column of windowColumns(); track column.key) {
+              <div class="grid-header-cell" [class.grid-header-cell--current]="column.current">
+                <span class="grid-header-cell__label">{{ column.label }}</span>
+              </div>
+            }
           </div>
-        }
+        </div>
       </div>
 
       <div class="grid__body">
@@ -43,10 +50,15 @@
         <div class="grid__backdrop">
           <div class="grid-first-row-band"></div>
 
-          <div class="grid__columns">
-            @for (column of columns(); track column.key; let i = $index) {
-              <div class="grid-cell" [class.grid-cell--under-today]="i === lineUnderToday()"></div>
-            }
+          <div class="grid__columns grid__track">
+            <div class="grid__window">
+              @for (column of windowColumns(); track column.key; let i = $index) {
+                <div
+                  class="grid-cell"
+                  [class.grid-cell--under-today]="windowStart() + i === lineUnderToday()"
+                ></div>
+              }
+            </div>
           </div>
 
           <div
@@ -83,6 +95,8 @@
                 (remove)="deleteOrder.emit(bar.order)"
                 (resize)="onBarResize(bar, $event)"
                 (nudge)="onBarNudge(bar, $event)"
+                (focusin)="focusedOrderId.set(bar.source.docId)"
+                (focusout)="onBarFocusOut(bar.source.docId, $event)"
               />
             }
           </div>

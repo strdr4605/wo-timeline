@@ -2,6 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 
 // Bonus b12-infinite: a scroll near an edge of the timeline adds a chunk of columns there.
 // A left extend keeps the visible content in place. Parity mode keeps the fixed range of the design.
+// I9 renders only a window of the columns, so the tests count the columns of the range, not the DOM.
 
 test.use({ viewport: { width: 1440, height: 1024 } });
 
@@ -9,13 +10,13 @@ test('[I1] a scroll to the right edge adds columns on the right', async ({ page 
   await page.goto('/');
   await waitForSettledColumns(page);
   const before = await columnCount(page);
-  const lastBefore = await page.locator('.grid-header-cell').last().textContent();
 
   await scrollGridTo(page, Number.MAX_SAFE_INTEGER);
 
   await expect.poll(() => columnCount(page)).toBeGreaterThan(before);
-  // The old columns stay, the new ones come after them.
-  await expect(page.locator('.grid-header-cell').nth(before - 1)).toHaveText(lastBefore!);
+  // The old last column is still at its place, and the next month comes after it.
+  const [oldLast, firstNew] = await labelsAt(page, [before - 1, before]);
+  expect(monthAfter(oldLast)).toBe(firstNew);
 });
 
 test('[I1] a scroll to the left edge adds columns on the left and the view does not jump', async ({
@@ -23,11 +24,16 @@ test('[I1] a scroll to the left edge adds columns on the left and the view does 
 }) => {
   await page.goto('/');
   await waitForSettledColumns(page);
+
+  // Just outside the edge zone first, so the column window is at the place of the next scroll.
+  const margin = await page.locator('.grid').evaluate((grid) => grid.clientWidth);
+  await scrollGridTo(page, margin + 20);
+  await waitForSettledColumns(page);
   const before = await columnCount(page);
 
   // Less than one viewport from the edge: the scroll event extends. The header is read in the
   // same task as the scroll, so before the extend.
-  const header = await firstVisibleHeader(page, 300);
+  const header = await firstVisibleHeader(page, margin - 20);
 
   await expect.poll(() => columnCount(page)).toBeGreaterThan(before);
   const after = await headerX(page, header.label);
@@ -56,16 +62,17 @@ test('[I1] parity mode keeps the fixed range of the design', async ({ page }) =>
 test('[I1] a bar stays at its date after a left extend', async ({ page }) => {
   await page.goto('/');
   await waitForSettledColumns(page);
+  // The focus keeps the bar in the DOM when the scroll moves it out of the column window (I9).
   const bar = page.locator('.work-order-bar').first();
+  await bar.focus();
   const before = await columnCount(page);
-  const anchor = await barAnchor(page);
+  const offset = await barToTodayLine(page);
 
   await scrollGridTo(page, 300);
   await expect.poll(() => columnCount(page)).toBeGreaterThan(before);
 
-  // The bar keeps its distance to the header of the column that holds its start date.
-  const barX = (await bar.boundingBox())!.x;
-  expect(Math.abs(barX - (await headerX(page, anchor.label)) - anchor.offset)).toBeLessThanOrEqual(1);
+  // The bar keeps its distance to the today line: both stay at their dates.
+  expect(Math.abs((await barToTodayLine(page)) - offset)).toBeLessThanOrEqual(1);
 });
 
 for (const timescale of ['Day', 'Hour']) {
@@ -86,8 +93,8 @@ for (const timescale of ['Day', 'Hour']) {
       await waitForSettledColumns(page);
 
       const { gap, viewport } = await page.locator('.grid').evaluate((grid) => {
-        const cells = grid.querySelectorAll('.grid-header-cell');
-        const lastRight = cells[cells.length - 1].getBoundingClientRect().right;
+        const track = grid.querySelector('.grid__header .grid__track')!;
+        const lastRight = track.getBoundingClientRect().right;
         const contentRight = lastRight - grid.getBoundingClientRect().left + grid.scrollLeft;
         return { gap: grid.scrollWidth - contentRight, viewport: grid.clientWidth };
       });
@@ -105,11 +112,14 @@ async function chooseTimescale(page: Page, option: string): Promise<void> {
   await expect(page.locator('.timescale-chip__value')).toContainText(option);
 }
 
-/** Scrolls until the right edge of the last column is at the right edge of the grid. */
+/**
+ * Scrolls until the right edge of the last column is at the right edge of the grid. The header
+ * track is as wide as all columns, also the columns out of the window.
+ */
 async function scrollToLastColumn(page: Page): Promise<void> {
   await page.locator('.grid').evaluate((grid) => {
-    const cells = grid.querySelectorAll('.grid-header-cell');
-    const lastRight = cells[cells.length - 1].getBoundingClientRect().right;
+    const track = grid.querySelector('.grid__header .grid__track')!;
+    const lastRight = track.getBoundingClientRect().right;
     const visibleRight = grid.getBoundingClientRect().left + grid.clientLeft + grid.clientWidth;
     grid.scrollBy({ left: lastRight - visibleRight, behavior: 'instant' });
   });
@@ -129,8 +139,43 @@ async function waitForSettledColumns(page: Page): Promise<void> {
     .toBe(true);
 }
 
+/** The columns of the range. The DOM holds only the window of them. */
 async function columnCount(page: Page): Promise<number> {
-  return page.locator('.grid-header-cell').count();
+  return page
+    .locator('.grid__timeline')
+    .evaluate((timeline) => Number((timeline as HTMLElement).style.getPropertyValue('--column-count')));
+}
+
+/** The header labels at column indices of the range, read at their x in the header track. */
+async function labelsAt(page: Page, indices: number[]): Promise<string[]> {
+  return page.evaluate((indices) => {
+    const track = document.querySelector('.grid__header .grid__track')!;
+    const cells = [...document.querySelectorAll('.grid-header-cell')];
+    const width = cells[0].getBoundingClientRect().width;
+    const left = track.getBoundingClientRect().left;
+    return indices.map((index) => {
+      const x = left + (index + 0.5) * width;
+      const cell = cells.find((element) => {
+        const box = element.getBoundingClientRect();
+        return x >= box.x && x < box.right;
+      });
+      return cell?.textContent?.trim() ?? '';
+    });
+  }, indices);
+}
+
+/** The Month label of the month after a Month label, as 'Mar 2027'. */
+function monthAfter(label: string): string {
+  const date = new Date(`1 ${label}`);
+  date.setMonth(date.getMonth() + 1);
+  return `${date.toLocaleString('en-US', { month: 'short' })} ${date.getFullYear()}`;
+}
+
+/** The x of the first bar measured from the today line. */
+async function barToTodayLine(page: Page): Promise<number> {
+  const barX = (await page.locator('.work-order-bar').first().boundingBox())!.x;
+  const todayX = (await page.locator('.grid-today-marker').boundingBox())!.x;
+  return barX - todayX;
 }
 
 async function scrollGridTo(page: Page, left: number): Promise<void> {
@@ -156,17 +201,4 @@ async function firstVisibleHeader(
     const cell = cells.find((element) => element.getBoundingClientRect().x >= railRight - 1)!;
     return { label: cell.textContent!.trim(), x: cell.getBoundingClientRect().x };
   }, scrollLeft);
-}
-
-/** The header that holds the left edge of the first bar, and the bar offset from that header. */
-async function barAnchor(page: Page): Promise<{ label: string; offset: number }> {
-  return page.evaluate(() => {
-    const barX = document.querySelector('.work-order-bar')!.getBoundingClientRect().x;
-    const cells = [...document.querySelectorAll('.grid-header-cell')];
-    const cell = cells.find((element) => {
-      const box = element.getBoundingClientRect();
-      return barX >= box.x && barX < box.right;
-    })!;
-    return { label: cell.textContent!.trim(), offset: barX - cell.getBoundingClientRect().x };
-  });
 }
