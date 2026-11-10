@@ -1,25 +1,34 @@
+@use 'sass:math';
 @use '../../styles/tokens' as t;
 
+$header-height: (t.$layout-grid-header-bottom - t.$layout-grid-header-top + t.$layout-grid-horizontal-grid-line-width);
+$line: t.$layout-grid-horizontal-grid-line-width solid t.$layout-grid-horizontal-grid-line-color;
+
+// The design draws the 3px today line centred on the 1px column line left of the current month.
+$today-offset: math.div(t.$layout-grid-today-marker-width + t.$layout-grid-vertical-grid-line-width, 2);
+
+// The grid is the card under the page head: it runs to the page bottom and scrolls both ways.
 .grid {
-  // The grid fills the space under the header band and scrolls in both directions.
   height: calc(100vh - #{t.$layout-grid-header-top});
   overflow: auto;
+  border-left: $line;
 }
 
 .grid__inner {
   display: flex;
   width: max-content;
   min-width: 100%;
+  min-height: 100%;
 }
 
-// The rail stays put while the timeline scrolls sideways.
+// The rail stays put while the timeline scrolls sideways. It is white down to the page bottom.
 .grid__rail {
   position: sticky;
   left: 0;
   z-index: 2;
   flex: none;
   width: t.$layout-grid-left-rail-w;
-  background: t.$color-surface-panel;
+  background: t.$layout-grid-rail-row-fill;
 }
 
 .grid__rail-header {
@@ -28,26 +37,33 @@
   z-index: 1;
   display: flex;
   align-items: center;
-  height: (t.$layout-grid-header-bottom - t.$layout-grid-header-top);
+  height: $header-height;
   padding-left: t.$layout-grid-left-rail-name-padding-x;
-  border-top: t.$layout-grid-horizontal-grid-line-width solid
-    t.$layout-grid-horizontal-grid-line-color;
-  border-bottom: t.$layout-grid-horizontal-grid-line-width solid
-    t.$layout-grid-horizontal-grid-line-color;
-  background: t.$color-surface-panel;
+  border-top: $line;
+  border-bottom: $line;
+  background: t.$layout-grid-header-fill;
   font-family: t.$font-family;
   font-size: t.$type-label-secondary-size;
   font-weight: t.$type-label-secondary-font-weight;
   color: t.$type-label-secondary-color;
 }
 
+// A row is 48 high with a 1px divider under it. The first row is 60 high, divider included.
 .work-center-row {
   display: flex;
   align-items: center;
-  height: t.$layout-grid-row-height;
+  height: (t.$layout-grid-row-height + t.$layout-grid-horizontal-grid-line-width);
   padding-left: t.$layout-grid-left-rail-name-padding-x;
-  border-top: t.$layout-grid-horizontal-grid-line-width solid
-    t.$layout-grid-horizontal-grid-line-color;
+  border-bottom: $line;
+  background: t.$layout-grid-rail-row-fill;
+
+  // The first row is 12px taller at the top: the name stays in line with a 48px row.
+  // The white first row of the design covers its divider line at y 297.
+  &:first-child {
+    height: t.$layout-grid-first-row-height;
+    border-bottom-color: transparent;
+    padding-top: (t.$layout-grid-first-row-height - t.$layout-grid-row-height + t.$layout-grid-horizontal-grid-line-width);
+  }
 }
 
 .work-center-name {
@@ -57,20 +73,22 @@
   color: t.$type-body-color;
 }
 
-.work-center-row--alternate {
-  background: t.$color-surface-row-alternate;
-}
-
 // The rail row and the timeline row of a work centre hover together.
 .work-center-row--hovered {
-  background: rgba(t.$color-surface-row-hover, t.$color-surface-row-hover-alpha);
+  background: t.$layout-grid-rail-row-hover-fill;
 }
 
+// A stacking context, so the layers of the timeline order among themselves only.
 .grid__timeline {
   position: relative;
-  flex: none;
+  isolation: isolate;
+  // The rows and their hover run to the right edge of the page, past the last column.
+  flex: 1 0 auto;
   border-left: t.$layout-grid-vertical-grid-line-width solid
     t.$layout-grid-vertical-grid-line-color;
+  // The body fill of the design stops 2px above the page bottom. The page under it is white.
+  border-bottom: t.$layout-grid-body-fill-bottom-gap solid t.$layout-grid-header-fill;
+  background: t.$layout-grid-body-fill;
 }
 
 // The column width is the only size the grid needs per zoom level.
@@ -91,17 +109,67 @@
   --column-width: #{t.$layout-grid-header-column-width-day};
 }
 
+// The header lines end with the last column. The header has no column separators.
 .grid__header {
   position: sticky;
   top: 0;
   z-index: 1;
   display: flex;
-  height: (t.$layout-grid-header-bottom - t.$layout-grid-header-top);
-  border-top: t.$layout-grid-horizontal-grid-line-width solid
-    t.$layout-grid-horizontal-grid-line-color;
-  border-bottom: t.$layout-grid-horizontal-grid-line-width solid
-    t.$layout-grid-horizontal-grid-line-color;
-  background: t.$color-surface-page;
+  height: $header-height;
+  background: t.$layout-grid-header-fill;
+
+  // An empty column after the last one. The design view shows the header, the rows and their
+  // hover past the last column (x 1395 to 1440), and the timeline must be wide enough to scroll
+  // August 2024 to the rail edge.
+  &::after {
+    content: '';
+    flex: none;
+    width: var(--column-width);
+  }
+}
+
+.grid-header-cell {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--column-width);
+  border-top: $line;
+  border-bottom: $line;
+  font-family: t.$font-family;
+  font-size: t.$type-label-secondary-size;
+  font-weight: t.$type-label-secondary-font-weight;
+  color: t.$type-label-secondary-color;
+}
+
+.grid__body {
+  position: relative;
+}
+
+// The layer under the rows: the white first row, the column lines and the today line.
+.grid__backdrop {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: max(100%, #{t.$layout-grid-vertical-grid-line-length});
+  pointer-events: none;
+}
+
+.grid-first-row-band {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: t.$layout-grid-first-row-height;
+  background: t.$layout-grid-first-row-fill;
+}
+
+.grid__columns {
+  position: relative;
+  display: flex;
+  width: max-content;
+  height: 100%;
 }
 
 .grid-cell {
@@ -109,80 +177,95 @@
   width: var(--column-width);
   border-right: t.$layout-grid-vertical-grid-line-width solid
     t.$layout-grid-vertical-grid-line-color;
-  font-family: t.$font-family;
 }
 
-.grid-header-cell {
-  display: flex;
-  align-items: center;
-  padding-left: t.$layout-grid-header-label-padding-x;
-  font-size: t.$type-label-secondary-size;
-  font-weight: t.$type-label-secondary-font-weight;
-  color: t.$type-label-secondary-color;
+// The today line replaces the column line under it, also below the end of the today line.
+.grid-cell--under-today {
+  border-right-color: transparent;
 }
 
+.grid-today-marker {
+  position: absolute;
+  top: 0;
+  left: calc((var(--col-index) + var(--col-fraction)) * var(--column-width) - #{$today-offset});
+  width: t.$layout-grid-today-marker-width;
+  height: t.$layout-grid-today-marker-length;
+  background: t.$layout-grid-today-marker-color;
+}
+
+// The timeline rows have no divider line, only the 1px gap of the rail divider.
 .grid-row {
   position: relative;
-  display: flex;
   height: t.$layout-grid-row-height;
-  border-top: t.$layout-grid-horizontal-grid-line-width solid
-    t.$layout-grid-horizontal-grid-line-color;
+  margin-bottom: t.$layout-grid-horizontal-grid-line-width;
+  cursor: pointer;
 }
 
-.grid-cell--row {
-  height: t.$layout-grid-row-height;
-}
-
-.grid-row--alternate {
-  background: t.$color-surface-row-alternate;
+.grid-row--first {
+  height: t.$layout-grid-first-row-height;
+  margin-bottom: 0;
 }
 
 .grid-row--hovered {
-  background: rgba(t.$color-surface-row-hover, t.$color-surface-row-hover-alpha);
+  background: t.$layout-grid-timeline-row-hover-fill;
 }
 
-// The markers sit over the rows, from the header band down to the last row.
-.grid__markers {
+// The empty cell under the pointer: a box around the pointer, the tooltip over it.
+.grid-cell-hover {
   position: absolute;
-  top: (t.$layout-grid-header-bottom - t.$layout-grid-header-top);
-  right: 0;
-  bottom: 0;
-  left: 0;
+  // No transform: a transform makes a stacking context, and the sticky header then covers the
+  // tooltip of the first row.
+  top: calc(50% - #{math.div(t.$layout-grid-cell-hover-height, 2)});
+  width: t.$layout-grid-cell-hover-width;
+  height: t.$layout-grid-cell-hover-height;
+  margin-left: -(t.$layout-grid-cell-hover-pointer-x);
+  border: t.$layout-grid-cell-hover-border-width solid t.$layout-grid-cell-hover-border-color;
+  border-radius: t.$layout-grid-cell-hover-radius;
+  background: rgba(t.$layout-grid-cell-hover-fill, t.$layout-grid-cell-hover-fill-alpha);
   pointer-events: none;
 }
 
-.grid-current-marker {
+.grid-cell-hover__tooltip {
   position: absolute;
-  top: 0;
-  bottom: 0;
-  left: calc(var(--col-index) * var(--column-width));
-  width: t.$layout-grid-current-month-marker-width;
-  background: t.$layout-grid-current-month-marker-color;
+  bottom: calc(100% + #{t.$layout-grid-cell-hover-tooltip-gap + t.$layout-grid-cell-hover-border-width});
+  // The token offset counts from the outer box edge. CSS counts from inside the box border.
+  left: (t.$layout-grid-cell-hover-tooltip-offset-x - t.$layout-grid-cell-hover-border-width);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: t.$layout-grid-cell-hover-tooltip-width;
+  height: t.$layout-tooltip-height;
+  border-radius: t.$layout-tooltip-radius;
+  background: t.$layout-tooltip-bg;
+  box-shadow:
+    0 0 t.$layout-grid-cell-hover-tooltip-shadow-blur t.$layout-grid-cell-hover-tooltip-shadow-spread
+      t.$layout-grid-cell-hover-tooltip-shadow-color,
+    0 t.$layout-grid-cell-hover-tooltip-shadow2-y t.$layout-grid-cell-hover-tooltip-shadow2-blur
+      t.$layout-grid-cell-hover-tooltip-shadow2-spread t.$layout-grid-cell-hover-tooltip-shadow2-color;
+  font-family: t.$font-family;
+  font-size: t.$type-tooltip-size;
+  font-weight: t.$type-tooltip-font-weight;
+  white-space: nowrap;
+  color: t.$type-tooltip-color;
 }
 
-// The chip of the Sketch: it names the current month column at the header band edge.
+// The chip names the current column over the first row, on the header bottom line.
 .grid-current-chip {
   position: absolute;
-  top: 0;
-  left: calc(var(--col-index) * var(--column-width));
+  top: (-1 * t.$layout-grid-horizontal-grid-line-width);
+  left: calc(var(--col-index) * var(--column-width) - #{$today-offset});
+  z-index: 2;
   display: flex;
   align-items: center;
   width: t.$layout-grid-current-month-chip-width;
   height: t.$layout-grid-current-month-chip-height;
-  padding-left: t.$layout-badge-padding-x;
+  padding-left: t.$layout-grid-current-month-chip-text-padding-x;
   border-radius: t.$radius-badge;
   background: t.$color-brand-tint;
   font-family: t.$font-family;
   font-size: t.$type-body-size;
   font-weight: t.$type-body-font-weight;
   color: t.$color-brand-primary;
-}
-
-.grid-today-marker {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: calc((var(--col-index) + var(--col-fraction)) * var(--column-width));
-  width: t.$layout-grid-today-marker-width;
-  background: t.$layout-grid-today-marker-color;
+  pointer-events: none;
 }

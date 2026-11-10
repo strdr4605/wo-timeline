@@ -20,7 +20,7 @@ test('[A1] app builds and serves the shell', async ({ page }) => {
   await expect(page.locator('.timescale-chip')).toBeVisible();
   await expect(page.locator('.top-bar .logo')).toBeVisible();
   await expect(page.locator('.work-center-row')).toHaveCount(5);
-  await expect(page.locator('.grid__header .grid-cell').first()).toBeVisible();
+  await expect(page.locator('.grid__header .grid-header-cell').first()).toBeVisible();
 
   expect(pageErrors).toEqual([]);
   expect(consoleErrors).toEqual([]);

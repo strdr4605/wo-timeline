@@ -15,6 +15,11 @@
   height: t.$layout-top-bar-logo-h;
 }
 
+// The page is white around the grid card: left of it and under the timeline body.
+.page {
+  background: t.$color-surface-panel;
+}
+
 // The head is white from the top bar down to the grid header band.
 .page__head {
   height: (t.$layout-grid-header-top - t.$layout-top-bar-height);
@@ -39,7 +44,8 @@
   margin-top: (t.$layout-toolbar-timescale-y - t.$layout-page-title-y - t.$type-h3-line-height);
 }
 
+// The grid draws its own 1px left border, so it starts one pixel left of the rail.
 app-timeline-grid {
   display: block;
-  margin-left: t.$layout-grid-left-rail-x;
+  margin-left: (t.$layout-grid-left-rail-x - t.$layout-grid-vertical-grid-line-width);
 }

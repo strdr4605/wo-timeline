@@ -21,6 +21,12 @@ import {
 import { PARITY_FIRST_COLUMN_OFFSET, PARITY_MODE, PARITY_TODAY } from '../parity';
 import { BarPosition, WorkOrderBar } from '../work-order-bar/work-order-bar';
 
+/** The empty cell under the pointer: the row and the pointer x inside the row. */
+interface CellHover {
+  workCenterId: string;
+  x: number;
+}
+
 /** A bar with the two positions it is placed by. */
 interface BarPlacement {
   order: WorkOrder;
@@ -50,6 +56,15 @@ export class TimelineGrid implements AfterViewInit {
     this.columns().findIndex((column) => column.current),
   );
 
+  /** The chip names the current month, week or day. */
+  protected readonly chipLabel = computed(() => CHIP_LABELS[this.timescale()]);
+
+  /** The column whose right line is under the today line, or -1 when today is inside a column. */
+  protected readonly lineUnderToday = computed(() => {
+    const { index, fraction } = this.today();
+    return fraction === 0 ? index - 1 : -1;
+  });
+
   /** The bars of every work centre, placed by the dates of the order. */
   private readonly barsByCenter = computed(() => {
     const columns = this.columns();
@@ -71,6 +86,9 @@ export class TimelineGrid implements AfterViewInit {
   /** The work centre whose row is hovered. The rail row and the timeline row hover together. */
   protected readonly hovered = signal<string | null>(null);
 
+  /** The placeholder box follows the pointer over the empty part of a timeline row. */
+  protected readonly cellHover = signal<CellHover | null>(null);
+
   private readonly scroller = viewChild<ElementRef<HTMLElement>>('scroller');
   private readonly rail = viewChild<ElementRef<HTMLElement>>('rail');
   private readonly timeline = viewChild<ElementRef<HTMLElement>>('timeline');
@@ -90,6 +108,23 @@ export class TimelineGrid implements AfterViewInit {
   /** The bars of one work centre. */
   protected barsOf(workCenterId: string): BarPlacement[] {
     return this.barsByCenter().get(workCenterId) ?? [];
+  }
+
+  /** Shows the placeholder under the pointer, or hides it while the pointer is on a bar. */
+  protected trackCellHover(workCenterId: string, event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    if (target.closest('.work-order-bar')) {
+      this.cellHover.set(null);
+      return;
+    }
+
+    const row = event.currentTarget as HTMLElement;
+    this.cellHover.set({ workCenterId, x: event.clientX - row.getBoundingClientRect().left });
+  }
+
+  protected leaveRow(): void {
+    this.hovered.set(null);
+    this.cellHover.set(null);
   }
 
   /** The design view in parity mode, today in the middle otherwise. */
@@ -114,8 +149,10 @@ export class TimelineGrid implements AfterViewInit {
     const columnWidth = parseFloat(
       getComputedStyle(timeline).getPropertyValue('--column-width'),
     );
+    // The left border of the timeline stays visible next to the rail, as in the design.
     const contentLeft = timeline.getBoundingClientRect().left + timeline.clientLeft;
-    scroller.scrollLeft += contentLeft + index * columnWidth - rail.getBoundingClientRect().right;
+    const visibleLeft = rail.getBoundingClientRect().right + timeline.clientLeft;
+    scroller.scrollLeft += contentLeft + index * columnWidth - visibleLeft;
   }
 
   /** Scrolls the timeline so that today sits in the middle of the visible grid. */
@@ -142,3 +179,11 @@ export class TimelineGrid implements AfterViewInit {
     scroller.scrollLeft += contentLeft + markerX - target;
   }
 }
+
+/** The chip text per zoom level. Hour columns sit inside today, so Hour names the day. */
+const CHIP_LABELS: Record<Timescale, string> = {
+  Hour: 'Today',
+  Day: 'Today',
+  Week: 'Current week',
+  Month: 'Current month',
+};
