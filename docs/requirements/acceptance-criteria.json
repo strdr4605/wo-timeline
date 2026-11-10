@@ -761,8 +761,8 @@
       ],
       "verify": "manual",
       "priority": "bonus",
-      "status": "pending",
-      "evidence": ""
+      "status": "pass",
+      "evidence": "manual: docs/ai-prompts.md indexes the prompts and contracts in docs/requirements/prompts/*.md"
     },
     {
       "id": "H5",
@@ -785,8 +785,8 @@
       ],
       "verify": "manual",
       "priority": "bonus",
-      "status": "pending",
-      "evidence": ""
+      "status": "pass",
+      "evidence": "manual: docs/ai-prompts.md, AI prompt log: delegation, unit/prompt/notes/commit table, decisions, failures"
     },
     {
       "id": "I1",

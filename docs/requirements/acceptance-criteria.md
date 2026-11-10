@@ -2,7 +2,7 @@
 
 Work Order Schedule Timeline (Naologic front-end take-home). Generated from `acceptance-criteria.json` - edit the JSON, then run `node docs/requirements/render.mjs`.
 
-Progress: 59 pass, 0 fail, 0 open decision, 13 pending.
+Progress: 61 pass, 0 fail, 0 open decision, 11 pending.
 
 Legend: `[x]` pass, `[ ]` pending, `[?]` open decision. An item may only be marked pass with an evidence command (test name, screenshot path or measurement output) in the JSON `evidence` field.
 
@@ -103,9 +103,9 @@ Legend: `[x]` pass, `[ ]` pending, `[?]` open decision. An item may only be mark
 | [ ] | H1 | README with run steps, setup, approach and the libraries used with reasons | brief | manual | must |  |
 | [ ] | H2 | Loom demo of 5 to 10 minutes covering every feature, overlap error and the code structure | brief | manual | must |  |
 | [ ] | H3 | Public repository with a clean commit history | brief | manual | must |  |
-| [ ] | H4 | Prompts used with AI saved as markdown files | brief | manual | bonus |  |
+| [x] | H4 | Prompts used with AI saved as markdown files | brief | manual | bonus | manual: docs/ai-prompts.md indexes the prompts and contracts in docs/requirements/prompts/*.md |
 | [ ] | H5 | Comments explain the date maths and the key decisions | brief | manual | must |  |
-| [ ] | H6 | AI prompt log for this build kept in the repo | brief | manual | bonus |  |
+| [x] | H6 | AI prompt log for this build kept in the repo | brief | manual | bonus | manual: docs/ai-prompts.md, AI prompt log: delegation, unit/prompt/notes/commit table, decisions, failures |
 
 ## Bonus features
 
