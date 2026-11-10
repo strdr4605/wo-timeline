@@ -1,13 +1,18 @@
 import {
   Component,
   DestroyRef,
+  ElementRef,
   Injectable,
+  Injector,
+  afterNextRender,
   computed,
   effect,
   inject,
   input,
   output,
   signal,
+  untracked,
+  viewChild,
   viewChildren,
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
@@ -28,6 +33,7 @@ import {
 import { NgLabelTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
 import { WorkOrderStatus } from '../data/sample-data';
 import { ScheduleService } from '../data/schedule.service';
+import { PARITY_MODE } from '../parity';
 import { STATUS_LABELS } from '../work-order-bar/work-order-bar';
 import {
   DayStruct,
@@ -91,6 +97,8 @@ export class WorkOrderDrawer {
   private readonly schedule = inject(ScheduleService);
   private readonly statusSelect = viewChildren(NgSelectComponent);
   private readonly datepickers = viewChildren(NgbInputDatepicker);
+  private readonly panel = viewChild.required<ElementRef<HTMLElement>>('panel');
+  private readonly nameInput = viewChild.required<ElementRef<HTMLInputElement>>('nameInput');
 
   constructor() {
     effect(() => {
@@ -108,6 +116,8 @@ export class WorkOrderDrawer {
       .subscribe(() => this.overlapCenter.set(null));
 
     this.closeOnEscape();
+    this.manageFocus();
+    this.trapFocus();
   }
 
   protected nameError(): string | null {
@@ -173,6 +183,77 @@ export class WorkOrderDrawer {
 
     document.addEventListener('keydown', listener, true);
     inject(DestroyRef).onDestroy(() => document.removeEventListener('keydown', listener, true));
+  }
+
+  /**
+   * Open moves the focus to the first field. Close gives the focus back to the control that
+   * opened the drawer: a bar, or nothing when a click on an empty cell opened it.
+   *
+   * Parity mode leaves the first field alone: the design shows the open drawer with no focus
+   * ring ("Placeholder and Defaults").
+   */
+  private manageFocus(): void {
+    const document = inject(DOCUMENT);
+    const injector = inject(Injector);
+    let opener: HTMLElement | null = null;
+
+    effect(() => {
+      const open = this.open();
+      untracked(() => {
+        if (open && !opener) {
+          opener = document.activeElement as HTMLElement | null;
+          if (PARITY_MODE) {
+            return;
+          }
+          // The panel is inert until the render removes the attribute.
+          afterNextRender(() => this.nameInput().nativeElement.focus({ preventScroll: true }), {
+            injector,
+          });
+        } else if (!open && opener) {
+          if (opener.isConnected) {
+            opener.focus({ preventScroll: true });
+          }
+          opener = null;
+        }
+      });
+    });
+  }
+
+  /**
+   * Tab and Shift+Tab stay in the open drawer. The listener wraps at the first and the last
+   * control, and pulls the focus back when a click on the empty panel dropped it on the page.
+   */
+  private trapFocus(): void {
+    const document = inject(DOCUMENT);
+    const listener = (event: KeyboardEvent) => {
+      if (event.key !== 'Tab' || !this.open()) {
+        return;
+      }
+
+      const controls = this.focusableControls();
+      const first = controls[0];
+      const last = controls[controls.length - 1];
+      const active = document.activeElement;
+      const inside = this.panel().nativeElement.contains(active);
+
+      if (!inside || (event.shiftKey && active === first)) {
+        event.preventDefault();
+        (event.shiftKey && inside ? last : first).focus();
+      } else if (!event.shiftKey && active === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener('keydown', listener);
+    inject(DestroyRef).onDestroy(() => document.removeEventListener('keydown', listener));
+  }
+
+  private focusableControls(): HTMLElement[] {
+    const selector = 'button, input, select, textarea, [tabindex]:not([tabindex="-1"])';
+    return Array.from(this.panel().nativeElement.querySelectorAll<HTMLElement>(selector)).filter(
+      (element) => !element.matches(':disabled') && element.tabIndex >= 0 && element.offsetParent,
+    );
   }
 
   private centerName(workCenterId: string): string {

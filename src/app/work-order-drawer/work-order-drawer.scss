@@ -97,6 +97,11 @@ $slide: transform #{t.$layout-panel-slide-duration} ease-out;
   cursor: pointer;
 }
 
+.drawer-button:focus-visible {
+  outline: t.$color-border-focus solid t.$layout-focus-ring-width;
+  outline-offset: t.$layout-focus-ring-offset;
+}
+
 .drawer-button--primary {
   border-color: t.$component-button-primary-bg;
   background: t.$component-button-primary-bg;

@@ -26,11 +26,18 @@
   font-family: t.$font-family;
 }
 
+// Only the keyboard shows the ring. A bar that a click focuses stays as the design.
+.work-order-bar:focus-visible {
+  outline: t.$color-border-focus solid t.$layout-focus-ring-width;
+  outline-offset: t.$layout-focus-ring-offset;
+}
+
 // A hovered bar draws its menu and tooltip over the bars of the rows below and over the sticky
 // header. Level 2 is the level of the current month chip: the chip comes later in the DOM, so it
 // stays on top, as in the design.
 .work-order-bar--hovered,
-.work-order-bar--menu-open {
+.work-order-bar--menu-open,
+.work-order-bar:focus-within {
   z-index: 2;
 }
 
@@ -159,7 +166,8 @@
 }
 
 .work-order-bar--hovered .work-order-bar__actions,
-.work-order-bar--menu-open .work-order-bar__actions {
+.work-order-bar--menu-open .work-order-bar__actions,
+.work-order-bar:focus-visible .work-order-bar__actions {
   opacity: 1;
   pointer-events: auto;
 }
@@ -232,8 +240,14 @@
   cursor: pointer;
 }
 
-.work-order-menu__item:hover {
+.work-order-menu__item:hover,
+.work-order-menu__item:focus-visible {
   background: t.$layout-dropdown-menu-row-hover-fill;
+}
+
+.work-order-menu__item:focus-visible {
+  outline: t.$color-border-focus solid t.$layout-focus-ring-width;
+  outline-offset: t.$layout-focus-ring-offset;
 }
 
 .work-order-menu__item--danger {

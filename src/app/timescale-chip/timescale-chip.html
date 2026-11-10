@@ -1,11 +1,14 @@
 <div class="timescale-chip">
   <span class="timescale-chip__label">{{ label() }}</span>
   <button
+    #trigger
     type="button"
     class="timescale-chip__value"
     aria-haspopup="listbox"
+    aria-controls="timescale-menu"
+    [attr.aria-label]="label() + ': ' + value()"
     [attr.aria-expanded]="open()"
-    (click)="toggle()"
+    (click)="toggle($event)"
   >
     {{ value() }}
   </button>
@@ -17,7 +20,12 @@
 </div>
 
 @if (open()) {
-  <div class="timescale-menu" role="listbox">
+  <div
+    id="timescale-menu"
+    class="timescale-menu"
+    role="listbox"
+    [attr.aria-label]="label()"
+  >
     @for (option of options(); track option) {
       <button
         type="button"
@@ -25,6 +33,7 @@
         role="option"
         [class.timescale-menu__item--selected]="option === value()"
         [attr.aria-selected]="option === value()"
+        [attr.tabindex]="option === value() ? 0 : -1"
         (click)="select(option)"
       >
         {{ option }}

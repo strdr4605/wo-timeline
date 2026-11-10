@@ -837,8 +837,8 @@
       ],
       "verify": "e2e",
       "priority": "bonus",
-      "status": "pending",
-      "evidence": ""
+      "status": "pass",
+      "evidence": "e2e: [I5] controls have names, bars and menus work with the keyboard, the drawer keeps the focus"
     },
     {
       "id": "I6",

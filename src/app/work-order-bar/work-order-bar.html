@@ -4,12 +4,18 @@
   [class.work-order-bar--hovered]="hovered()"
   [class.work-order-bar--edge-hovered]="edgeHovered()"
   [class.work-order-bar--menu-open]="menuOpen()"
+  tabindex="0"
+  role="group"
+  [attr.aria-label]="accessibleName()"
   [style.--start-index]="start().index"
   [style.--start-fraction]="start().fraction"
   [style.--end-index]="end().index"
   [style.--end-fraction]="end().fraction"
   (mouseenter)="hovered.set(true)"
   (mouseleave)="hovered.set(false)"
+  (keydown)="onBarKeydown($event)"
+  (focusout)="closeMenuOnFocusLeave($event)"
+  #bar
 >
   <span
     class="work-order-bar__handle work-order-bar__handle--start"
@@ -32,7 +38,9 @@
   <button
     type="button"
     class="work-order-bar__actions"
-    aria-label="Work order actions"
+    tabindex="-1"
+    aria-haspopup="menu"
+    [attr.aria-label]="'Actions for ' + order().name"
     [attr.aria-expanded]="menuOpen()"
     (click)="toggleMenu($event)"
   >
@@ -43,15 +51,23 @@
     </span>
   </button>
 
-  <div class="work-order-menu" role="menu" [class.work-order-menu--open]="menuOpen()">
-    <button type="button" class="work-order-menu__item" role="menuitem" (click)="edit.emit()">
+  <!-- A closed menu is only transparent. Inert keeps its items out of the Tab order. -->
+  <div
+    class="work-order-menu"
+    role="menu"
+    [attr.aria-label]="'Actions for ' + order().name"
+    [class.work-order-menu--open]="menuOpen()"
+    [attr.inert]="menuOpen() ? null : ''"
+    (keydown)="onMenuKeydown($event)"
+  >
+    <button type="button" class="work-order-menu__item" role="menuitem" (click)="activate('edit')">
       Edit
     </button>
     <button
       type="button"
       class="work-order-menu__item work-order-menu__item--danger"
       role="menuitem"
-      (click)="remove.emit()"
+      (click)="activate('remove')"
     >
       Delete
     </button>

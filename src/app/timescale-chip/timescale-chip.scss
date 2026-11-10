@@ -55,8 +55,8 @@
 }
 
 .timescale-chip__value:focus-visible {
-  outline: t.$color-border-focus solid t.$layout-grid-vertical-grid-line-width;
-  outline-offset: -1px;
+  outline: t.$color-border-focus solid t.$layout-focus-ring-width;
+  outline-offset: t.$layout-focus-ring-offset;
 }
 
 // The icon sits on the value button. Clicks go through to the button.
@@ -116,8 +116,14 @@
   cursor: pointer;
 }
 
-.timescale-menu__item:hover {
+.timescale-menu__item:hover,
+.timescale-menu__item:focus-visible {
   background: t.$color-surface-chip-bg;
+}
+
+.timescale-menu__item:focus-visible {
+  outline: t.$color-border-focus solid t.$layout-focus-ring-width;
+  outline-offset: t.$layout-focus-ring-offset;
 }
 
 .timescale-menu__item--selected {

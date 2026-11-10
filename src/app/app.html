@@ -11,7 +11,14 @@
 
       <!-- The design has no Today button. Parity mode hides it, so the screenshots stay the same. -->
       @if (!parityMode) {
-        <button type="button" class="today-button" (click)="grid.centerOnToday(true)">Today</button>
+        <button
+          type="button"
+          class="today-button"
+          aria-label="Today: scroll the timeline to today"
+          (click)="grid.centerOnToday(true)"
+        >
+          Today
+        </button>
       }
     </div>
   </div>

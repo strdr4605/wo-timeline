@@ -73,8 +73,8 @@
 }
 
 .today-button:focus-visible {
-  outline: t.$color-border-focus solid t.$layout-grid-vertical-grid-line-width;
-  outline-offset: -1px;
+  outline: t.$color-border-focus solid t.$layout-focus-ring-width;
+  outline-offset: t.$layout-focus-ring-offset;
 }
 
 // The grid draws its own 1px left border, so it starts one pixel left of the rail.
