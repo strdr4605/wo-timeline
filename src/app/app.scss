@@ -40,8 +40,41 @@
 }
 
 .toolbar {
+  display: flex;
+  align-items: flex-start;
+  gap: t.$layout-badge-padding-x;
   height: t.$layout-toolbar-timescale-h;
   margin-top: (t.$layout-toolbar-timescale-y - t.$layout-page-title-y - t.$type-h3-line-height);
+}
+
+// A secondary button with the frame and the value font of the timescale chip. No new colours.
+.today-button {
+  height: t.$component-scale-chip-height;
+  // Pinned to the text box of the chip value, so "Today" sits on the same baseline as "Month".
+  padding: t.$component-scale-chip-text-y t.$layout-badge-padding-x 0;
+  display: flex;
+  align-items: flex-start;
+  border: 0;
+  border-radius: t.$component-scale-chip-radius;
+  background: t.$component-scale-chip-fill;
+  box-shadow: t.$component-scale-chip-shadow-x t.$component-scale-chip-shadow-y
+    t.$component-scale-chip-shadow-blur t.$component-scale-chip-shadow-spread
+    t.$component-scale-chip-shadow-color;
+  font-family: t.$font-family;
+  font-size: t.$type-chip-value-size;
+  font-weight: t.$type-chip-value-font-weight;
+  line-height: t.$component-scale-chip-text-line-height;
+  color: t.$type-chip-value-color;
+  cursor: pointer;
+}
+
+.today-button:hover {
+  background: t.$color-surface-chip-bg;
+}
+
+.today-button:focus-visible {
+  outline: t.$color-border-focus solid t.$layout-grid-vertical-grid-line-width;
+  outline-offset: -1px;
 }
 
 // The grid draws its own 1px left border, so it starts one pixel left of the rail.

@@ -8,10 +8,16 @@
 
     <div class="toolbar">
       <app-timescale-chip [value]="timescale()" (valueChange)="timescale.set($event)" />
+
+      <!-- The design has no Today button. Parity mode hides it, so the screenshots stay the same. -->
+      @if (!parityMode) {
+        <button type="button" class="today-button" (click)="grid.centerOnToday(true)">Today</button>
+      }
     </div>
   </div>
 
   <app-timeline-grid
+    #grid
     [timescale]="timescale()"
     [workCenters]="workCenters()"
     [workOrders]="workOrders()"

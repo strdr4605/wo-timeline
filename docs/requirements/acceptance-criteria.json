@@ -801,8 +801,8 @@
       ],
       "verify": "e2e",
       "priority": "bonus",
-      "status": "pending",
-      "evidence": ""
+      "status": "pass",
+      "evidence": "e2e: [I2] the Today button centres the viewport on today in every timescale"
     },
     {
       "id": "I3",

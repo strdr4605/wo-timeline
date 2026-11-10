@@ -119,6 +119,36 @@ export class TimelineGrid implements AfterViewInit {
     this.scrollToStart();
   }
 
+  /**
+   * Scrolls the timeline so that today sits in the middle of the visible grid.
+   * The Today button asks for a smooth scroll. Reduced motion jumps at once.
+   */
+  centerOnToday(smooth = false): void {
+    const scroller = this.scroller()?.nativeElement;
+    const rail = this.rail()?.nativeElement;
+    const timeline = this.timeline()?.nativeElement;
+
+    if (!scroller || !rail || !timeline) {
+      return;
+    }
+
+    const columnWidth = parseFloat(
+      getComputedStyle(timeline).getPropertyValue('--column-width'),
+    );
+    const { index, fraction } = this.today();
+
+    // The marker of today sits at this offset inside the timeline content.
+    const markerX = (index + fraction) * columnWidth;
+    const contentLeft = timeline.getBoundingClientRect().left + timeline.clientLeft;
+
+    // The rail is sticky, so the visible grid area starts at its right edge.
+    const target = (rail.getBoundingClientRect().right + scroller.getBoundingClientRect().right) / 2;
+    const left = scroller.scrollLeft + contentLeft + markerX - target;
+
+    const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    scroller.scrollTo({ left, behavior: smooth && !reducedMotion ? 'smooth' : 'instant' });
+  }
+
   /** The bars of one work centre. */
   protected barsOf(workCenterId: string): BarPlacement[] {
     return this.barsByCenter().get(workCenterId) ?? [];
@@ -191,30 +221,6 @@ export class TimelineGrid implements AfterViewInit {
     const contentLeft = timeline.getBoundingClientRect().left + timeline.clientLeft;
     const visibleLeft = rail.getBoundingClientRect().right + timeline.clientLeft;
     scroller.scrollLeft += contentLeft + index * columnWidth - visibleLeft;
-  }
-
-  /** Scrolls the timeline so that today sits in the middle of the visible grid. */
-  private centerOnToday(): void {
-    const scroller = this.scroller()?.nativeElement;
-    const rail = this.rail()?.nativeElement;
-    const timeline = this.timeline()?.nativeElement;
-
-    if (!scroller || !rail || !timeline) {
-      return;
-    }
-
-    const columnWidth = parseFloat(
-      getComputedStyle(timeline).getPropertyValue('--column-width'),
-    );
-    const { index, fraction } = this.today();
-
-    // The marker of today sits at this offset inside the timeline content.
-    const markerX = (index + fraction) * columnWidth;
-    const contentLeft = timeline.getBoundingClientRect().left + timeline.clientLeft;
-
-    // The rail is sticky, so the visible grid area starts at its right edge.
-    const target = (rail.getBoundingClientRect().right + scroller.getBoundingClientRect().right) / 2;
-    scroller.scrollLeft += contentLeft + markerX - target;
   }
 }
 
