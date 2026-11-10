@@ -1,0 +1,8 @@
+@use '../src/styles/tokens' as t;
+
+// The grid places a bar in a row of month columns. A story gives the bar the same frame.
+.story-bar-row {
+  position: relative;
+  height: t.$layout-grid-row-height;
+  --column-width: #{t.$layout-grid-header-column-width-month};
+}

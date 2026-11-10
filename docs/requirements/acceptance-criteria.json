@@ -8,7 +8,8 @@
       "owner": "docs/videos/fe-kickoff-and-handover.md (task owner kickoff)",
       "sketch": "docs/design/tokens.json (extracted from the Sketch file)",
       "ref": "docs/videos/fe-reference-implementation-walkthrough.md (candidate walkthrough, Renvil Dsa)",
-      "cand": "docs/videos/fe-work-order-timeline-overview.md (candidate walkthrough, Jacob Hamel)"
+      "cand": "docs/videos/fe-work-order-timeline-overview.md (candidate walkthrough, Jacob Hamel)",
+      "lead": "lead decision 'Storybook for the main components' (bonus wave)"
     },
     "verifyKinds": {
       "unit": "covered by an automated unit test",
@@ -911,6 +912,18 @@
       "priority": "bonus",
       "status": "pass",
       "evidence": "e2e: [I10] a drag on the rail edge resizes the rail, with limits, Escape, keys and storage"
+    },
+    {
+      "id": "I11",
+      "group": "Bonus features",
+      "requirement": "Storybook for the main components: the work order bar (one story per status: Open, In progress, Complete, Blocked), the timescale chip (closed and open menu) and the drawer (create and edit), with the real components, the global styles, the tokens and the sample data. Scripts storybook and build-storybook, output storybook-static (ignored). The app build, vitest and Playwright do not pick up the stories.",
+      "source": [
+        "lead"
+      ],
+      "verify": "e2e",
+      "priority": "bonus",
+      "status": "pass",
+      "evidence": "e2e: [I11] Storybook has stories for each bar status, the timescale chip and the drawer, outside the app build"
     },
     {
       "id": "J1",

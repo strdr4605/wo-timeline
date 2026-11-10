@@ -11,3 +11,4 @@ test-results/
 docs/demo/videos/
 .DS_Store
 .pixel-check
+storybook-static/

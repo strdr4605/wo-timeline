@@ -2,7 +2,7 @@
 
 Work Order Schedule Timeline (Naologic front-end take-home). Generated from `acceptance-criteria.json` - edit the JSON, then run `node docs/requirements/render.mjs`.
 
-Progress: 69 pass, 0 fail, 0 open decision, 5 pending.
+Progress: 70 pass, 0 fail, 0 open decision, 5 pending.
 
 Legend: `[x]` pass, `[ ]` pending, `[?]` open decision. An item may only be marked pass with an evidence command (test name, screenshot path or measurement output) in the JSON `evidence` field.
 
@@ -121,6 +121,7 @@ Legend: `[x]` pass, `[ ]` pending, `[?]` open decision. An item may only be mark
 | [x] | I8 | The design covers Month only; Day and Week layouts are derived from the same tokens and look consistent | sketch | visual | must | e2e: [I8] Day and Week reuse the Month rows, bars and header of the design |
 | [x] | I9 | Virtual scrolling for large ranges (brief l.439 "Consider virtual scrolling for performance with large ranges"): only the columns and bars near the view are in the DOM, the scroll position and the focus stay, a drag works across the window edge, parity mode renders every column | brief | e2e | bonus | e2e: [I9] parity mode renders every column |
 | [x] | I10 | Drag the rail divider to resize the work center column ("Drag to resize" label at the rail edge of Timeline - Hover Options): blue line and label on hover, pointer drag with min and max width, Escape cancels, separator keys, width saved (not in parity mode) | sketch | e2e | bonus | e2e: [I10] a drag on the rail edge resizes the rail, with limits, Escape, keys and storage |
+| [x] | I11 | Storybook for the main components: the work order bar (one story per status: Open, In progress, Complete, Blocked), the timescale chip (closed and open menu) and the drawer (create and edit), with the real components, the global styles, the tokens and the sample data. Scripts storybook and build-storybook, output storybook-static (ignored). The app build, vitest and Playwright do not pick up the stories. | lead | e2e | bonus | e2e: [I11] Storybook has stories for each bar status, the timescale chip and the drawer, outside the app build |
 
 ## Demo evidence
 
@@ -137,6 +138,7 @@ Legend: `[x]` pass, `[ ]` pending, `[?]` open decision. An item may only be mark
 - **sketch**: docs/design/tokens.json (extracted from the Sketch file)
 - **ref**: docs/videos/fe-reference-implementation-walkthrough.md (candidate walkthrough, Renvil Dsa)
 - **cand**: docs/videos/fe-work-order-timeline-overview.md (candidate walkthrough, Jacob Hamel)
+- **lead**: lead decision 'Storybook for the main components' (bonus wave)
 
 ## Verification kinds
 

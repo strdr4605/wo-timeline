@@ -11,7 +11,9 @@
     "test:unit": "vitest run",
     "test:e2e": "playwright test",
     "test:all": "npm run build && vitest run && playwright test",
-    "demo": "playwright test --config=playwright.demo.config.ts"
+    "demo": "playwright test --config=playwright.demo.config.ts",
+    "storybook": "ng run wo-timeline:storybook",
+    "build-storybook": "ng run wo-timeline:build-storybook"
   },
   "prettier": {
     "printWidth": 100,
@@ -40,14 +42,18 @@
     "zone.js": "~0.15.0"
   },
   "devDependencies": {
+    "@angular-devkit/build-angular": "20.3.42",
     "@angular/build": "20.3.42",
     "@angular/cli": "20.3.42",
     "@angular/compiler-cli": "20.3.35",
+    "@angular/platform-browser-dynamic": "20.3.35",
     "@axe-core/playwright": "^4.14.0",
     "@playwright/test": "1.65.0",
+    "@storybook/angular": "10.6.5",
     "pixelmatch": "^7.1.0",
     "playwright": "1.65.0",
     "pngjs": "^7.0.0",
+    "storybook": "10.6.5",
     "typescript": "~5.9.2",
     "vitest": "5.1.0"
   }

@@ -82,6 +82,35 @@
         "extract-i18n": {
           "builder": "@angular/build:extract-i18n"
         },
+        "storybook": {
+          "builder": "@storybook/angular:start-storybook",
+          "options": {
+            "configDir": ".storybook",
+            "browserTarget": "wo-timeline:build",
+            "tsConfig": ".storybook/tsconfig.json",
+            "compodoc": false,
+            "port": 6006,
+            "ci": true,
+            "styles": [
+              "src/styles.scss",
+              ".storybook/story-frame.scss"
+            ]
+          }
+        },
+        "build-storybook": {
+          "builder": "@storybook/angular:build-storybook",
+          "options": {
+            "configDir": ".storybook",
+            "browserTarget": "wo-timeline:build",
+            "tsConfig": ".storybook/tsconfig.json",
+            "compodoc": false,
+            "outputDir": "storybook-static",
+            "styles": [
+              "src/styles.scss",
+              ".storybook/story-frame.scss"
+            ]
+          }
+        }
       }
     }
   }
