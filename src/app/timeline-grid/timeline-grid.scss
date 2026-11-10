@@ -86,6 +86,11 @@
   --column-width: #{t.$layout-grid-header-column-width-day};
 }
 
+// The design has no Hour artboard. Hour reuses the Day column width.
+.grid__timeline--hour {
+  --column-width: #{t.$layout-grid-header-column-width-day};
+}
+
 .grid__header {
   position: sticky;
   top: 0;

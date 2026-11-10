@@ -62,14 +62,24 @@ test('[B2] the timeline grid scrolls horizontally', async ({ page }) => {
   expect(firstCellAfter!.x).toBeLessThan(firstCellBefore!.x);
 });
 
-test('[B3] the timescale dropdown offers Day, Week and Month', async ({ page }) => {
+test('[B3] the timescale dropdown offers Hour, Day, Week and Month', async ({ page }) => {
   await page.goto('/');
 
   await page.locator('.timescale-chip__value').click();
 
+  // The menu of the artboard 'View Selection': 200 x 136 at (101, 185), Month selected.
   const menu = page.locator('.timescale-menu');
   await expect(menu).toBeVisible();
-  await expect(menu.locator('.timescale-menu__item')).toHaveText(['Day', 'Week', 'Month']);
+  await expect(menu.locator('.timescale-menu__item')).toHaveText(['Hour', 'Day', 'Week', 'Month']);
+  expect(await menu.boundingBox()).toEqual({ x: 101, y: 185, width: 200, height: 136 });
+  await expect(menu.locator('.timescale-menu__item--selected')).toHaveText('Month');
+
+  // The design has no Hour artboard. Hour columns are as wide as Day columns.
+  await menu.locator('.timescale-menu__item', { hasText: 'Hour' }).click();
+  await expect(page.locator('.timescale-chip__value')).toContainText('Hour');
+  await expect(page.locator('.grid-header-cell').first()).toHaveText(/^\d{2}:00$/);
+  const cell = await page.locator('.grid-header-cell').first().boundingBox();
+  expect(cell!.width).toBe(48);
 });
 
 test('[B4] the default timescale is Month', async ({ page }) => {
@@ -205,15 +215,69 @@ test('[G2] the timescale chip is 146 wide with the segments at 75 and 71', async
 
   const chip = await page.locator('.timescale-chip').boundingBox();
   expect(chip!.width).toBe(146);
+  expect(chip!.height).toBe(25);
 
   const label = await page.locator('.timescale-chip__label').boundingBox();
   const value = await page.locator('.timescale-chip__value').boundingBox();
   expect(label!.width).toBe(75);
   expect(value!.width).toBe(71);
 
-  // The value segment starts at x 176, the chip starts at x 101.
+  // The value segment starts at x 176, the chip starts at x 101 and y 155.
   expect(chip!.x).toBe(101);
+  expect(chip!.y).toBe(155);
   expect(value!.x).toBe(176);
+
+  // One white rectangle with a shadow and no border. The label segment is tinted.
+  const style = await page.locator('.timescale-chip').evaluate((element) => {
+    const css = getComputedStyle(element);
+    return { fill: css.backgroundColor, border: css.borderTopWidth, shadow: css.boxShadow };
+  });
+  expect(style).toEqual({
+    fill: rgb('#ffffff'),
+    border: '0px',
+    shadow: 'rgb(200, 207, 233) 1px 2.5px 3px 0px',
+  });
+  expect(
+    await page
+      .locator('.timescale-chip__label')
+      .evaluate((element) => getComputedStyle(element).backgroundColor),
+  ).toBe('rgba(241, 243, 248, 0.75)');
+
+  // The chevron is the line icon of the design, 8.47 x 5 at (230.53, 165.91).
+  const chevron = await page.locator('.timescale-chip__chevron').boundingBox();
+  expect(chevron!.x).toBeCloseTo(230.53, 0);
+  expect(chevron!.y).toBeCloseTo(165.91, 0);
+});
+
+test('[G3] the NAOLOGIC wordmark sits at (101, 20), 80 x 10, on a top bar without a border', async ({
+  page,
+}) => {
+  await page.goto('/');
+
+  const logo = page.locator('.top-bar .logo');
+  await expect(logo).toHaveAttribute('alt', 'Naologic');
+  expect(await logo.evaluate((element: HTMLImageElement) => element.naturalWidth)).toBeGreaterThan(0);
+  expect(await logo.boundingBox()).toEqual({ x: 101, y: 20, width: 80, height: 10 });
+
+  const bar = page.locator('.top-bar');
+  expect((await bar.boundingBox())!.height).toBe(50);
+  expect(await bar.evaluate((element) => getComputedStyle(element).borderBottomWidth)).toBe('0px');
+
+  // The title line box of the design starts at y 95.
+  const title = await page.locator('.page__title').boundingBox();
+  expect(title!.y).toBe(95);
+});
+
+test('parity mode shows the artboard view: Aug 2024 first, Sep 2024 current, the fixture bars', async ({
+  page,
+}) => {
+  await page.goto('/?parity=1');
+
+  const firstVisible = page.locator('.grid-header-cell', { hasText: 'Aug 2024' });
+  await expect.poll(async () => (await firstVisible.boundingBox())!.x).toBe(482);
+  await expect(page.locator('.grid-header-cell--current')).toHaveText('Sep 2024');
+  await expect(page.locator('app-work-order-bar')).toHaveCount(4);
+  await expect(page.locator('.timescale-chip__value')).toContainText('Month');
 });
 
 test('[B10] rows are 48 high and the work center panel is 380 wide', async ({ page }) => {

@@ -1,5 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { WorkCenter } from '../timeline/timeline';
+import { PARITY_MODE, PARITY_WORK_ORDER_DOCUMENTS } from '../parity';
 import { OverlapCandidate, overlaps } from './overlap';
 import {
   SAMPLE_WORK_CENTER_DOCUMENTS,
@@ -21,7 +22,7 @@ export class ScheduleService {
   ).asReadonly();
 
   readonly workOrders = signal<WorkOrder[]>(
-    SAMPLE_WORK_ORDER_DOCUMENTS.map((document) => ({
+    (PARITY_MODE ? PARITY_WORK_ORDER_DOCUMENTS : SAMPLE_WORK_ORDER_DOCUMENTS).map((document) => ({
       docId: document.docId,
       ...document.data,
     })),

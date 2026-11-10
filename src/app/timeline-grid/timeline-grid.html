@@ -20,6 +20,7 @@
     <div
       class="grid__timeline"
       #timeline
+      [class.grid__timeline--hour]="timescale() === 'Hour'"
       [class.grid__timeline--day]="timescale() === 'Day'"
       [class.grid__timeline--week]="timescale() === 'Week'"
       [class.grid__timeline--month]="timescale() === 'Month'"

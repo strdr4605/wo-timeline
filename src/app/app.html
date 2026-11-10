@@ -1,12 +1,14 @@
 <header class="top-bar">
-  <div class="logo" aria-label="Naologic"></div>
+  <img class="logo" src="naologic-logo.svg" alt="Naologic" />
 </header>
 
 <main class="page">
-  <h1 class="page__title">Work Orders</h1>
+  <div class="page__head">
+    <h1 class="page__title">Work Orders</h1>
 
-  <div class="toolbar">
-    <app-timescale-chip [value]="timescale()" (valueChange)="timescale.set($event)" />
+    <div class="toolbar">
+      <app-timescale-chip [value]="timescale()" (valueChange)="timescale.set($event)" />
+    </div>
   </div>
 
   <app-timeline-grid

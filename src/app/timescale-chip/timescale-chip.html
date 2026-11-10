@@ -8,8 +8,12 @@
     (click)="toggle()"
   >
     {{ value() }}
-    <span class="timescale-chip__chevron" aria-hidden="true"></span>
   </button>
+
+  <!-- The line icon 'Nao_Icons/Line/Arrow/Simple/Down' of the design. -->
+  <svg class="timescale-chip__chevron" viewBox="0 0 8.47 5" aria-hidden="true">
+    <polyline points="0.6,0.6 4.235,4.2 7.87,0.6" />
+  </svg>
 </div>
 
 @if (open()) {

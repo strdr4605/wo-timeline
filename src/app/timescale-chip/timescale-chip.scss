@@ -1,4 +1,3 @@
-@use 'sass:math';
 @use '../../styles/tokens' as t;
 
 :host {
@@ -6,17 +5,18 @@
   position: relative;
 }
 
+// One white rectangle with a shadow. The label segment is a tinted layer on its left part.
 .timescale-chip {
+  position: relative;
   display: inline-flex;
   align-items: stretch;
   height: t.$component-scale-chip-height;
-  // The Sketch chip is as wide as its two segments: label 75 at x 101, value 71 at x 176.
   width: (t.$component-scale-chip-segments-label-w + t.$component-scale-chip-segments-value-w);
-  border: t.$component-scale-chip-border-width solid t.$component-scale-chip-border-color;
   border-radius: t.$component-scale-chip-radius;
-  // The segments lie on the border, so the ring is drawn on top of them.
-  outline: t.$component-scale-chip-border-width solid t.$component-scale-chip-border-color;
-  outline-offset: -#{t.$component-scale-chip-border-width};
+  background: t.$component-scale-chip-fill;
+  box-shadow: t.$component-scale-chip-shadow-x t.$component-scale-chip-shadow-y
+    t.$component-scale-chip-shadow-blur t.$component-scale-chip-shadow-spread
+    t.$component-scale-chip-shadow-color;
   font-family: t.$font-family;
 }
 
@@ -24,12 +24,8 @@
   display: flex;
   align-items: center;
   width: t.$component-scale-chip-segments-label-w;
-  margin-left: -#{t.$component-scale-chip-border-width};
   padding-left: t.$layout-badge-padding-x;
-  border-radius: (
-      t.$component-scale-chip-radius - t.$component-scale-chip-border-width
-    )
-    0 0 (t.$component-scale-chip-radius - t.$component-scale-chip-border-width);
+  border-radius: t.$component-scale-chip-radius 0 0 t.$component-scale-chip-radius;
   background: rgba(
     t.$component-scale-chip-segments-label-fill,
     t.$component-scale-chip-segments-label-alpha
@@ -41,16 +37,16 @@
 
 .timescale-chip__value {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  align-items: flex-start;
+  // Centred, the Medium weight lands 1px below the design. The text box of the design is pinned.
+  padding-top: t.$component-scale-chip-text-y;
+  line-height: t.$component-scale-chip-text-line-height;
   width: t.$component-scale-chip-segments-value-w;
-  margin-right: -#{t.$component-scale-chip-border-width};
-  padding: 0 t.$layout-badge-padding-x;
+  padding-right: t.$layout-badge-padding-x;
+  padding-left: t.$layout-badge-padding-x;
   border: 0;
-  border-radius: 0
-    (t.$component-scale-chip-radius - t.$component-scale-chip-border-width)
-    (t.$component-scale-chip-radius - t.$component-scale-chip-border-width) 0;
-  background: t.$component-scale-chip-segments-value-fill;
+  border-radius: 0 t.$component-scale-chip-radius t.$component-scale-chip-radius 0;
+  background: transparent;
   font-family: t.$font-family;
   font-size: t.$type-chip-value-size;
   font-weight: t.$type-chip-value-font-weight;
@@ -63,27 +59,44 @@
   outline-offset: -1px;
 }
 
+// The icon sits on the value button. Clicks go through to the button.
 .timescale-chip__chevron {
-  width: 0;
-  height: 0;
-  border-left: math.div(t.$layout-toolbar-timescale-chevron-w, 2) solid transparent;
-  border-right: math.div(t.$layout-toolbar-timescale-chevron-w, 2) solid transparent;
-  border-top: t.$layout-toolbar-timescale-chevron-h solid t.$color-text-secondary;
+  position: absolute;
+  left: t.$component-scale-chip-chevron-x;
+  top: t.$component-scale-chip-chevron-y;
+  width: t.$component-scale-chip-chevron-w;
+  height: t.$component-scale-chip-chevron-h;
+  overflow: visible;
+  fill: none;
+  stroke: t.$component-scale-chip-chevron-color;
+  stroke-width: t.$component-scale-chip-chevron-stroke;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
 }
 
-// The menu hangs under the value segment of the chip.
+.timescale-chip:has([aria-expanded='true']) .timescale-chip__chevron {
+  stroke: t.$component-scale-chip-chevron-open-color;
+}
+
+// The menu hangs under the chip, aligned with its left edge.
 .timescale-menu {
   position: absolute;
-  top: 100%;
-  left: t.$component-scale-chip-segments-label-w;
+  top: calc(100% + #{t.$component-scale-chip-menu-gap});
+  left: 0;
   z-index: 3;
   width: t.$layout-dropdown-menu-width;
+  // Sketch draws the 1px border inside the box, so the rows start 12px below the outer edge.
+  padding: (t.$layout-dropdown-menu-padding-y - t.$layout-grid-vertical-grid-line-width) 0;
   background: t.$color-surface-panel;
-  border: t.$layout-grid-vertical-grid-line-width solid rgba(t.$color-text-secondary, 0.1);
+  border: t.$layout-grid-vertical-grid-line-width solid
+    rgba(t.$layout-dropdown-menu-border-color, t.$layout-dropdown-menu-border-alpha);
   border-radius: t.$layout-dropdown-menu-radius;
   box-shadow:
     0 t.$layout-dropdown-menu-shadow-y t.$layout-dropdown-menu-shadow-blur
-    t.$layout-dropdown-menu-shadow-color;
+      t.$layout-dropdown-menu-shadow-spread t.$layout-dropdown-menu-shadow-color,
+    0 t.$layout-dropdown-menu-shadow2-y t.$layout-dropdown-menu-shadow2-blur
+      t.$layout-dropdown-menu-shadow2-spread t.$layout-dropdown-menu-shadow2-color;
 }
 
 .timescale-menu__item {
@@ -91,7 +104,8 @@
   align-items: center;
   width: 100%;
   height: t.$layout-dropdown-menu-row-height;
-  padding: 0 t.$layout-dropdown-menu-row-padding-x;
+  padding: 0
+    (t.$layout-dropdown-menu-row-padding-x - t.$layout-grid-vertical-grid-line-width);
   border: 0;
   background: transparent;
   font-family: t.$font-family;

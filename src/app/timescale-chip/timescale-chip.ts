@@ -1,5 +1,5 @@
 import { Component, ElementRef, HostListener, input, output, signal } from '@angular/core';
-import { Timescale } from '../timeline/timeline';
+import { TIMESCALES, Timescale } from '../timeline/timeline';
 
 @Component({
   selector: 'app-timescale-chip',
@@ -9,7 +9,7 @@ import { Timescale } from '../timeline/timeline';
 export class TimescaleChip {
   readonly label = input('Timescale');
   readonly value = input<Timescale>('Month');
-  readonly options = input<Timescale[]>(['Day', 'Week', 'Month']);
+  readonly options = input<Timescale[]>(TIMESCALES);
   readonly valueChange = output<Timescale>();
 
   /** The menu is a styled list, not a system dropdown. */

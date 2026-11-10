@@ -1,10 +1,10 @@
 @use '../styles/tokens' as t;
 
+// The design has no line under the top bar: the bar and the page head are one white area.
 .top-bar {
   position: relative;
   height: t.$layout-top-bar-height;
   background: t.$color-surface-panel;
-  border-bottom: t.$layout-grid-vertical-grid-line-width solid t.$color-border-grid;
 }
 
 .logo {
@@ -13,38 +13,33 @@
   left: t.$layout-top-bar-logo-x;
   width: t.$layout-top-bar-logo-w;
   height: t.$layout-top-bar-logo-h;
-  background: t.$color-brand-element;
 }
 
-.page {
-  padding-left: t.$layout-grid-left-rail-x;
+// The head is white from the top bar down to the grid header band.
+.page__head {
+  height: (t.$layout-grid-header-top - t.$layout-top-bar-height);
+  // Padding, not a title margin: a margin would collapse through the head and show the page colour.
+  padding-top: (t.$layout-page-title-y - t.$layout-top-bar-height);
+  padding-left: t.$layout-toolbar-timescale-x;
+  background: t.$color-surface-panel;
 }
 
+// The title is a 34px line box, as the text layer of the Sketch symbol 'Table/Header/3'.
 .page__title {
   margin: 0;
-  // The title sits above the toolbar chip. Both offsets come from the layout tokens.
-  margin-top: (
-    t.$layout-toolbar-timescale-y - t.$layout-top-bar-height - t.$type-h3-size - t.$layout-toolbar-timescale-h
-  );
-  margin-bottom: t.$layout-toolbar-timescale-h;
   font-family: t.$font-family;
   font-size: t.$type-h3-size;
-  line-height: t.$type-h3-size;
+  line-height: t.$type-h3-line-height;
   font-weight: t.$type-h3-font-weight;
   color: t.$type-h3-color;
 }
 
 .toolbar {
-  position: relative;
-  // The design puts the chip one pixel left of the grid rail.
-  left: -1px;
   height: t.$layout-toolbar-timescale-h;
+  margin-top: (t.$layout-toolbar-timescale-y - t.$layout-page-title-y - t.$type-h3-line-height);
 }
 
 app-timeline-grid {
   display: block;
-  // The grid starts at the header band of the design.
-  margin-top: (
-    t.$layout-grid-header-top - t.$layout-toolbar-timescale-y - t.$layout-toolbar-timescale-h
-  );
+  margin-left: t.$layout-grid-left-rail-x;
 }

@@ -1,12 +1,15 @@
 /**
  * Timeline grid date maths.
  *
- * The grid has one column per period: a day, a week or a month. Every column
+ * The grid has one column per period: an hour, a day, a week or a month. Every column
  * has a fixed pixel width, so a date inside a column is placed by the fraction
  * of the period that has passed. The work order bars use the same fraction.
  */
 
-export type Timescale = 'Day' | 'Week' | 'Month';
+export type Timescale = 'Hour' | 'Day' | 'Week' | 'Month';
+
+/** The options of the timescale dropdown, in the order of the design. */
+export const TIMESCALES: Timescale[] = ['Hour', 'Day', 'Week', 'Month'];
 
 export interface WorkCenter {
   id: string;
@@ -24,8 +27,10 @@ export interface TimelineColumn {
   current: boolean;
 }
 
-/** Columns rendered on each side of today: two weeks in Day view, six months in Month view. */
-const BUFFER: Record<Timescale, number> = { Day: 14, Week: 6, Month: 6 };
+/** Columns rendered on each side of today: two days in Hour view, six months in Month view. */
+const BUFFER: Record<Timescale, number> = { Hour: 48, Day: 14, Week: 6, Month: 6 };
+
+const HOUR_MS = 3_600_000;
 
 const MONTH_NAME = new Intl.DateTimeFormat('en-US', { month: 'short' });
 
@@ -41,6 +46,18 @@ export function buildColumns(timescale: Timescale, today: Date): TimelineColumn[
 }
 
 export function columnFor(timescale: Timescale, today: Date, offset: number): TimelineColumn {
+  if (timescale === 'Hour') {
+    const start = addHours(startOfHour(today), offset);
+    const end = addHours(start, 1);
+    return {
+      key: `${isoDate(start)}T${String(start.getHours()).padStart(2, '0')}`,
+      start,
+      end,
+      label: `${String(start.getHours()).padStart(2, '0')}:00`,
+      current: offset === 0,
+    };
+  }
+
   if (timescale === 'Day') {
     const start = addDays(startOfDay(today), offset);
     const end = addDays(start, 1);
@@ -83,6 +100,11 @@ export function todayPosition(
 ): { index: number; fraction: number } {
   const index = columns.findIndex((column) => column.current);
   const column = columns[index];
+
+  if (column.end.getTime() - column.start.getTime() <= HOUR_MS) {
+    return { index, fraction: today.getMinutes() / 60 };
+  }
+
   const span = dayNumber(column.end) - dayNumber(column.start);
   const elapsed = dayNumber(today) - dayNumber(column.start);
 
@@ -104,6 +126,10 @@ export function positionInColumns(
   const first = columns[0].start;
   const index = periodNumber(timescale, date) - periodNumber(timescale, first);
 
+  if (timescale === 'Hour') {
+    return { index, fraction: date.getMinutes() / 60 };
+  }
+
   const start = periodStart(timescale, date);
   const end = periodEnd(timescale, date);
   const span = dayNumber(end) - dayNumber(start);
@@ -120,6 +146,10 @@ export function parseIsoDate(isoDate: string): Date {
 
 /** The number of the period a date belongs to, counted from an arbitrary origin. */
 function periodNumber(timescale: Timescale, date: Date): number {
+  if (timescale === 'Hour') {
+    // Local wall-clock hours, so a daylight saving change does not shift the columns.
+    return dayNumber(date) * 24 + date.getHours();
+  }
   if (timescale === 'Day') {
     return dayNumber(startOfDay(date));
   }
@@ -131,6 +161,9 @@ function periodNumber(timescale: Timescale, date: Date): number {
 
 /** The first day of the period a date belongs to. */
 function periodStart(timescale: Timescale, date: Date): Date {
+  if (timescale === 'Hour') {
+    return startOfHour(date);
+  }
   if (timescale === 'Day') {
     return startOfDay(date);
   }
@@ -142,6 +175,9 @@ function periodStart(timescale: Timescale, date: Date): Date {
 
 /** The first day after the period a date belongs to. */
 function periodEnd(timescale: Timescale, date: Date): Date {
+  if (timescale === 'Hour') {
+    return addHours(startOfHour(date), 1);
+  }
   if (timescale === 'Day') {
     return addDays(startOfDay(date), 1);
   }
@@ -149,6 +185,10 @@ function periodEnd(timescale: Timescale, date: Date): Date {
     return addDays(startOfWeek(date), 7);
   }
   return new Date(date.getFullYear(), date.getMonth() + 1, 1);
+}
+
+function startOfHour(date: Date): Date {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours());
 }
 
 function startOfDay(date: Date): Date {
@@ -163,6 +203,15 @@ function startOfWeek(date: Date): Date {
 
 function addDays(date: Date, days: number): Date {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate() + days);
+}
+
+function addHours(date: Date, hours: number): Date {
+  return new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate(),
+    date.getHours() + hours,
+  );
 }
 
 function isoDate(date: Date): string {

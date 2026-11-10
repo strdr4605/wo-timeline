@@ -40,4 +40,23 @@ describe('timeline positions', () => {
     expect(day.index).toBe(16);
     expect(day.fraction).toBe(0);
   });
+
+  test('[B3] an hour column holds sixty minutes and is labelled with its hour', () => {
+    const now = new Date(2026, 10, 8, 14, 30);
+    const columns = buildColumns('Hour', now);
+
+    // Two days of hours on each side of the current hour.
+    expect(columns).toHaveLength(97);
+    expect(columns[48].current).toBe(true);
+    expect(columns[48].label).toBe('14:00');
+
+    const marker = todayPosition(columns, now);
+    expect(marker.index).toBe(48);
+    expect(marker.fraction).toBeCloseTo(0.5, 6);
+
+    // A date without a time starts at midnight: 14 hours before the current hour.
+    const start = positionInColumns(columns, 'Hour', parseIsoDate('2026-11-08'));
+    expect(start.index).toBe(34);
+    expect(start.fraction).toBe(0);
+  });
 });

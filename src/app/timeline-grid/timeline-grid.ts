@@ -18,6 +18,7 @@ import {
   positionInColumns,
   todayPosition,
 } from '../timeline/timeline';
+import { PARITY_FIRST_COLUMN_OFFSET, PARITY_MODE, PARITY_TODAY } from '../parity';
 import { BarPosition, WorkOrderBar } from '../work-order-bar/work-order-bar';
 
 /** A bar with the two positions it is placed by. */
@@ -39,7 +40,7 @@ export class TimelineGrid implements AfterViewInit {
   readonly workOrders = input.required<WorkOrder[]>();
 
   /** Captured once, so every column of one render speaks about the same day. */
-  private readonly now = new Date();
+  private readonly now = PARITY_MODE ? PARITY_TODAY : new Date();
 
   protected readonly columns = computed<TimelineColumn[]>(() =>
     buildColumns(this.timescale(), this.now),
@@ -78,17 +79,43 @@ export class TimelineGrid implements AfterViewInit {
     // Runs after the render, so the columns of the new zoom level are in the DOM.
     afterRenderEffect(() => {
       this.timescale();
-      this.centerOnToday();
+      this.scrollToStart();
     });
   }
 
   ngAfterViewInit(): void {
-    this.centerOnToday();
+    this.scrollToStart();
   }
 
   /** The bars of one work centre. */
   protected barsOf(workCenterId: string): BarPlacement[] {
     return this.barsByCenter().get(workCenterId) ?? [];
+  }
+
+  /** The design view in parity mode, today in the middle otherwise. */
+  private scrollToStart(): void {
+    if (PARITY_MODE && this.timescale() === 'Month') {
+      this.scrollToColumn(this.currentIndex() + PARITY_FIRST_COLUMN_OFFSET);
+      return;
+    }
+    this.centerOnToday();
+  }
+
+  /** Scrolls the timeline so that the column sits at the left edge of the visible grid. */
+  private scrollToColumn(index: number): void {
+    const scroller = this.scroller()?.nativeElement;
+    const rail = this.rail()?.nativeElement;
+    const timeline = this.timeline()?.nativeElement;
+
+    if (!scroller || !rail || !timeline) {
+      return;
+    }
+
+    const columnWidth = parseFloat(
+      getComputedStyle(timeline).getPropertyValue('--column-width'),
+    );
+    const contentLeft = timeline.getBoundingClientRect().left + timeline.clientLeft;
+    scroller.scrollLeft += contentLeft + index * columnWidth - rail.getBoundingClientRect().right;
   }
 
   /** Scrolls the timeline so that today sits in the middle of the visible grid. */
