@@ -92,6 +92,7 @@ export function columnFor(timescale: Timescale, today: Date, offset: number): Ti
     };
   }
 
+  // The Date constructor moves a month number outside 0 to 11 into the previous or next year.
   const start = new Date(today.getFullYear(), today.getMonth() + offset, 1);
   const end = new Date(today.getFullYear(), today.getMonth() + offset + 1, 1);
   return {
@@ -111,6 +112,8 @@ export function todayPosition(
   const index = columns.findIndex((column) => column.current);
   const column = columns[index];
 
+  // An hour column moves with the minutes. Longer columns move one step per whole day, so a
+  // month of 28 to 31 days still fills one column width.
   if (column.end.getTime() - column.start.getTime() <= HOUR_MS) {
     return { index, fraction: today.getMinutes() / 60 };
   }
@@ -189,6 +192,7 @@ function periodNumber(timescale: Timescale, date: Date): number {
     return dayNumber(startOfDay(date));
   }
   if (timescale === 'Week') {
+    // Two Mondays are 7 day numbers apart, so the division gives consecutive week numbers.
     return Math.floor(dayNumber(startOfWeek(date)) / 7);
   }
   return date.getFullYear() * 12 + date.getMonth();
@@ -236,7 +240,11 @@ function startOfWeek(date: Date): Date {
   return addDays(startOfDay(date), -mondayOffset);
 }
 
-/** The calendar day that is a number of days after a date. */
+/**
+ * The calendar day that is a number of days after a date. The Date constructor moves a day past
+ * the month end into the next month. It adds days, not 24 hours, so a daylight saving change
+ * cannot change the result.
+ */
 export function addDays(date: Date, days: number): Date {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate() + days);
 }

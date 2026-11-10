@@ -42,6 +42,7 @@ export function formValueFor(request: DrawerRequest): DrawerFormValue {
     };
   }
 
+  // The Date constructor moves a day past the month end into the next month.
   const start = request.startDate;
   const end = new Date(start.getFullYear(), start.getMonth(), start.getDate() + DEFAULT_LENGTH_DAYS);
   return {

@@ -774,8 +774,8 @@
       ],
       "verify": "manual",
       "priority": "must",
-      "status": "pending",
-      "evidence": ""
+      "status": "pass",
+      "evidence": "e2e: [H5] comments explain the date maths and the key decisions"
     },
     {
       "id": "H6",

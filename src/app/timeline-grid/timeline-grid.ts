@@ -567,6 +567,8 @@ export class TimelineGrid implements AfterViewInit {
     const visibleLeft = scrollerLeft + rail.getBoundingClientRect().width;
     const visibleRight = scrollerLeft + scroller.clientWidth;
 
+    // The window is in offsets from today, not indices: a left extend adds columns before the
+    // first one, but the visible offsets stay the same.
     const origin = this.firstOffset();
     const firstVisible = origin + Math.floor((visibleLeft - contentLeft) / columnWidth);
     const lastVisible = origin + Math.ceil((visibleRight - contentLeft) / columnWidth);
@@ -701,7 +703,10 @@ function columnsRightGap(scroller: HTMLElement, timeline: HTMLElement, columnsWi
   return contentLeft + columnsWidth - visibleRight;
 }
 
-/** The day at a fraction of a column. An hour column sits inside one day. */
+/**
+ * The day at a fraction of a column. An hour column sits inside one day, so its length rounds
+ * to 0 days. The rounding also absorbs the 23 or 25 hour day of a daylight saving change.
+ */
 function dayInColumn(column: TimelineColumn, fraction: number): Date {
   const days = Math.round((column.end.getTime() - column.start.getTime()) / 86_400_000);
   const start = column.start;
