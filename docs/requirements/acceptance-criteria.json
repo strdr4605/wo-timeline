@@ -328,6 +328,18 @@
       "evidence": "e2e: [C8] the bar shows a drag handle at both ends on hover"
     },
     {
+      "id": "C9",
+      "group": "Work order bars",
+      "requirement": "Drag a bar-end handle to resize the order (\"Drag to resize\" label of Timeline - Hover Options): snapped to days, live preview, refused on end before start or overlap, Escape cancels, Shift+Arrow and Alt+Shift+Arrow keys",
+      "source": [
+        "sketch"
+      ],
+      "verify": "e2e",
+      "priority": "bonus",
+      "status": "pass",
+      "evidence": "e2e: [C9] a drag on a bar-end handle resizes the order, snapped to days, with checks and keys"
+    },
+    {
       "id": "D1",
       "group": "Create and edit drawer",
       "requirement": "Drawer slides in from the right, width 591, radius 12, with the drop shadow from the design",

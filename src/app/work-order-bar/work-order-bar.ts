@@ -21,6 +21,25 @@ export interface BarPosition {
   fraction: number;
 }
 
+/** The end of the bar that a resize moves. */
+export type BarEdge = 'start' | 'end';
+
+/**
+ * One step of a pointer resize. `deltaX` is the pointer travel in pixels since the press. The
+ * grid turns it into a date, because only the grid knows the columns.
+ */
+export interface BarResize {
+  edge: BarEdge;
+  phase: 'move' | 'end' | 'cancel';
+  deltaX: number;
+}
+
+/** A keyboard resize: one edge moves by a number of days. */
+export interface BarNudge {
+  edge: BarEdge;
+  days: number;
+}
+
 export const STATUS_LABELS: Record<WorkOrder['status'], string> = {
   open: 'Open',
   'in-progress': 'In progress',
@@ -46,11 +65,17 @@ export class WorkOrderBar {
 
   readonly edit = output<void>();
   readonly remove = output<void>();
+  readonly resize = output<BarResize>();
+  readonly nudge = output<BarNudge>();
 
   /** The bar is hovered. The row hover is a class of its own, this one is the bar. */
   protected readonly hovered = signal(false);
-  /** The pointer is on a drag handle: the design then shows both handles and the dates at once. */
-  protected readonly edgeHovered = signal(false);
+  /** The handle under the pointer. The design then shows both handles and the dates at once. */
+  protected readonly hoveredEdge = signal<BarEdge | null>(null);
+  protected readonly edgeHovered = computed(() => this.hoveredEdge() !== null);
+
+  /** The handle that a pointer drag holds. The resize label hides: the dates show the change. */
+  protected readonly resizing = signal<BarEdge | null>(null);
   /** The three-dot menu is open. */
   protected readonly menuOpen = signal(false);
 
@@ -71,6 +96,54 @@ export class WorkOrderBar {
   private readonly bar = viewChild.required<ElementRef<HTMLElement>>('bar');
   private readonly injector = inject(Injector);
 
+  /** The pointer x at the press of the handle. */
+  private dragOriginX = 0;
+
+  /**
+   * The press on a handle starts a resize. Pointer capture keeps the drag alive when the pointer
+   * leaves the bar. The default is prevented, so the press selects no text.
+   */
+  protected startResize(edge: BarEdge, event: PointerEvent): void {
+    if (event.button !== 0) {
+      return;
+    }
+    event.preventDefault();
+    event.stopPropagation();
+    (event.currentTarget as HTMLElement).setPointerCapture(event.pointerId);
+    this.dragOriginX = event.clientX;
+    this.resizing.set(edge);
+  }
+
+  protected moveResize(event: PointerEvent): void {
+    const edge = this.resizing();
+    if (edge !== null) {
+      this.resize.emit({ edge, phase: 'move', deltaX: event.clientX - this.dragOriginX });
+    }
+  }
+
+  protected endResize(event: PointerEvent): void {
+    this.finishResize('end', event.clientX - this.dragOriginX);
+  }
+
+  /** The browser took the pointer away (for example a touch scroll): nothing changes. */
+  protected cancelResize(): void {
+    this.finishResize('cancel', 0);
+  }
+
+  /** A click on a handle ends a drag. It must not reach the row, the menu or the drawer. */
+  protected swallowClick(event: Event): void {
+    event.stopPropagation();
+  }
+
+  /** Escape during a drag puts the bar back. The bar may not have the focus, so this is global. */
+  @HostListener('document:keydown.escape', ['$event'])
+  protected cancelResizeOnEscape(event: Event): void {
+    if (this.resizing() !== null) {
+      event.preventDefault();
+      this.finishResize('cancel', 0);
+    }
+  }
+
   /**
    * Enter or Space on the focused bar opens its menu, as a click on the three-dot button. Escape
    * closes the menu and gives the focus back to the bar.
@@ -83,6 +156,13 @@ export class WorkOrderBar {
       return;
     }
     if (event.target !== event.currentTarget) {
+      return;
+    }
+    const nudge = nudgeFor(event);
+    if (nudge !== null) {
+      // The arrows would scroll the grid.
+      event.preventDefault();
+      this.nudge.emit(nudge);
       return;
     }
     if (event.key === 'Enter' || event.key === ' ') {
@@ -145,4 +225,25 @@ export class WorkOrderBar {
   private menuItems(): HTMLElement[] {
     return Array.from(this.bar().nativeElement.querySelectorAll<HTMLElement>('[role="menuitem"]'));
   }
+
+  private finishResize(phase: 'end' | 'cancel', deltaX: number): void {
+    const edge = this.resizing();
+    if (edge === null) {
+      return;
+    }
+    this.resizing.set(null);
+    this.resize.emit({ edge, phase, deltaX });
+  }
+}
+
+/** Shift+Arrow moves the end date one day, Alt+Shift+Arrow the start date. */
+function nudgeFor(event: KeyboardEvent): BarNudge | null {
+  if (!event.shiftKey || event.ctrlKey || event.metaKey) {
+    return null;
+  }
+  const days = event.key === 'ArrowLeft' ? -1 : event.key === 'ArrowRight' ? 1 : 0;
+  if (days === 0) {
+    return null;
+  }
+  return { edge: event.altKey ? 'start' : 'end', days };
 }

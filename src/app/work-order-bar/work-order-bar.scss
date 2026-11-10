@@ -140,8 +140,15 @@
   );
 }
 
-.work-order-bar--edge-hovered .work-order-bar__handle {
+.work-order-bar--edge-hovered .work-order-bar__handle,
+.work-order-bar--resizing .work-order-bar__handle {
   opacity: 1;
+}
+
+.work-order-bar__handle {
+  cursor: ew-resize;
+  // A touch drag on a handle resizes the bar, it does not scroll the grid.
+  touch-action: none;
 }
 
 // The design measures the button gap from the outer edge of the bar, `right` counts from inside
@@ -256,7 +263,8 @@
 
 // The tooltip sits centred above the bar. On the bar body it waits for a dwell: the design shows a
 // hovered bar without a tooltip, and a tooltip that follows every pass of the pointer is noise.
-.work-order-tooltip {
+.work-order-tooltip,
+.work-order-resize-label {
   position: absolute;
   bottom: calc(100% + #{t.$component-bar-border-width} + #{t.$layout-tooltip-gap-to-bar});
   left: 50%;
@@ -296,5 +304,26 @@
 }
 
 .work-order-tooltip__name {
+  font-weight: t.$type-tooltip-bold-font-weight;
+}
+
+// The resize label is the date tooltip component: it takes the box, colour, shadow and font of
+// the tooltip rules above. It sits centred on the outer edge of the hovered handle, a little
+// closer to the bar than the tooltip.
+.work-order-resize-label {
+  bottom: calc(100% + #{t.$component-bar-border-width} + #{t.$layout-resize-label-gap-to-bar});
+  left: calc(100% + #{t.$component-bar-border-width});
+  gap: 0;
+}
+
+.work-order-resize-label[data-edge='start'] {
+  left: -#{t.$component-bar-border-width};
+}
+
+.work-order-resize-label--visible {
+  opacity: 1;
+}
+
+.work-order-resize-label__strong {
   font-weight: t.$type-tooltip-bold-font-weight;
 }

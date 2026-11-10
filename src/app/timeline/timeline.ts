@@ -138,6 +138,31 @@ export function positionInColumns(
   return { index, fraction: span > 0 ? elapsed / span : 0 };
 }
 
+/**
+ * The day boundary nearest to a position in the timeline, the inverse of `positionInColumns`.
+ *
+ * The orders store calendar days, so every timescale snaps to a whole day. In Hour view a day
+ * boundary is the midnight column line. A position outside the rendered columns still has a
+ * period: the columns are consecutive, so the period is counted from the first column.
+ */
+export function dateAtPosition(
+  columns: TimelineColumn[],
+  timescale: Timescale,
+  position: number,
+): Date {
+  const index = Math.floor(position);
+  const column = columns[index] ?? columnFor(timescale, columns[0].start, index);
+  const fraction = position - index;
+
+  if (timescale === 'Hour') {
+    const hours = column.start.getHours() + fraction;
+    return addDays(startOfDay(column.start), Math.round(hours / 24));
+  }
+
+  const span = dayNumber(column.end) - dayNumber(column.start);
+  return addDays(column.start, Math.round(fraction * span));
+}
+
 /** An ISO date, yyyy-mm-dd, as a local date. The app works with local calendar days. */
 export function parseIsoDate(isoDate: string): Date {
   const [year, month, day] = isoDate.split('-').map(Number);
@@ -201,7 +226,8 @@ function startOfWeek(date: Date): Date {
   return addDays(startOfDay(date), -mondayOffset);
 }
 
-function addDays(date: Date, days: number): Date {
+/** The calendar day that is a number of days after a date. */
+export function addDays(date: Date, days: number): Date {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate() + days);
 }
 
@@ -214,7 +240,8 @@ function addHours(date: Date, hours: number): Date {
   );
 }
 
-function isoDate(date: Date): string {
+/** A local date as an ISO date, yyyy-mm-dd. */
+export function isoDate(date: Date): string {
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
   return `${date.getFullYear()}-${month}-${day}`;

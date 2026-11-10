@@ -1,4 +1,10 @@
 <section class="grid" #scroller>
+  <!-- The description of every bar. Hidden text still names the keys to a screen reader. -->
+  <p id="work-order-bar-help" hidden>
+    Enter opens the actions. Shift and an arrow key move the end date one day. Alt, Shift and an
+    arrow key move the start date one day.
+  </p>
+
   <div class="grid__inner">
     <div class="grid__rail" #rail>
       <div class="grid__rail-header">Work Center</div>
@@ -75,6 +81,8 @@
                 [end]="bar.end"
                 (edit)="editOrder.emit(bar.order)"
                 (remove)="deleteOrder.emit(bar.order)"
+                (resize)="onBarResize(bar, $event)"
+                (nudge)="onBarNudge(bar, $event)"
               />
             }
           </div>

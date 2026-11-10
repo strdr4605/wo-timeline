@@ -14,13 +14,21 @@ import {
   Timescale,
   TimelineColumn,
   WorkCenter,
+  addDays,
   buildColumns,
+  dateAtPosition,
+  isoDate,
   parseIsoDate,
   positionInColumns,
   todayPosition,
 } from '../timeline/timeline';
 import { PARITY_FIRST_COLUMN_OFFSET, PARITY_MODE, PARITY_TODAY } from '../parity';
-import { BarPosition, WorkOrderBar } from '../work-order-bar/work-order-bar';
+import {
+  BarNudge,
+  BarPosition,
+  BarResize,
+  WorkOrderBar,
+} from '../work-order-bar/work-order-bar';
 
 /** The empty cell under the pointer: the row and the pointer x inside the row. */
 interface CellHover {
@@ -34,9 +42,19 @@ export interface CellPick {
   date: Date;
 }
 
+/** A resized order asks for new dates. The app checks them and saves them. */
+export interface ResizeRequest {
+  order: WorkOrder;
+  startDate: string;
+  endDate: string;
+}
+
 /** A bar with the two positions it is placed by. */
 interface BarPlacement {
+  /** The order as drawn: during a drag it has the preview dates. */
   order: WorkOrder;
+  /** The order as stored. A drag measures from these dates. */
+  source: WorkOrder;
   start: BarPosition;
   end: BarPosition;
 }
@@ -58,6 +76,7 @@ export class TimelineGrid implements AfterViewInit {
   readonly cellPick = output<CellPick>();
   readonly editOrder = output<WorkOrder>();
   readonly deleteOrder = output<WorkOrder>();
+  readonly resizeOrder = output<ResizeRequest>();
 
   /** Captured once, so every column of one render speaks about the same day. */
   private readonly now = PARITY_MODE ? PARITY_TODAY : new Date();
@@ -85,9 +104,13 @@ export class TimelineGrid implements AfterViewInit {
     const timescale = this.timescale();
     const bars = new Map<string, BarPlacement[]>();
 
-    for (const order of this.workOrders()) {
+    const preview = this.resizePreview();
+
+    for (const source of this.workOrders()) {
+      const order = preview?.order.docId === source.docId ? { ...source, ...preview.dates } : source;
       const placement: BarPlacement = {
         order,
+        source,
         start: positionInColumns(columns, timescale, parseIsoDate(order.startDate)),
         end: positionInColumns(columns, timescale, parseIsoDate(order.endDate)),
       };
@@ -96,6 +119,12 @@ export class TimelineGrid implements AfterViewInit {
 
     return bars;
   });
+
+  /** The dates of the bar that a pointer drag resizes, before the release commits them. */
+  private readonly resizePreview = signal<{
+    order: WorkOrder;
+    dates: { startDate: string; endDate: string };
+  } | null>(null);
 
   /** The work centre whose row is hovered. The rail row and the timeline row hover together. */
   protected readonly hovered = signal<string | null>(null);
@@ -154,6 +183,37 @@ export class TimelineGrid implements AfterViewInit {
     return this.barsByCenter().get(workCenterId) ?? [];
   }
 
+  /**
+   * A drag moves one edge by the pointer travel, snapped to whole days. The bar and its tooltip
+   * show the preview. The release asks the app to save it, Escape drops it.
+   */
+  protected onBarResize(bar: BarPlacement, resize: BarResize): void {
+    const dates = this.resizedDates(bar.source, resize);
+
+    if (resize.phase === 'move') {
+      this.resizePreview.set({ order: bar.source, dates });
+      return;
+    }
+
+    if (resize.phase === 'end' && !sameDates(bar.source, dates)) {
+      this.resizeOrder.emit({ order: bar.source, ...dates });
+    }
+    this.resizePreview.set(null);
+  }
+
+  /** Shift+Arrow and Alt+Shift+Arrow move one edge by one day. */
+  protected onBarNudge(bar: BarPlacement, nudge: BarNudge): void {
+    const { startDate, endDate } = bar.source;
+    const edgeDate = nudge.edge === 'start' ? startDate : endDate;
+    const moved = isoDate(addDays(parseIsoDate(edgeDate), nudge.days));
+
+    this.resizeOrder.emit(
+      nudge.edge === 'start'
+        ? { order: bar.source, startDate: moved, endDate }
+        : { order: bar.source, startDate, endDate: moved },
+    );
+  }
+
   /** Shows the placeholder under the pointer, or hides it while the pointer is on a bar. */
   protected trackCellHover(workCenterId: string, event: MouseEvent): void {
     const target = event.target as HTMLElement;
@@ -195,6 +255,26 @@ export class TimelineGrid implements AfterViewInit {
     this.cellHover.set(null);
   }
 
+  /** The dates of an order with one edge moved by the pointer travel of a drag. */
+  private resizedDates(order: WorkOrder, resize: BarResize): { startDate: string; endDate: string } {
+    const timeline = this.timeline()?.nativeElement;
+    if (!timeline || resize.phase === 'cancel') {
+      return { startDate: order.startDate, endDate: order.endDate };
+    }
+
+    const columns = this.columns();
+    const timescale = this.timescale();
+    const columnWidth = parseFloat(getComputedStyle(timeline).getPropertyValue('--column-width'));
+    const edgeDate = resize.edge === 'start' ? order.startDate : order.endDate;
+    const origin = positionInColumns(columns, timescale, parseIsoDate(edgeDate));
+    const position = origin.index + origin.fraction + resize.deltaX / columnWidth;
+    const moved = isoDate(dateAtPosition(columns, timescale, position));
+
+    return resize.edge === 'start'
+      ? { startDate: moved, endDate: order.endDate }
+      : { startDate: order.startDate, endDate: moved };
+  }
+
   /** The design view in parity mode, today in the middle otherwise. */
   private scrollToStart(): void {
     if (PARITY_MODE && this.timescale() === 'Month') {
@@ -229,6 +309,10 @@ function dayInColumn(column: TimelineColumn, fraction: number): Date {
   const days = Math.round((column.end.getTime() - column.start.getTime()) / 86_400_000);
   const start = column.start;
   return new Date(start.getFullYear(), start.getMonth(), start.getDate() + Math.floor(fraction * days));
+}
+
+function sameDates(order: WorkOrder, dates: { startDate: string; endDate: string }): boolean {
+  return order.startDate === dates.startDate && order.endDate === dates.endDate;
 }
 
 /** The chip text per zoom level. Hour columns sit inside today, so Hour names the day. */

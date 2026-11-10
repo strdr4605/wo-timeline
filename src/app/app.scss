@@ -82,3 +82,22 @@ app-timeline-grid {
   display: block;
   margin-left: (t.$layout-grid-left-rail-x - t.$layout-grid-vertical-grid-line-width);
 }
+
+// The alert of a refused resize. It has the look of the overlap alert of the drawer.
+.resize-alert {
+  position: fixed;
+  bottom: t.$layout-resize-alert-bottom;
+  left: 50%;
+  z-index: 20;
+  margin: 0;
+  padding: t.$component-form-error-alert-pad-y t.$component-form-error-alert-pad-x;
+  border: t.$component-form-error-alert-border-width solid t.$component-form-error-alert-border;
+  border-radius: t.$component-form-error-alert-radius;
+  background: t.$component-form-error-alert-fill;
+  transform: translateX(-50%);
+  font-family: t.$font-family;
+  font-size: t.$type-control-label-size;
+  line-height: t.$layout-panel-field-label-h;
+  font-weight: t.$type-control-label-font-weight;
+  color: t.$component-form-error-color;
+}

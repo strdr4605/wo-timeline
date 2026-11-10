@@ -32,7 +32,13 @@
     (cellPick)="openCreate($event)"
     (editOrder)="openEdit($event)"
     (deleteOrder)="deleteOrder($event)"
+    (resizeOrder)="resizeOrder($event)"
   />
 </main>
+
+<!-- Only a refused resize shows it, so the parity screenshots never contain it. -->
+@if (resizeError(); as message) {
+  <p class="resize-alert" role="alert">{{ message }}</p>
+}
 
 <app-work-order-drawer [request]="drawer()" (closed)="drawer.set(null)" />

@@ -4,9 +4,11 @@
   [class.work-order-bar--hovered]="hovered()"
   [class.work-order-bar--edge-hovered]="edgeHovered()"
   [class.work-order-bar--menu-open]="menuOpen()"
+  [class.work-order-bar--resizing]="resizing() !== null"
   tabindex="0"
   role="group"
   [attr.aria-label]="accessibleName()"
+  aria-describedby="work-order-bar-help"
   [style.--start-index]="start().index"
   [style.--start-fraction]="start().fraction"
   [style.--end-index]="end().index"
@@ -20,8 +22,13 @@
   <span
     class="work-order-bar__handle work-order-bar__handle--start"
     aria-hidden="true"
-    (mouseenter)="edgeHovered.set(true)"
-    (mouseleave)="edgeHovered.set(false)"
+    (mouseenter)="hoveredEdge.set('start')"
+    (mouseleave)="hoveredEdge.set(null)"
+    (pointerdown)="startResize('start', $event)"
+    (pointermove)="moveResize($event)"
+    (pointerup)="endResize($event)"
+    (pointercancel)="cancelResize()"
+    (click)="swallowClick($event)"
   ></span>
 
   <span class="work-order-bar__name">{{ order().name }}</span>
@@ -31,8 +38,13 @@
   <span
     class="work-order-bar__handle work-order-bar__handle--end"
     aria-hidden="true"
-    (mouseenter)="edgeHovered.set(true)"
-    (mouseleave)="edgeHovered.set(false)"
+    (mouseenter)="hoveredEdge.set('end')"
+    (mouseleave)="hoveredEdge.set(null)"
+    (pointerdown)="startResize('end', $event)"
+    (pointermove)="moveResize($event)"
+    (pointerup)="endResize($event)"
+    (pointercancel)="cancelResize()"
+    (click)="swallowClick($event)"
   ></span>
 
   <button
@@ -82,5 +94,16 @@
     <span class="work-order-tooltip__name">{{ order().name }}</span>
     <span class="work-order-tooltip__status">{{ statusLabel() }}</span>
     <span class="work-order-tooltip__dates">{{ dateRange() }}</span>
+  </div>
+
+  <!-- "Helpers/Button-Hover/Label" of "Timeline - Hover Options", above the hovered handle. -->
+  <div
+    class="work-order-resize-label"
+    aria-hidden="true"
+    [attr.data-edge]="hoveredEdge()"
+    [class.work-order-resize-label--visible]="hoveredEdge() !== null && resizing() === null"
+  >
+    <!-- One flex item, so the space after "Drag" stays. -->
+    <span><span class="work-order-resize-label__strong">Drag</span> to resize</span>
   </div>
 </div>

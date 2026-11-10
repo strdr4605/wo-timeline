@@ -2,7 +2,7 @@
 
 Work Order Schedule Timeline (Naologic front-end take-home). Generated from `acceptance-criteria.json` - edit the JSON, then run `node docs/requirements/render.mjs`.
 
-Progress: 58 pass, 0 fail, 0 open decision, 13 pending.
+Progress: 59 pass, 0 fail, 0 open decision, 13 pending.
 
 Legend: `[x]` pass, `[ ]` pending, `[?]` open decision. An item may only be marked pass with an evidence command (test name, screenshot path or measurement output) in the JSON `evidence` field.
 
@@ -44,6 +44,7 @@ Legend: `[x]` pass, `[ ]` pending, `[?]` open decision. An item may only be mark
 | [x] | C6 | Menu styled like the design (width 200, rows 28, radius 5), not a system menu | owner, sketch | visual | must | e2e: [C6] the menu is the menu of the design, not a system menu |
 | [x] | C7 | Hover tooltip on the bar shows name, status and the full date range | brief, ref, cand | e2e | bonus | e2e: [C7] the bar shows a tooltip with name, status and the full date range |
 | [x] | C8 | Drag handles at both ends of the bar on hover (design shows them) | sketch, ref | e2e | bonus | e2e: [C8] the bar shows a drag handle at both ends on hover |
+| [x] | C9 | Drag a bar-end handle to resize the order ("Drag to resize" label of Timeline - Hover Options): snapped to days, live preview, refused on end before start or overlap, Escape cancels, Shift+Arrow and Alt+Shift+Arrow keys | sketch | e2e | bonus | e2e: [C9] a drag on a bar-end handle resizes the order, snapped to days, with checks and keys |
 
 ## Create and edit drawer
 
