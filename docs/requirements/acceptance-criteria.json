@@ -118,7 +118,7 @@
       "verify": "e2e",
       "priority": "must",
       "status": "pass",
-      "evidence": "e2e: [B3] the timescale dropdown offers Day, Week and Month"
+      "evidence": "unit: timeline positions [B3] an hour column holds sixty minutes and is labelled with its hour"
     },
     {
       "id": "B4",
@@ -158,7 +158,7 @@
       "verify": "visual",
       "priority": "must",
       "status": "pass",
-      "evidence": "e2e: [B6] the current month shows the chip of the design and a vertical line"
+      "evidence": "e2e: [B6] the Current month chip sits on the header line at the current month"
     },
     {
       "id": "B7",
@@ -170,7 +170,7 @@
       "verify": "e2e",
       "priority": "must",
       "status": "pass",
-      "evidence": "e2e: [B7] the grid shows a line for the current day"
+      "evidence": "e2e: [B7] one 3px #d4d7ff today line, 709 long, on the edge of the current month"
     },
     {
       "id": "B8",
@@ -196,7 +196,7 @@
       "verify": "e2e",
       "priority": "must",
       "status": "pass",
-      "evidence": "e2e: [B9] the work centre row and the timeline row hover together"
+      "evidence": "e2e: [B9] row hover: rail and timeline row, the placeholder box and its tooltip"
     },
     {
       "id": "B10",
@@ -209,7 +209,7 @@
       "verify": "visual",
       "priority": "must",
       "status": "pass",
-      "evidence": "e2e: [B10] rows are 48 high and the work center panel is 380 wide"
+      "evidence": "e2e: [B10] the first row is 60 high, the next rows 48 with a 1px divider"
     },
     {
       "id": "B11",
@@ -221,7 +221,7 @@
       "verify": "visual",
       "priority": "must",
       "status": "pass",
-      "evidence": "e2e: [B11] grid lines are 1px #e6ebf0 and columns follow the timescale"
+      "evidence": "e2e: [B11] column lines run 747 down from the header line in every timescale"
     },
     {
       "id": "C1",
@@ -338,8 +338,8 @@
       ],
       "verify": "visual",
       "priority": "must",
-      "status": "pending",
-      "evidence": ""
+      "status": "pass",
+      "evidence": "e2e: [D1] the drawer slides in from the right: 591 wide, radius 12, the design shadow"
     },
     {
       "id": "D2",
@@ -351,8 +351,8 @@
       ],
       "verify": "visual",
       "priority": "must",
-      "status": "pending",
-      "evidence": ""
+      "status": "pass",
+      "evidence": "e2e: [D2] the header shows the title, the subtitle and the line under them"
     },
     {
       "id": "D3",
@@ -365,8 +365,8 @@
       ],
       "verify": "e2e",
       "priority": "must",
-      "status": "pending",
-      "evidence": ""
+      "status": "pass",
+      "evidence": "e2e: [D3] a click on an empty cell opens the create drawer with the start date of the click"
     },
     {
       "id": "D4",
@@ -378,8 +378,8 @@
       ],
       "verify": "unit",
       "priority": "must",
-      "status": "pending",
-      "evidence": ""
+      "status": "pass",
+      "evidence": "unit: drawer form defaults [D4] the end date is the start date plus 7 days, also over a month end"
     },
     {
       "id": "D5",
@@ -390,8 +390,8 @@
       ],
       "verify": "unit",
       "priority": "must",
-      "status": "pending",
-      "evidence": ""
+      "status": "pass",
+      "evidence": "unit: drawer form defaults [D5] a new order is Open with an empty name"
     },
     {
       "id": "D6",
@@ -402,8 +402,8 @@
       ],
       "verify": "e2e",
       "priority": "must",
-      "status": "pending",
-      "evidence": ""
+      "status": "pass",
+      "evidence": "unit: drawer form defaults [D6] edit fills the values of the order"
     },
     {
       "id": "D7",
@@ -414,8 +414,8 @@
       ],
       "verify": "e2e",
       "priority": "must",
-      "status": "pending",
-      "evidence": ""
+      "status": "pass",
+      "evidence": "e2e: [D7] Cancel closes the drawer without a new order"
     },
     {
       "id": "D8",
@@ -426,8 +426,8 @@
       ],
       "verify": "e2e",
       "priority": "must",
-      "status": "pending",
-      "evidence": ""
+      "status": "pass",
+      "evidence": "e2e: [D8] a click outside the drawer closes it"
     },
     {
       "id": "D9",
@@ -438,8 +438,8 @@
       ],
       "verify": "e2e",
       "priority": "bonus",
-      "status": "pending",
-      "evidence": ""
+      "status": "pass",
+      "evidence": "e2e: [D9] Escape closes the drawer, but first closes an open dropdown"
     },
     {
       "id": "D10",
@@ -450,8 +450,8 @@
       ],
       "verify": "e2e",
       "priority": "bonus",
-      "status": "pending",
-      "evidence": ""
+      "status": "pass",
+      "evidence": "e2e: [D10] Tab moves through the fields in order, End date above Start date"
     },
     {
       "id": "D11",
@@ -463,8 +463,8 @@
       ],
       "verify": "visual",
       "priority": "must",
-      "status": "pending",
-      "evidence": ""
+      "status": "pass",
+      "evidence": "e2e: [D11] the text field shows the placeholder state and the focus state of the design"
     },
     {
       "id": "D12",
@@ -475,8 +475,8 @@
       ],
       "verify": "e2e",
       "priority": "must",
-      "status": "pending",
-      "evidence": ""
+      "status": "pass",
+      "evidence": "unit: drawer form defaults [D12] dates read and write as DD.MM.YYYY, as in the design"
     },
     {
       "id": "D13",
@@ -488,8 +488,8 @@
       ],
       "verify": "visual",
       "priority": "must",
-      "status": "pending",
-      "evidence": ""
+      "status": "pass",
+      "evidence": "e2e: [D13] the status is a pill when collapsed and plain text in the open list"
     },
     {
       "id": "D14",
@@ -500,8 +500,8 @@
       ],
       "verify": "visual",
       "priority": "must",
-      "status": "pending",
-      "evidence": ""
+      "status": "pass",
+      "evidence": "e2e: [D14] Cancel and the primary button: 66 x 32 at the top right, white and #5659ff"
     },
     {
       "id": "D15",
@@ -513,8 +513,8 @@
       ],
       "verify": "visual",
       "priority": "must",
-      "status": "pending",
-      "evidence": ""
+      "status": "pass",
+      "evidence": "e2e: [D15] the overlay dims the page behind the drawer"
     },
     {
       "id": "E1",
@@ -525,8 +525,8 @@
       ],
       "verify": "unit",
       "priority": "must",
-      "status": "pending",
-      "evidence": ""
+      "status": "pass",
+      "evidence": "unit: drawer form validation [E1] a valid form gives an ISO draft on the work centre of the request"
     },
     {
       "id": "E2",
@@ -539,8 +539,8 @@
       ],
       "verify": "unit",
       "priority": "must",
-      "status": "pending",
-      "evidence": ""
+      "status": "pass",
+      "evidence": "unit: schedule service save and remove [E2] the new order gets a docId that no other order has"
     },
     {
       "id": "E3",
@@ -551,8 +551,8 @@
       ],
       "verify": "unit",
       "priority": "must",
-      "status": "pending",
-      "evidence": ""
+      "status": "pass",
+      "evidence": "unit: schedule service save and remove [E3] save with a docId updates that order in place and ignores its old dates"
     },
     {
       "id": "E4",
@@ -564,8 +564,8 @@
       ],
       "verify": "e2e",
       "priority": "must",
-      "status": "pending",
-      "evidence": ""
+      "status": "pass",
+      "evidence": "e2e: [E4] the overlap error names the work centre and sits between the buttons and the fields"
     },
     {
       "id": "E5",
@@ -576,8 +576,8 @@
       ],
       "verify": "unit",
       "priority": "must",
-      "status": "pending",
-      "evidence": ""
+      "status": "pass",
+      "evidence": "unit: schedule service save and remove [E5] the same range on another work centre is saved"
     },
     {
       "id": "F1",
@@ -676,8 +676,8 @@
       ],
       "verify": "visual",
       "priority": "must",
-      "status": "pending",
-      "evidence": ""
+      "status": "pass",
+      "evidence": "e2e: [G3] the NAOLOGIC wordmark sits at (101, 20), 80 x 10, on a top bar without a border"
     },
     {
       "id": "G4",
