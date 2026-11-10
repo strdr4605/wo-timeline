@@ -897,8 +897,8 @@
       ],
       "verify": "manual",
       "priority": "bonus",
-      "status": "pending",
-      "evidence": ""
+      "status": "pass",
+      "evidence": "e2e: [J1] the demo config records a headed, slow video per requirement test under docs/demo/videos"
     },
     {
       "id": "J2",
@@ -909,8 +909,8 @@
       ],
       "verify": "manual",
       "priority": "bonus",
-      "status": "pending",
-      "evidence": ""
+      "status": "pass",
+      "evidence": "e2e: [J2] npm run demo runs the suite with the demo config, test:all keeps the fast config"
     },
     {
       "id": "J3",

@@ -2,7 +2,7 @@
 
 Work Order Schedule Timeline (Naologic front-end take-home). Generated from `acceptance-criteria.json` - edit the JSON, then run `node docs/requirements/render.mjs`.
 
-Progress: 64 pass, 0 fail, 0 open decision, 8 pending.
+Progress: 66 pass, 0 fail, 0 open decision, 6 pending.
 
 Legend: `[x]` pass, `[ ]` pending, `[?]` open decision. An item may only be marked pass with an evidence command (test name, screenshot path or measurement output) in the JSON `evidence` field.
 
@@ -124,8 +124,8 @@ Legend: `[x]` pass, `[ ]` pending, `[?]` open decision. An item may only be mark
 
 | | id | requirement | source | verify | priority | evidence |
 |---|---|---|---|---|---|---|
-| [ ] | J1 | A second Playwright config records a video per requirement test: headed Chrome, slow motion, files under docs/demo/videos/. The fast config used by verify.mjs is not affected. | brief | manual | bonus |  |
-| [ ] | J2 | npm run demo runs the suite headed with video recording and produces one video per requirement test. | brief | manual | bonus |  |
+| [x] | J1 | A second Playwright config records a video per requirement test: headed Chrome, slow motion, files under docs/demo/videos/. The fast config used by verify.mjs is not affected. | brief | manual | bonus | e2e: [J1] the demo config records a headed, slow video per requirement test under docs/demo/videos |
+| [x] | J2 | npm run demo runs the suite headed with video recording and produces one video per requirement test. | brief | manual | bonus | e2e: [J2] npm run demo runs the suite with the demo config, test:all keeps the fast config |
 | [ ] | J3 | docs/demo-script.md gives the exact click path for the Loom recording, including how to trigger the overlap error. | brief | manual | must |  |
 
 ## Sources
