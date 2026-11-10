@@ -26,8 +26,12 @@ the next session.
 | mquzoqqr | b5-prompts | H4 H6 | `docs/ai-prompts.md` |
 | nuvyutkx | b6-onpush | I6 | OnPush, stable track, static check |
 | lsqwlqmo | b7-motion | I3 | transitions under 300 ms, reduced motion, motion tokens |
+| upkppvkt | b8-headless | I4 | `npm run test:all`, `reuseExistingServer: true` |
+| klklvwtm | b9-demo | J1 J2 | `playwright.demo.config.ts`, `npm run demo`, `DEMO_HEADLESS=1` |
+| vrsqoyqk | b10-dates | E1 (bug fix) | impossible dates rejected, date errors on blur |
+| lnpyvlwl | b11-rail | I10 (new id) | rail resize by drag and keys, saved width |
 
-`node docs/requirements/verify.mjs`: 59 pass, 13 pending, 0 fail. Playwright: 65 passed.
+`node docs/requirements/verify.mjs`: 67 pass, 6 pending, 0 fail. Playwright: 74 passed. Vitest: 31.
 
 Pixel values to keep (with the masks of the first handover): Default 0.2%, Default hover 0.11%,
 View Selection 0.43%, Options CTA 0.31%, Edit and Delete Expanded 0.26%, drawer states
@@ -64,34 +68,14 @@ The lead kept this text in a scratchpad file. It is lost now, so copy it from he
 > then write the e2e spec(s), one test per item id with the id in brackets, 4) run npm run
 > build, npx vitest run, npx playwright test, all green. Update the item row in
 > docs/requirements/acceptance-criteria.md / .json with evidence when verify.mjs does not do it.
+> Never run headed Chrome: windows flash on the human screen. For npm run demo use
+> DEMO_HEADLESS=1 npm run demo.
 
 ## Remaining bonus items, in this order
 
-1. H4 and H6: AI prompt log. The brief asks for it (l.7, l.350, l.403, l.475). Collect the
-   prompts that already exist (`docs/requirements/prompts/`, the unit notes, the two handovers,
-   the pi session of 2026-11-08) in one Markdown index, for example `docs/ai-prompts.md`. Show
-   the key decisions and why. A document item: no e2e. The verifier checks the links and that
-   the facts match the commits.
-2. I6: OnPush on every component and stable `track` expressions (by id, not `$index`) on the
-   timeline lists. Evidence: one test titled `[I6]` that fails when a component has no OnPush (a
-   static source check is fine). Risks: C9 live preview, the resize error timer, ng-select and
-   ngb-datepicker. The first b5-onpush builder was stopped after it started; its partial change
-   was discarded. Start again from zero.
-3. I3: smooth animations (drawer slide in and out, bar hover transitions). Respect
-   `prefers-reduced-motion`. pixel-check waits 400 ms after the steps, so a transition must end
-   before that.
-4. I4: the automated suite runs headless and passes. This is probably already true (vitest and
-   Playwright are headless). Check it, and add an npm script `test:all` if there is none.
-5. J1 and J2: a second Playwright config that records one video for each requirement test
-   (headed Chrome, slow motion, files under `docs/demo/videos/`), and `npm run demo`. The fast
-   config must not change.
-6. I10 (new item, from the human, 2026-11-11): rail resize. The rail edge (right side of
-   `grid__rail`) is the drag handle. Hover shows the 3px blue line and the "Drag to resize"
-   label of "Timeline - Hover Options" (489,531). Pointer drag with min and max width, Escape
-   cancels, `role="separator"` with arrow keys. The width is saved through the F5 storage path.
-   Parity mode keeps 380 and saves nothing. Evidence: an e2e test titled `[I10]`. Unit b11-rail,
-   notes `notes/b11-rail.md`.
-7. Two units, in this order (plan change from the human, 2026-11-10). Same flow for each.
+Items 1 to 6 of the earlier list are done (see the table). The order now is: I1, I9, Storybook.
+
+1. Two units, in this order (plan change from the human, 2026-11-10). Same flow for each.
    a. I1: infinite horizontal scroll. More columns load when the user scrolls near an edge.
       Store the range as logical column offsets from today (`firstOffset..lastOffset`), not as
       an array of columns. Build columns with `columnFor(timescale, today, offset)`. Keep the
@@ -115,7 +99,7 @@ The lead kept this text in a scratchpad file. It is lost now, so copy it from he
         count stays at or below a bound. Far bars are not in the DOM. The scroll position stays
         the same on prepend. The focus stays after a scroll. A drag across the window edge
         works. Then run the full suite again (a11y, resize and today touch this code).
-8. Storybook. It has no item id. Give it a new id in `acceptance-criteria.md` (bonus). Stories
+2. Storybook. It has no item id. Give it a new id in `acceptance-criteria.md` (bonus). Stories
    for the bar (each status), the timescale chip and the drawer. Storybook must not change the
    app build.
 
@@ -137,6 +121,21 @@ script (J3) and the public repo cut (H3). The human records the Loom (H2).
   and "Plastic chairs" text of the Hover Options mock is out of scope (not in the data model).
 - A timer value (`RESIZE_ERROR_MS` in `app.ts`) is behaviour, not a design token. Do not put
   timers in `tokens.json`.
+
+- No headed Chrome in unattended runs. `playwright.demo.config.ts` reads `DEMO_HEADLESS=1`.
+  The default stays headed (J1). Give this rule to every builder and verifier.
+- The static tests [I4] [I6] [J1] [J2] open no page, so the demo has no video for them
+  (71 demo tests, 67 videos). This is accepted.
+- Dates: `parseDottedDate` returns null for an impossible date. A date field shows its error on
+  blur. The name field keeps the submit rule.
+- Rail width (I10) in parity mode: it starts at 380, a drag changes it for the page only, and
+  nothing is saved. This is the same rule as work orders in parity mode (F5).
+
+## Context control
+
+- The lead context grows by about 20k tokens for each item. Keep it under 150k.
+- At the limit, update this handover and commit it. Then send `hc send t4f "ready-to-compact"`.
+  t4f runs /compact for the lead. Then continue from this handover.
 
 ## a11y.spec race fix
 
