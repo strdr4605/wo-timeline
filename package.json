@@ -10,6 +10,7 @@
     "tokens": "node tools/generate-tokens.mjs",
     "test:unit": "vitest run",
     "test:e2e": "playwright test",
+    "test:all": "npm run build && vitest run && playwright test",
     "demo": "playwright test --config=playwright.demo.config.ts"
   },
   "prettier": {

@@ -10,6 +10,8 @@ export default defineConfig({
   retries: process.env['CI'] ? 1 : 0,
   reporter: [['list']],
   use: {
+    // The suite must run without a window, also on a machine without a display.
+    headless: true,
     baseURL: 'http://localhost:4200',
     trace: 'retain-on-failure',
     viewport,
@@ -23,7 +25,9 @@ export default defineConfig({
   webServer: {
     command: 'npm run start',
     url: 'http://localhost:4200',
-    reuseExistingServer: !process.env['CI'],
+    // The lead keeps a dev server on :4200. With CI=1 a fresh start would fail on the busy port,
+    // so the suite always reuses a running server and starts one only when none answers.
+    reuseExistingServer: true,
     timeout: 120_000,
   },
 });

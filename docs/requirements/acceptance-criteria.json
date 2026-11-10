@@ -837,8 +837,8 @@
       ],
       "verify": "unit",
       "priority": "bonus",
-      "status": "pending",
-      "evidence": ""
+      "status": "pass",
+      "evidence": "e2e: [I4] test:all runs build, vitest and playwright, and the suite is headless"
     },
     {
       "id": "I5",
