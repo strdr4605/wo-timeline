@@ -39,8 +39,8 @@
       ],
       "verify": "unit",
       "priority": "must",
-      "status": "pending",
-      "evidence": ""
+      "status": "pass",
+      "evidence": "e2e: [A2] the drawer form is a Reactive Forms FormGroup with Validators"
     },
     {
       "id": "A3",
@@ -52,8 +52,8 @@
       ],
       "verify": "visual",
       "priority": "must",
-      "status": "pending",
-      "evidence": ""
+      "status": "pass",
+      "evidence": "e2e: [A3] the status field is ng-select, restyled, with no system dropdown"
     },
     {
       "id": "A4",
@@ -64,8 +64,8 @@
       ],
       "verify": "unit",
       "priority": "must",
-      "status": "pending",
-      "evidence": ""
+      "status": "pass",
+      "evidence": "e2e: [A4] the start and end dates use ngb-datepicker"
     },
     {
       "id": "A5",
@@ -689,8 +689,8 @@
       ],
       "verify": "visual",
       "priority": "must",
-      "status": "fail",
-      "evidence": "measure: selector not found: .drawer"
+      "status": "pass",
+      "evidence": "measure: .drawer border-bottom-left-radius = \"12px\" (expected \"12px\")"
     },
     {
       "id": "G5",
@@ -861,8 +861,8 @@
       ],
       "verify": "manual",
       "priority": "must",
-      "status": "pending",
-      "evidence": ""
+      "status": "pass",
+      "evidence": "e2e: [I7] a phone screen keeps the timeline, the scroll and the drawer usable"
     },
     {
       "id": "I8",
@@ -873,8 +873,8 @@
       ],
       "verify": "visual",
       "priority": "must",
-      "status": "pending",
-      "evidence": ""
+      "status": "pass",
+      "evidence": "e2e: [I8] Day and Week reuse the Month rows, bars and header of the design"
     },
     {
       "id": "J1",

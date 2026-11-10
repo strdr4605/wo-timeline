@@ -3,7 +3,8 @@
   "measurements": [
     { "id": "A5", "selector": "body", "check": "font-family", "expect": "Circular-Std" },
     { "id": "G4", "selector": ".drawer", "check": "box", "expect": { "width": 591 } },
-    { "id": "G4", "selector": ".drawer", "check": "border-radius", "expect": "12px" },
+    { "id": "G4", "selector": ".drawer", "check": "border-top-left-radius", "expect": "12px" },
+    { "id": "G4", "selector": ".drawer", "check": "border-bottom-left-radius", "expect": "12px" },
     { "id": "B10", "selector": ".grid-row:not(.grid-row--first)", "check": "box", "expect": { "height": 48 } },
     { "id": "B10", "selector": ".grid__rail", "check": "box", "expect": { "width": 380 } },
     { "id": "C4", "selector": ".work-order-bar[data-status='open']", "check": "box", "expect": { "height": 38 } },

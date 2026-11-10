@@ -2,7 +2,7 @@
 
 Work Order Schedule Timeline (Naologic front-end take-home). Generated from `acceptance-criteria.json` - edit the JSON, then run `node docs/requirements/render.mjs`.
 
-Progress: 49 pass, 1 fail, 0 open decision, 21 pending.
+Progress: 55 pass, 0 fail, 0 open decision, 16 pending.
 
 Legend: `[x]` pass, `[ ]` pending, `[?]` open decision. An item may only be marked pass with an evidence command (test name, screenshot path or measurement output) in the JSON `evidence` field.
 
@@ -11,9 +11,9 @@ Legend: `[x]` pass, `[ ]` pending, `[?]` open decision. An item may only be mark
 | | id | requirement | source | verify | priority | evidence |
 |---|---|---|---|---|---|---|
 | [x] | A1 | Angular 17+, standalone components, TypeScript strict mode, SCSS | brief | unit | must | e2e: [A1] app builds and serves the shell |
-| [ ] | A2 | Drawer form uses Reactive Forms (FormGroup, FormControl, Validators) | brief | unit | must |  |
-| [ ] | A3 | Status dropdown uses ng-select, restyled to match the design (no system dropdown) | brief, owner | visual | must |  |
-| [ ] | A4 | Start and end dates use ngb-datepicker | brief | unit | must |  |
+| [x] | A2 | Drawer form uses Reactive Forms (FormGroup, FormControl, Validators) | brief | unit | must | e2e: [A2] the drawer form is a Reactive Forms FormGroup with Validators |
+| [x] | A3 | Status dropdown uses ng-select, restyled to match the design (no system dropdown) | brief, owner | visual | must | e2e: [A3] the status field is ng-select, restyled, with no system dropdown |
+| [x] | A4 | Start and end dates use ngb-datepicker | brief | unit | must | e2e: [A4] the start and end dates use ngb-datepicker |
 | [x] | A5 | Circular Std loaded from the CDN with the local docs/design/fonts fallback | brief, sketch | visual | must | e2e: [A5] Circular Std comes from the Naologic CDN with a local fallback |
 
 ## Timeline grid and zoom
@@ -92,7 +92,7 @@ Legend: `[x]` pass, `[ ]` pending, `[?]` open decision. An item may only be mark
 | [x] | G1 | Every colour and size comes from docs/design/tokens.json, no guessed values | owner, sketch | visual | must | unit: design tokens [G1] every SCSS token variable matches tokens.json |
 | [x] | G2 | Timescale chip geometry: label segment 75, value segment 71, height 25, radius 5 | sketch | visual | must | e2e: [G2] the timescale chip is 146 wide with the segments at 75 and 71 |
 | [x] | G3 | Logo top left with the spacing from the design | ref, sketch | visual | must | e2e: [G3] the NAOLOGIC wordmark sits at (101, 20), 80 x 10, on a top bar without a border |
-| [ ] | G4 | Measure the rendered DOM against the token values (a script prints differences) | sketch, owner | visual | must | measure: selector not found: .drawer |
+| [x] | G4 | Measure the rendered DOM against the token values (a script prints differences) | sketch, owner | visual | must | measure: .drawer border-bottom-left-radius = "12px" (expected "12px") |
 | [x] | G5 | Type scale matches: body 14 Book, drawer title 20 Medium, chip 13 | sketch | visual | must | unit: design tokens [G5] type scale matches the token file |
 
 ## Deliverables
@@ -116,8 +116,8 @@ Legend: `[x]` pass, `[ ]` pending, `[?]` open decision. An item may only be mark
 | [ ] | I4 | Automated test suite runs headless and passes | brief | unit | bonus |  |
 | [ ] | I5 | Accessibility: aria labels on controls, focus management, keyboard reachable menu | brief | e2e | bonus |  |
 | [ ] | I6 | OnPush change detection and trackBy on the timeline lists | brief | manual | bonus |  |
-| [ ] | I7 | Responsive: layout does not break on smaller screens, horizontal scroll acceptable | brief | manual | must |  |
-| [ ] | I8 | The design covers Month only; Day and Week layouts are derived from the same tokens and look consistent | sketch | visual | must |  |
+| [x] | I7 | Responsive: layout does not break on smaller screens, horizontal scroll acceptable | brief | manual | must | e2e: [I7] a phone screen keeps the timeline, the scroll and the drawer usable |
+| [x] | I8 | The design covers Month only; Day and Week layouts are derived from the same tokens and look consistent | sketch | visual | must | e2e: [I8] Day and Week reuse the Month rows, bars and header of the design |
 
 ## Demo evidence
 

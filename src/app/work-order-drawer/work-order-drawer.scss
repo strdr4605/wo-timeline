@@ -29,7 +29,8 @@ $slide: transform #{t.$layout-panel-slide-duration} ease-out;
   right: 0;
   bottom: 0;
   z-index: 11;
-  width: t.$layout-panel-width;
+  // A screen narrower than the panel shows the full panel, not its right part.
+  width: min(#{t.$layout-panel-width}, 100vw);
   border-radius: t.$layout-panel-radius 0 0 t.$layout-panel-radius;
   background: t.$color-surface-panel;
   box-shadow:

@@ -27,7 +27,8 @@ $today-offset: math.div(t.$layout-grid-today-marker-width + t.$layout-grid-verti
   left: 0;
   z-index: 2;
   flex: none;
-  width: t.$layout-grid-left-rail-w;
+  // A narrow screen keeps part of the timeline visible next to the sticky rail.
+  width: min(#{t.$layout-grid-left-rail-w}, 40vw);
   background: t.$layout-grid-rail-row-fill;
 }
 
@@ -67,6 +68,9 @@ $today-offset: math.div(t.$layout-grid-today-marker-width + t.$layout-grid-verti
 }
 
 .work-center-name {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   font-family: t.$font-family;
   font-size: t.$type-body-size;
   font-weight: t.$type-body-font-weight;
