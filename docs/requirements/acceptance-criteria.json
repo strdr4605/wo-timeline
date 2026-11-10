@@ -538,7 +538,7 @@
       "verify": "unit",
       "priority": "must",
       "status": "pass",
-      "evidence": "unit: drawer form validation [E1] a valid form gives an ISO draft on the work centre of the request"
+      "evidence": "unit: drawer form validation [E1] the shape check tells a wrong shape from a day that does not exist"
     },
     {
       "id": "E2",

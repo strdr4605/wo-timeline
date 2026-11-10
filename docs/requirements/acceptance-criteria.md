@@ -70,7 +70,7 @@ Legend: `[x]` pass, `[ ]` pending, `[?]` open decision. An item may only be mark
 
 | | id | requirement | source | verify | priority | evidence |
 |---|---|---|---|---|---|---|
-| [x] | E1 | All fields required, end date must be after start date, invalid form blocks save | brief | unit | must | unit: drawer form validation [E1] a valid form gives an ISO draft on the work centre of the request |
+| [x] | E1 | All fields required, end date must be after start date, invalid form blocks save | brief | unit | must | unit: drawer form validation [E1] the shape check tells a wrong shape from a day that does not exist |
 | [x] | E2 | Overlapping work order on the same work center is rejected and no order is created | brief, owner, ref | unit | must | unit: schedule service save and remove [E2] the new order gets a docId that no other order has |
 | [x] | E3 | Edit ignores the order being edited when checking overlap | brief | unit | must | unit: schedule service save and remove [E3] save with a docId updates that order in place and ignores its old dates |
 | [x] | E4 | Overlap error is shown to the user with a clear message | brief, owner | e2e | must | e2e: [E4] the overlap error names the work centre and sits between the buttons and the fields |

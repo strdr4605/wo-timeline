@@ -97,7 +97,7 @@ test('[E1] the end date must be after the start date', async ({ page }) => {
   await expect(page.locator('.work-order-bar')).toHaveCount(bars);
 
   await page.locator('#drawer-end').fill('31.13.2024');
-  await expect(page.locator('#drawer-end-error')).toHaveText('Enter the date as dd.mm.yyyy.');
+  await expect(page.locator('#drawer-end-error')).toHaveText('31.13.2024 is not a valid date.');
 
   await page.locator('#drawer-end').fill('17.09.2024');
   await expect(page.locator('#drawer-end-error')).toHaveCount(0);

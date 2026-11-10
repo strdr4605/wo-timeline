@@ -43,6 +43,7 @@ import {
   draftFor,
   formatDottedDate,
   formValueFor,
+  isDottedShape,
   isEndAfterStart,
   parseDottedDate,
 } from './drawer-form';
@@ -89,8 +90,8 @@ export class WorkOrderDrawer {
   );
 
   /**
-   * The errors stay hidden until the first Create or Save. A field that the user only passes
-   * through must not turn red.
+   * The name error stays hidden until the first Create or Save. A field that the user only
+   * passes through must not turn red.
    */
   protected readonly submitted = signal(false);
 
@@ -133,18 +134,23 @@ export class WorkOrderDrawer {
     return 'Enter a work order name.';
   }
 
+  /**
+   * A date field shows its own error when it loses focus: a typo must show before Create. The
+   * end-before-start error waits for the first Create or Save, because the user often changes
+   * one date and then the other.
+   */
   protected dateError(field: DateField): string | null {
     const control = this.form.controls[field];
-    if (!this.submitted()) {
+    if (!this.submitted() && !control.touched) {
       return null;
     }
     if (control.hasError('required')) {
       return 'Enter a date.';
     }
     if (control.invalid) {
-      return 'Enter the date as dd.mm.yyyy.';
+      return invalidDateMessage(control.value);
     }
-    if (field === 'endDate' && this.form.hasError('endBeforeStart')) {
+    if (field === 'endDate' && this.submitted() && this.form.hasError('endBeforeStart')) {
       return 'The end date must be after the start date.';
     }
     return null;
@@ -288,6 +294,17 @@ function endAfterStart(group: AbstractControl): ValidationErrors | null {
     return null;
   }
   return isEndAfterStart(start, end) ? null : { endBeforeStart: true };
+}
+
+/**
+ * The control holds the typed text when the parser rejects it. A text with the right shape is a
+ * day that does not exist, such as 31.02.2025.
+ */
+function invalidDateMessage(value: unknown): string {
+  if (typeof value === 'string' && isDottedShape(value)) {
+    return `${value.trim()} is not a valid date.`;
+  }
+  return 'Enter the date as dd.mm.yyyy.';
 }
 
 /** ngbDatepicker writes the typed text into the control when it cannot parse it. */

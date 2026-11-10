@@ -28,6 +28,8 @@ export interface DrawerFormValue {
 /** The brief: the end date of a new order is the start date plus 7 days. */
 const DEFAULT_LENGTH_DAYS = 7;
 
+const DOTTED_DATE = /^(\d{1,2})\.(\d{1,2})\.(\d{4})$/;
+
 /** The form values of a request: the order for edit, the defaults of the brief for create. */
 export function formValueFor(request: DrawerRequest): DrawerFormValue {
   if (request.mode === 'edit') {
@@ -77,12 +79,22 @@ export function formatDottedDate(date: DayStruct | null): string {
   return `${pad(date.day)}.${pad(date.month)}.${date.year}`;
 }
 
+/** The typed text has the DD.MM.YYYY shape. It can still be a day that does not exist. */
+export function isDottedShape(value: string): boolean {
+  return DOTTED_DATE.test(value.trim());
+}
+
+/** The day of a DD.MM.YYYY text, or null when the shape is wrong or the day does not exist. */
 export function parseDottedDate(value: string): DayStruct | null {
-  const match = value.trim().match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/);
+  const match = value.trim().match(DOTTED_DATE);
   if (!match) {
     return null;
   }
+
   const [, day, month, year] = match.map(Number);
+  if (month < 1 || month > 12 || day < 1 || day > daysInMonth(year, month)) {
+    return null;
+  }
   return { year, month, day };
 }
 
@@ -98,6 +110,11 @@ function isoToStruct(isoDate: string): DayStruct {
 /** yyyy-mm-dd. The fixed width makes the string order the date order. */
 function structToIso(date: DayStruct): string {
   return `${date.year}-${pad(date.month)}-${pad(date.day)}`;
+}
+
+/** Day 0 of the next month is the last day of this month. The month counts from 1. */
+function daysInMonth(year: number, month: number): number {
+  return new Date(year, month, 0).getDate();
 }
 
 function pad(value: number): string {

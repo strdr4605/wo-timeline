@@ -2,6 +2,7 @@ import { describe, expect, test } from 'vitest';
 import {
   draftFor,
   formatDottedDate,
+  isDottedShape,
   isEndAfterStart,
   formValueFor,
   parseDottedDate,
@@ -98,5 +99,22 @@ describe('drawer form validation', () => {
       endDate: '2026-01-05',
     };
     expect(draftFor({ mode: 'edit', order }, value).workCenterId).toBe('wc-spartan');
+  });
+
+  test('[E1] a day that does not exist is not a date', () => {
+    expect(parseDottedDate('40.13.2024')).toBeNull();
+    expect(parseDottedDate('31.02.2025')).toBeNull();
+    expect(parseDottedDate('29.02.2025')).toBeNull();
+    expect(parseDottedDate('00.01.2025')).toBeNull();
+    expect(parseDottedDate('31.04.2025')).toBeNull();
+    expect(parseDottedDate('29.02.2024')).toEqual({ year: 2024, month: 2, day: 29 });
+    expect(parseDottedDate('31.12.2025')).toEqual({ year: 2025, month: 12, day: 31 });
+  });
+
+  test('[E1] the shape check tells a wrong shape from a day that does not exist', () => {
+    expect(isDottedShape('40.13.2024')).toBe(true);
+    expect(isDottedShape(' 1.2.2026 ')).toBe(true);
+    expect(isDottedShape('2025-12-30')).toBe(false);
+    expect(isDottedShape('12.2025')).toBe(false);
   });
 });
