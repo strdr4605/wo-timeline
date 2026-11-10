@@ -30,8 +30,15 @@ the next session.
 | klklvwtm | b9-demo | J1 J2 | `playwright.demo.config.ts`, `npm run demo`, `DEMO_HEADLESS=1` |
 | vrsqoyqk | b10-dates | E1 (bug fix) | impossible dates rejected, date errors on blur |
 | lnpyvlwl | b11-rail | I10 (new id) | rail resize by drag and keys, saved width |
+| kpqvonnq | b12-infinite | I1 | logical offsets, extend at both edges, bar layer clipped to the columns |
+| uspnxumk | b13-virtual | I9 (new id) | signal windowing of columns and bars, spacer |
+| qppunust | b14-storybook | I11 (new id) | Storybook, stories for bar statuses, chip, drawer |
+| oqpyloym | b15-readme | H1 | `README.md` |
+| ptnurkzy | b16-script | J3 | `docs/demo-script.md`, 9:40, walk script `notes/b16-walk.mjs` |
+| wmnkywwm | b17-comments | H5 | comments on date maths, static check `tests/e2e/comments.spec.ts` |
 
-`node docs/requirements/verify.mjs`: 67 pass, 6 pending, 0 fail. Playwright: 74 passed. Vitest: 31.
+`node docs/requirements/verify.mjs`: 73 pass, 2 pending, 0 fail. Playwright: 88 passed. Vitest: 31.
+The 2 pending items are H2 (Loom, human) and H3 (public repo, blocked).
 
 Pixel values to keep (with the masks of the first handover): Default 0.2%, Default hover 0.11%,
 View Selection 0.43%, Options CTA 0.31%, Edit and Delete Expanded 0.26%, drawer states
@@ -71,40 +78,14 @@ The lead kept this text in a scratchpad file. It is lost now, so copy it from he
 > Never run headed Chrome: windows flash on the human screen. For npm run demo use
 > DEMO_HEADLESS=1 npm run demo.
 
-## Remaining bonus items, in this order
+## Remaining items
 
-Items 1 to 6 of the earlier list are done (see the table). The order now is: I1, I9, Storybook.
+The bonus wave and the deliverables H1 and J3 are done. These items stay:
 
-1. Two units, in this order (plan change from the human, 2026-11-10). Same flow for each.
-   a. I1: infinite horizontal scroll. More columns load when the user scrolls near an edge.
-      Store the range as logical column offsets from today (`firstOffset..lastOffset`), not as
-      an array of columns. Build columns with `columnFor(timescale, today, offset)`. Keep the
-      scroll position when columns are added on the left. Parity mode keeps the fixed range.
-   b. I9 (new item): virtualization. Add I9 to `acceptance-criteria.md` (bonus, e2e, source:
-      brief l.439 "Consider virtual scrolling for performance with large ranges").
-      - Custom windowing with signals. Do not use CDK virtual scroll: the bars are absolute and
-        go across many rows.
-      - Keep a scroll signal. Compute the visible column window plus a buffer of about one
-        viewport on each side.
-      - Render only the header cells and the grid columns in the window, moved with
-        `translateX`. A spacer (logical column count x column width) keeps the scrollbar
-        correct.
-      - Render only the bars that overlap the window (a date test). Their left position stays
-        relative to the logical origin.
-      - Always render the focused bar, the bar in a drag and the bar of the open drawer. I5
-        focus and C9 drag must not break.
-      - The today line and the hover placeholder stay on logical positions.
-      - Parity mode: fixed range, windowing off, pixel values do not change.
-      - Evidence: an e2e test titled `[I9]`. Scroll about 2 years in Day view. The column DOM
-        count stays at or below a bound. Far bars are not in the DOM. The scroll position stays
-        the same on prepend. The focus stays after a scroll. A drag across the window edge
-        works. Then run the full suite again (a11y, resize and today touch this code).
-2. Storybook. It has no item id. Give it a new id in `acceptance-criteria.md` (bonus). Stories
-   for the bar (each status), the timescale chip and the drawer. Storybook must not change the
-   app build.
-
-After the bonus wave come the deliverables (first handover, "Next" step 3): README (H1), demo
-script (J3) and the public repo cut (H3). The human records the Loom (H2).
+1. H3, public repository with a clean commit history. Blocked overnight: it needs a push and a
+   public repo, and the overnight rules forbid a push. The human must decide the repo name and
+   the history cut (for example, squash the unit commits or keep them).
+2. H2, the Loom. The human records it with `docs/demo-script.md`.
 
 ## Decisions taken in this session
 
@@ -137,6 +118,11 @@ script (J3) and the public repo cut (H3). The human records the Loom (H2).
 - At the limit, update this handover and commit it. Then send `hc send t4f "ready-to-compact"`.
   t4f runs /compact for the lead. Then continue from this handover.
 
+- Storybook (I11): `@angular/platform-browser-dynamic` 20.3.35 is 9 days old. It must match the
+  installed `@angular/core` 20.3.35, so the two-week rule does not apply to it.
+- I1: the bar layer is clipped to the column extent, so bars past the range do not make the scroll
+  area wider. The edge test uses the column extent, not `scrollWidth`.
+
 ## a11y.spec race fix
 
 The step "axe: no serious or critical violation in the drawer of an Open order" pressed Enter
@@ -146,6 +132,14 @@ the other steps do. The fix is in the b3-a11y commit (moved there with `jj squas
 same pattern in new keyboard tests.
 
 ## Open notes
+
+- H3 is blocked (see "Remaining items").
+- Date fields: a click on a date field opens the ngb-datepicker and moves the focus to a calendar
+  day at once. A user who clicks and then types loses the typed text. Tab into the field works.
+  The demo script uses Tab. This is a possible UX bug; a fix needs a human decision.
+- I9: bars far from the view are not in the DOM, so Tab does not reach them. Accepted cost of
+  virtualization.
+- The b15 verifier saw one flake of a B3 test under load in `npm run test:all`. It passed on rerun.
 
 - `verify.mjs` prints `unknown item id in test title: P9`. A test title uses `[P9]` (a design
   conflict id, not an item id). Change the title or teach `verify.mjs` the P ids. Small.
