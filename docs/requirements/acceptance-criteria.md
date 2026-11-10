@@ -2,7 +2,7 @@
 
 Work Order Schedule Timeline (Naologic front-end take-home). Generated from `acceptance-criteria.json` - edit the JSON, then run `node docs/requirements/render.mjs`.
 
-Progress: 62 pass, 0 fail, 0 open decision, 10 pending.
+Progress: 63 pass, 0 fail, 0 open decision, 9 pending.
 
 Legend: `[x]` pass, `[ ]` pending, `[?]` open decision. An item may only be marked pass with an evidence command (test name, screenshot path or measurement output) in the JSON `evidence` field.
 
@@ -113,7 +113,7 @@ Legend: `[x]` pass, `[ ]` pending, `[?]` open decision. An item may only be mark
 |---|---|---|---|---|---|---|
 | [ ] | I1 | Infinite horizontal scroll: more columns load as the user scrolls | brief, ref, cand | e2e | bonus |  |
 | [x] | I2 | Today button centres the viewport on today | brief, ref, cand | e2e | bonus | e2e: [I2] the Today button centres the viewport on today in every timescale |
-| [ ] | I3 | Smooth animations: drawer slide in and out, bar hover transitions | brief | manual | bonus |  |
+| [x] | I3 | Smooth animations: drawer slide in and out, bar hover transitions | brief | manual | bonus | e2e: [I3] prefers-reduced-motion: reduce sets every duration to 0s |
 | [ ] | I4 | Automated test suite runs headless and passes | brief | unit | bonus |  |
 | [x] | I5 | Accessibility: aria labels on controls, focus management, keyboard reachable menu | brief | e2e | bonus | e2e: [I5] controls have names, bars and menus work with the keyboard, the drawer keeps the focus |
 | [x] | I6 | OnPush change detection and trackBy on the timeline lists | brief | manual | bonus | e2e: [I6] every component uses OnPush and no template tracks by $index |

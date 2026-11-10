@@ -20,3 +20,14 @@ body {
 *::after {
   box-sizing: border-box;
 }
+
+// A user who asks for less motion gets every transition and animation at its end state at once.
+// The delays stay: the tooltip dwell is a wait, not a motion.
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0s !important;
+    animation-duration: 0s !important;
+  }
+}

@@ -825,8 +825,8 @@
       ],
       "verify": "manual",
       "priority": "bonus",
-      "status": "pending",
-      "evidence": ""
+      "status": "pass",
+      "evidence": "e2e: [I3] prefers-reduced-motion: reduce sets every duration to 0s"
     },
     {
       "id": "I4",

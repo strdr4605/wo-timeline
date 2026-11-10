@@ -2,7 +2,9 @@
 @use '../../styles/control-shadows' as *;
 
 $field-gap: (t.$layout-panel-field-h - t.$layout-panel-field-label-h - t.$layout-panel-field-control-h);
-$slide: transform #{t.$layout-panel-slide-duration} ease-out;
+$duration: #{t.$layout-motion-duration-base};
+$slide: transform $duration #{t.$layout-motion-easing};
+$fade: opacity $duration #{t.$layout-motion-easing};
 
 // The overlay dims the page under the drawer and takes the click outside the drawer.
 .drawer-overlay {
@@ -13,14 +15,14 @@ $slide: transform #{t.$layout-panel-slide-duration} ease-out;
   opacity: 0;
   visibility: hidden;
   transition:
-    opacity #{t.$layout-panel-slide-duration},
-    visibility 0s #{t.$layout-panel-slide-duration};
+    $fade,
+    visibility 0s $duration;
 }
 
 .drawer-overlay--open {
   opacity: 1;
   visibility: visible;
-  transition: opacity #{t.$layout-panel-slide-duration};
+  transition: $fade;
 }
 
 .drawer {
@@ -41,7 +43,7 @@ $slide: transform #{t.$layout-panel-slide-duration} ease-out;
   visibility: hidden;
   transition:
     $slide,
-    visibility 0s #{t.$layout-panel-slide-duration};
+    visibility 0s $duration;
 }
 
 .drawer--open {

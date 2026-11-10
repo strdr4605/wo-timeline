@@ -97,6 +97,15 @@
       t.$layout-dropdown-menu-shadow-spread t.$layout-dropdown-menu-shadow-color,
     0 t.$layout-dropdown-menu-shadow2-y t.$layout-dropdown-menu-shadow2-blur
       t.$layout-dropdown-menu-shadow2-spread t.$layout-dropdown-menu-shadow2-color;
+  // The menu is created on open, so it uses an animation, not a transition.
+  animation: timescale-menu-enter #{t.$layout-motion-duration-base} #{t.$layout-motion-easing};
+}
+
+// Only a fade, as the menu of a bar: the box is at its place from the first frame.
+@keyframes timescale-menu-enter {
+  from {
+    opacity: 0;
+  }
 }
 
 .timescale-menu__item {
@@ -114,6 +123,7 @@
   color: t.$component-menu-item-default;
   text-align: left;
   cursor: pointer;
+  transition: background-color #{t.$layout-motion-duration-fast} #{t.$layout-motion-easing};
 }
 
 .timescale-menu__item:hover,
