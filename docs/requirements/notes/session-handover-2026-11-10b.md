@@ -23,6 +23,9 @@ the next session.
 | omyuutpo | b2-today | I2 | Today button, hidden in parity mode |
 | uwmxptsm | b3-a11y | I5 | aria, keyboard, focus trap, axe, focus-ring tokens |
 | utrvxlns | b4-resize | C9 (new id) | drag to resize, "Drag to resize" label, keyboard resize |
+| mquzoqqr | b5-prompts | H4 H6 | `docs/ai-prompts.md` |
+| nuvyutkx | b6-onpush | I6 | OnPush, stable track, static check |
+| lsqwlqmo | b7-motion | I3 | transitions under 300 ms, reduced motion, motion tokens |
 
 `node docs/requirements/verify.mjs`: 59 pass, 13 pending, 0 fail. Playwright: 65 passed.
 
@@ -82,9 +85,30 @@ The lead kept this text in a scratchpad file. It is lost now, so copy it from he
 5. J1 and J2: a second Playwright config that records one video for each requirement test
    (headed Chrome, slow motion, files under `docs/demo/videos/`), and `npm run demo`. The fast
    config must not change.
-6. I1: infinite horizontal scroll. More columns load when the user scrolls near an edge. Keep
-   the scroll position when columns are added on the left. Parity mode must keep the fixed
-   range.
+6. Two units, in this order (plan change from the human, 2026-11-10). Same flow for each.
+   a. I1: infinite horizontal scroll. More columns load when the user scrolls near an edge.
+      Store the range as logical column offsets from today (`firstOffset..lastOffset`), not as
+      an array of columns. Build columns with `columnFor(timescale, today, offset)`. Keep the
+      scroll position when columns are added on the left. Parity mode keeps the fixed range.
+   b. I9 (new item): virtualization. Add I9 to `acceptance-criteria.md` (bonus, e2e, source:
+      brief l.439 "Consider virtual scrolling for performance with large ranges").
+      - Custom windowing with signals. Do not use CDK virtual scroll: the bars are absolute and
+        go across many rows.
+      - Keep a scroll signal. Compute the visible column window plus a buffer of about one
+        viewport on each side.
+      - Render only the header cells and the grid columns in the window, moved with
+        `translateX`. A spacer (logical column count x column width) keeps the scrollbar
+        correct.
+      - Render only the bars that overlap the window (a date test). Their left position stays
+        relative to the logical origin.
+      - Always render the focused bar, the bar in a drag and the bar of the open drawer. I5
+        focus and C9 drag must not break.
+      - The today line and the hover placeholder stay on logical positions.
+      - Parity mode: fixed range, windowing off, pixel values do not change.
+      - Evidence: an e2e test titled `[I9]`. Scroll about 2 years in Day view. The column DOM
+        count stays at or below a bound. Far bars are not in the DOM. The scroll position stays
+        the same on prepend. The focus stays after a scroll. A drag across the window edge
+        works. Then run the full suite again (a11y, resize and today touch this code).
 7. Storybook. It has no item id. Give it a new id in `acceptance-criteria.md` (bonus). Stories
    for the bar (each status), the timescale chip and the drawer. Storybook must not change the
    app build.
