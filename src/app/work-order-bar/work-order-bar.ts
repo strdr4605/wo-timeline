@@ -32,6 +32,7 @@ export class WorkOrderBar {
   readonly end = input.required<BarPosition>();
 
   readonly edit = output<void>();
+  readonly remove = output<void>();
 
   /** The bar is hovered. The row hover is a class of its own, this one is the bar. */
   protected readonly hovered = signal(false);

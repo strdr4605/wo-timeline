@@ -44,7 +44,6 @@
   </button>
 
   <div class="work-order-menu" role="menu" [class.work-order-menu--open]="menuOpen()">
-    <!-- Delete does nothing yet: it belongs to the next unit. -->
     <button type="button" class="work-order-menu__item" role="menuitem" (click)="edit.emit()">
       Edit
     </button>
@@ -52,6 +51,7 @@
       type="button"
       class="work-order-menu__item work-order-menu__item--danger"
       role="menuitem"
+      (click)="remove.emit()"
     >
       Delete
     </button>

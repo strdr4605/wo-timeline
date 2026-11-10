@@ -4,6 +4,7 @@
  */
 
 import { WorkOrder, WorkOrderStatus } from '../data/sample-data';
+import type { WorkOrderDraft } from '../data/schedule.service';
 
 /** What the drawer is open for: a new order on a clicked cell, or an existing order. */
 export type DrawerRequest =
@@ -49,6 +50,25 @@ export function formValueFor(request: DrawerRequest): DrawerFormValue {
   };
 }
 
+/** The brief: the end date must be after the start date. The same day is not after it. */
+export function isEndAfterStart(start: DayStruct, end: DayStruct): boolean {
+  return structToIso(end) > structToIso(start);
+}
+
+/** The order that a valid form describes. */
+export function draftFor(
+  request: DrawerRequest,
+  value: DrawerFormValue & { startDate: DayStruct; endDate: DayStruct },
+): WorkOrderDraft {
+  return {
+    name: value.name.trim(),
+    workCenterId: request.mode === 'edit' ? request.order.workCenterId : request.workCenterId,
+    status: value.status,
+    startDate: structToIso(value.startDate),
+    endDate: structToIso(value.endDate),
+  };
+}
+
 /** DD.MM.YYYY, as the date fields of the design ('01.01.2026'). */
 export function formatDottedDate(date: DayStruct | null): string {
   if (!date) {
@@ -73,6 +93,11 @@ function dateToStruct(date: Date): DayStruct {
 function isoToStruct(isoDate: string): DayStruct {
   const [year, month, day] = isoDate.split('-').map(Number);
   return { year, month, day };
+}
+
+/** yyyy-mm-dd. The fixed width makes the string order the date order. */
+function structToIso(date: DayStruct): string {
+  return `${date.year}-${pad(date.month)}-${pad(date.day)}`;
 }
 
 function pad(value: number): string {

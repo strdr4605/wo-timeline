@@ -1,6 +1,8 @@
 import { describe, expect, test } from 'vitest';
 import {
+  draftFor,
   formatDottedDate,
+  isEndAfterStart,
   formValueFor,
   parseDottedDate,
 } from '../../src/app/work-order-drawer/drawer-form';
@@ -55,5 +57,46 @@ describe('drawer form defaults', () => {
     expect(formatDottedDate(null)).toBe('');
     expect(parseDottedDate('30.12.2025')).toEqual({ year: 2025, month: 12, day: 30 });
     expect(parseDottedDate('2025-12-30')).toBeNull();
+  });
+});
+
+describe('drawer form validation', () => {
+  test('[E1] the end date must be after the start date, the same day is not after it', () => {
+    const start = { year: 2026, month: 3, day: 10 };
+    expect(isEndAfterStart(start, { year: 2026, month: 3, day: 11 })).toBe(true);
+    expect(isEndAfterStart(start, start)).toBe(false);
+    expect(isEndAfterStart(start, { year: 2026, month: 2, day: 28 })).toBe(false);
+    // The month is compared as a number, not as text: 10 is after 9.
+    expect(isEndAfterStart({ year: 2026, month: 9, day: 30 }, { year: 2026, month: 10, day: 1 })).toBe(
+      true,
+    );
+  });
+
+  test('[E1] a valid form gives an ISO draft on the work centre of the request', () => {
+    const value = {
+      name: '  Acme Inc.  ',
+      status: 'blocked' as const,
+      startDate: { year: 2026, month: 3, day: 9 },
+      endDate: { year: 2026, month: 3, day: 16 },
+    };
+    const create = { mode: 'create' as const, workCenterId: 'wc-genesis', startDate: new Date() };
+
+    expect(draftFor(create, value)).toEqual({
+      name: 'Acme Inc.',
+      workCenterId: 'wc-genesis',
+      status: 'blocked',
+      startDate: '2026-03-09',
+      endDate: '2026-03-16',
+    });
+
+    const order = {
+      docId: 'wo-1',
+      name: 'Old',
+      workCenterId: 'wc-spartan',
+      status: 'open' as const,
+      startDate: '2026-01-01',
+      endDate: '2026-01-05',
+    };
+    expect(draftFor({ mode: 'edit', order }, value).workCenterId).toBe('wc-spartan');
   });
 });

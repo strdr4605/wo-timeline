@@ -74,6 +74,7 @@
                 [start]="bar.start"
                 [end]="bar.end"
                 (edit)="editOrder.emit(bar.order)"
+                (remove)="deleteOrder.emit(bar.order)"
               />
             }
           </div>

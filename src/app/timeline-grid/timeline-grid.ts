@@ -57,6 +57,7 @@ export class TimelineGrid implements AfterViewInit {
 
   readonly cellPick = output<CellPick>();
   readonly editOrder = output<WorkOrder>();
+  readonly deleteOrder = output<WorkOrder>();
 
   /** Captured once, so every column of one render speaks about the same day. */
   private readonly now = PARITY_MODE ? PARITY_TODAY : new Date();

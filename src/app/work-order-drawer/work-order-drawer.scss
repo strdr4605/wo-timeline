@@ -161,3 +161,32 @@ $slide: transform #{t.$layout-panel-slide-duration} ease-out;
     box-shadow: $focus-ring;
   }
 }
+
+// No artboard shows an error. The error state borrows the Blocked status colours and the label
+// type, so it reads as part of the design and stays quiet.
+.drawer-field__control--invalid,
+.drawer-field__control--invalid:focus {
+  border-color: t.$component-form-error-color;
+}
+
+.drawer-field__error {
+  margin: (t.$component-form-error-gap-y - $field-gap) 0 0;
+  font-family: t.$font-family;
+  font-size: t.$type-control-label-size;
+  line-height: t.$layout-panel-field-label-h;
+  font-weight: t.$type-control-label-font-weight;
+  color: t.$component-form-error-color;
+}
+
+.drawer__alert {
+  margin: t.$component-form-error-alert-margin-top t.$layout-panel-pad-x 0;
+  padding: t.$component-form-error-alert-pad-y t.$component-form-error-alert-pad-x;
+  border: t.$component-form-error-alert-border-width solid t.$component-form-error-alert-border;
+  border-radius: t.$component-form-error-alert-radius;
+  background: t.$component-form-error-alert-fill;
+  font-family: t.$font-family;
+  font-size: t.$type-control-label-size;
+  line-height: t.$layout-panel-field-label-h;
+  font-weight: t.$type-control-label-font-weight;
+  color: t.$component-form-error-color;
+}

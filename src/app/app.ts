@@ -38,4 +38,8 @@ export class App {
   protected openEdit(order: WorkOrder): void {
     this.drawer.set({ mode: 'edit', order });
   }
+
+  protected deleteOrder(order: WorkOrder): void {
+    this.schedule.remove(order.docId);
+  }
 }
