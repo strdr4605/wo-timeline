@@ -62,7 +62,9 @@ test('[I9] the scroll position stays the same when columns are added on the left
   expect((await domColumns(page)).header).toBeLessThanOrEqual(MAX_DAY_COLUMNS);
 });
 
-test('[I9] the focus stays on a bar after a scroll moves it out of the window', async ({ page }) => {
+test('[I9] the focus stays on a bar after a scroll moves it out of the window', async ({
+  page,
+}) => {
   await openDayView(page);
   const bar = page.locator('.work-order-bar').first();
   const name = (await bar.getAttribute('aria-label'))!;
@@ -125,7 +127,10 @@ test('[I9] parity mode renders every column', async ({ page }) => {
   expect(grid).toBe(header);
   // The window starts at the first column, so no pixel moves.
   expect(
-    await page.locator('.grid__window').first().evaluate((element) => getComputedStyle(element).transform),
+    await page
+      .locator('.grid__window')
+      .first()
+      .evaluate((element) => getComputedStyle(element).transform),
   ).toBe('matrix(1, 0, 0, 1, 0, 0)');
 });
 
@@ -155,7 +160,9 @@ async function waitForSettledColumns(page: Page): Promise<void> {
 async function columnCount(page: Page): Promise<number> {
   return page
     .locator('.grid__timeline')
-    .evaluate((timeline) => Number((timeline as HTMLElement).style.getPropertyValue('--column-count')));
+    .evaluate((timeline) =>
+      Number((timeline as HTMLElement).style.getPropertyValue('--column-count')),
+    );
 }
 
 async function domColumns(page: Page): Promise<{ header: number; grid: number }> {
@@ -186,7 +193,9 @@ async function scrollGridBy(page: Page, left: number): Promise<void> {
 }
 
 async function scrollGridTo(page: Page, left: number): Promise<void> {
-  await page.locator('.grid').evaluate((grid, x) => grid.scrollTo({ left: x, behavior: 'instant' }), left);
+  await page
+    .locator('.grid')
+    .evaluate((grid, x) => grid.scrollTo({ left: x, behavior: 'instant' }), left);
 }
 
 /** The label and x of the first column header right of the rail, after an optional scroll. */
@@ -230,7 +239,9 @@ function endDateOf(label: string): Date {
 }
 
 function formatDate(date: Date): string {
-  return new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(
-    date,
-  );
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  }).format(date);
 }

@@ -8,8 +8,7 @@ import type { WorkOrderDraft } from '../data/schedule.service';
 
 /** What the drawer is open for: a new order on a clicked cell, or an existing order. */
 export type DrawerRequest =
-  | { mode: 'create'; workCenterId: string; startDate: Date }
-  | { mode: 'edit'; order: WorkOrder };
+  { mode: 'create'; workCenterId: string; startDate: Date } | { mode: 'edit'; order: WorkOrder };
 
 /** A calendar day as ngb-datepicker holds it. The month counts from 1. */
 export interface DayStruct {
@@ -44,7 +43,11 @@ export function formValueFor(request: DrawerRequest): DrawerFormValue {
 
   // The Date constructor moves a day past the month end into the next month.
   const start = request.startDate;
-  const end = new Date(start.getFullYear(), start.getMonth(), start.getDate() + DEFAULT_LENGTH_DAYS);
+  const end = new Date(
+    start.getFullYear(),
+    start.getMonth(),
+    start.getDate() + DEFAULT_LENGTH_DAYS,
+  );
   return {
     name: '',
     status: 'open',

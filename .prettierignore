@@ -1,0 +1,15 @@
+# Generated, vendored and private (gitignored) files.
+package-lock.json
+dist/
+.angular/
+storybook-static/
+playwright-report/
+test-results/
+.pixel-check/
+docs/
+tests/demo/
+tests/e2e/demo-config.spec.ts
+playwright.demo.config.ts
+scripts/pixel-check.mjs
+scripts/design-diff.mjs
+FE-technical-test-10-2026.md

@@ -13,7 +13,12 @@
     "test:all": "npm run build && vitest run && playwright test",
     "demo": "playwright test --config=playwright.demo.config.ts",
     "storybook": "ng run wo-timeline:storybook",
-    "build-storybook": "ng run wo-timeline:build-storybook"
+    "build-storybook": "ng run wo-timeline:build-storybook",
+    "lint": "npm run lint:ts && npm run lint:scss && npm run format:check",
+    "lint:ts": "eslint .",
+    "lint:scss": "stylelint \"src/**/*.scss\" \".storybook/**/*.scss\"",
+    "format:check": "prettier --check .",
+    "format": "prettier --write ."
   },
   "prettier": {
     "printWidth": 100,
@@ -50,11 +55,18 @@
     "@axe-core/playwright": "^4.14.0",
     "@playwright/test": "1.65.0",
     "@storybook/angular": "10.6.5",
+    "angular-eslint": "20.7.0",
+    "eslint": "^9.39.1",
+    "globals": "17.14.0",
     "pixelmatch": "^7.1.0",
     "playwright": "1.65.0",
     "pngjs": "^7.0.0",
+    "prettier": "3.10.0",
     "storybook": "10.6.5",
+    "stylelint": "17.16.0",
+    "stylelint-config-standard-scss": "17.0.0",
     "typescript": "~5.9.2",
+    "typescript-eslint": "8.46.4",
     "vitest": "5.1.0"
   }
 }

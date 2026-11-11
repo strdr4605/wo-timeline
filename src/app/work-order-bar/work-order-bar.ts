@@ -68,7 +68,7 @@ export class WorkOrderBar {
 
   readonly edit = output<void>();
   readonly remove = output<void>();
-  readonly resize = output<BarResize>();
+  readonly resized = output<BarResize>();
   readonly nudge = output<BarNudge>();
 
   /** The bar is hovered. The row hover is a class of its own, this one is the bar. */
@@ -115,13 +115,13 @@ export class WorkOrderBar {
     (event.currentTarget as HTMLElement).setPointerCapture(event.pointerId);
     this.dragOriginX = event.clientX;
     this.resizing.set(edge);
-    this.resize.emit({ edge, phase: 'start', deltaX: 0 });
+    this.resized.emit({ edge, phase: 'start', deltaX: 0 });
   }
 
   protected moveResize(event: PointerEvent): void {
     const edge = this.resizing();
     if (edge !== null) {
-      this.resize.emit({ edge, phase: 'move', deltaX: event.clientX - this.dragOriginX });
+      this.resized.emit({ edge, phase: 'move', deltaX: event.clientX - this.dragOriginX });
     }
   }
 
@@ -236,7 +236,7 @@ export class WorkOrderBar {
       return;
     }
     this.resizing.set(null);
-    this.resize.emit({ edge, phase, deltaX });
+    this.resized.emit({ edge, phase, deltaX });
   }
 }
 

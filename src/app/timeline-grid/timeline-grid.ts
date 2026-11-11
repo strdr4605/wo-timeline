@@ -34,12 +34,7 @@ import {
 } from '../timeline/timeline';
 import { PARITY_FIRST_COLUMN_OFFSET, PARITY_MODE, PARITY_TODAY } from '../parity';
 import { VIRTUAL_MODE } from '../demo';
-import {
-  BarNudge,
-  BarPosition,
-  BarResize,
-  WorkOrderBar,
-} from '../work-order-bar/work-order-bar';
+import { BarNudge, BarPosition, BarResize, WorkOrderBar } from '../work-order-bar/work-order-bar';
 
 /** The empty cell under the pointer: the row and the pointer x inside the row. */
 interface CellHover {
@@ -174,7 +169,8 @@ export class TimelineGrid implements AfterViewInit {
     const preview = this.resizePreview();
 
     for (const source of this.workOrders()) {
-      const order = preview?.order.docId === source.docId ? { ...source, ...preview.dates } : source;
+      const order =
+        preview?.order.docId === source.docId ? { ...source, ...preview.dates } : source;
       const placement: BarPlacement = {
         order,
         source,
@@ -277,9 +273,7 @@ export class TimelineGrid implements AfterViewInit {
       return;
     }
 
-    const columnWidth = parseFloat(
-      getComputedStyle(timeline).getPropertyValue('--column-width'),
-    );
+    const columnWidth = parseFloat(getComputedStyle(timeline).getPropertyValue('--column-width'));
     const { index, fraction } = this.today();
 
     // The marker of today sits at this offset inside the timeline content.
@@ -473,7 +467,10 @@ export class TimelineGrid implements AfterViewInit {
   }
 
   /** The dates of an order with one edge moved by the pointer travel of a drag. */
-  private resizedDates(order: WorkOrder, resize: BarResize): { startDate: string; endDate: string } {
+  private resizedDates(
+    order: WorkOrder,
+    resize: BarResize,
+  ): { startDate: string; endDate: string } {
     const timeline = this.timeline()?.nativeElement;
     if (!timeline || resize.phase === 'cancel') {
       return { startDate: order.startDate, endDate: order.endDate };
@@ -608,7 +605,8 @@ export class TimelineGrid implements AfterViewInit {
     const scrollLeft = scroller.scrollLeft;
     const columnWidth = parseFloat(getComputedStyle(timeline).getPropertyValue('--column-width'));
     const atLeft = scrollLeft < margin;
-    const atRight = columnsRightGap(scroller, timeline, this.columns().length * columnWidth) < margin;
+    const atRight =
+      columnsRightGap(scroller, timeline, this.columns().length * columnWidth) < margin;
     if (!atLeft && !atRight) {
       return;
     }
@@ -679,9 +677,7 @@ export class TimelineGrid implements AfterViewInit {
       return;
     }
 
-    const columnWidth = parseFloat(
-      getComputedStyle(timeline).getPropertyValue('--column-width'),
-    );
+    const columnWidth = parseFloat(getComputedStyle(timeline).getPropertyValue('--column-width'));
     // The left border of the timeline stays visible next to the rail, as in the design.
     const contentLeft = timeline.getBoundingClientRect().left + timeline.clientLeft;
     const visibleLeft = rail.getBoundingClientRect().right + timeline.clientLeft;
@@ -703,9 +699,14 @@ const EXTEND_CHUNK = 30;
  * scrollWidth is not used: a bar can end far past the last column, and then the right edge
  * never comes near.
  */
-function columnsRightGap(scroller: HTMLElement, timeline: HTMLElement, columnsWidth: number): number {
+function columnsRightGap(
+  scroller: HTMLElement,
+  timeline: HTMLElement,
+  columnsWidth: number,
+): number {
   const contentLeft = timeline.getBoundingClientRect().left + timeline.clientLeft;
-  const visibleRight = scroller.getBoundingClientRect().left + scroller.clientLeft + scroller.clientWidth;
+  const visibleRight =
+    scroller.getBoundingClientRect().left + scroller.clientLeft + scroller.clientWidth;
   return contentLeft + columnsWidth - visibleRight;
 }
 
@@ -716,7 +717,11 @@ function columnsRightGap(scroller: HTMLElement, timeline: HTMLElement, columnsWi
 function dayInColumn(column: TimelineColumn, fraction: number): Date {
   const days = Math.round((column.end.getTime() - column.start.getTime()) / 86_400_000);
   const start = column.start;
-  return new Date(start.getFullYear(), start.getMonth(), start.getDate() + Math.floor(fraction * days));
+  return new Date(
+    start.getFullYear(),
+    start.getMonth(),
+    start.getDate() + Math.floor(fraction * days),
+  );
 }
 
 /** The width that a key asks for, or null for a key that does not resize. */

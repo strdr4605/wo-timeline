@@ -44,12 +44,17 @@ const STATUSES: readonly WorkOrderStatus[] = ['open', 'in-progress', 'complete',
  * before and after today. When a centre gets more orders than two-day slots fit in that span, the
  * span grows: 5,000 orders on 5 centres need about 2.7 years on each side.
  */
-export function generateDemoOrders(centers: readonly WorkCenter[], count: number, today: Date): WorkOrder[] {
+export function generateDemoOrders(
+  centers: readonly WorkCenter[],
+  count: number,
+  today: Date,
+): WorkOrder[] {
   const random = mulberry32(DEMO_SEED);
   const orders: WorkOrder[] = [];
 
   centers.forEach((center, centerIndex) => {
-    const centerCount = Math.floor(count / centers.length) + (centerIndex < count % centers.length ? 1 : 0);
+    const centerCount =
+      Math.floor(count / centers.length) + (centerIndex < count % centers.length ? 1 : 0);
     if (centerCount === 0) {
       return;
     }

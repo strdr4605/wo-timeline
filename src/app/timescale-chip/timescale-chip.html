@@ -20,12 +20,7 @@
 </div>
 
 @if (open()) {
-  <div
-    id="timescale-menu"
-    class="timescale-menu"
-    role="listbox"
-    [attr.aria-label]="label()"
-  >
+  <div id="timescale-menu" class="timescale-menu" role="listbox" [attr.aria-label]="label()">
     @for (option of options(); track option) {
       <button
         type="button"

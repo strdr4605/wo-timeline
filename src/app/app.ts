@@ -5,7 +5,13 @@ import { TimescaleChip } from './timescale-chip/timescale-chip';
 import { CellPick, ResizeRequest, TimelineGrid } from './timeline-grid/timeline-grid';
 import { WorkOrder } from './data/sample-data';
 import { PARITY_MODE } from './parity';
-import { DEMO_CENTER_COUNT, DEMO_MODE, DEMO_ORDER_COUNT, generateDemoCenters, generateDemoOrders } from './demo';
+import {
+  DEMO_CENTER_COUNT,
+  DEMO_MODE,
+  DEMO_ORDER_COUNT,
+  generateDemoCenters,
+  generateDemoOrders,
+} from './demo';
 import { DemoBadge } from './demo-badge/demo-badge';
 import { DrawerRequest } from './work-order-drawer/drawer-form';
 import { WorkOrderDrawer } from './work-order-drawer/work-order-drawer';

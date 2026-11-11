@@ -32,10 +32,13 @@ const valueFor = (value: unknown, path: string[]): string => {
     return /alpha/i.test(key) ? String(value) : `${value}px`;
   }
   const text = String(value);
-  return text.startsWith('#') ? text : `"${text}"`;
+  return text.startsWith('#') ? text : `'${text}'`;
 };
 
-type Entry = { name: string; value: string };
+interface Entry {
+  name: string;
+  value: string;
+}
 
 const walk = (value: unknown, path: string[], out: Entry[]) => {
   if (SKIP.has(path.join('.'))) return;
@@ -79,17 +82,20 @@ describe('design tokens', () => {
   test('[G1] the app styles use no colour or size that the token file does not hold', () => {
     const tokenValues = new Set(expected.map((e) => e.value.replace(/"/g, '')));
 
-    const literals = appStyles(join(root, 'src'))
-      .map((file) => readFileSync(file, 'utf8'))
-      .join('\n')
-      .match(/#[0-9a-fA-F]{3,8}\b|\b\d+(?:\.\d+)?px\b/g) ?? [];
+    const literals =
+      appStyles(join(root, 'src'))
+        .map((file) => readFileSync(file, 'utf8'))
+        .join('\n')
+        .match(/#[0-9a-fA-F]{3,8}\b|\b\d+(?:\.\d+)?px\b/g) ?? [];
 
     expect(literals.filter((literal) => !tokenValues.has(literal))).toEqual([]);
   });
 
   test('[G1] every SCSS token variable matches tokens.json', () => {
     for (const { name, value } of expected) {
-      expect(declared.get(name), `$${name} is missing or wrong in src/styles/_tokens.scss`).toBe(value);
+      expect(declared.get(name), `$${name} is missing or wrong in src/styles/_tokens.scss`).toBe(
+        value,
+      );
     }
 
     // No variable may exist that the token file does not describe.
@@ -98,12 +104,12 @@ describe('design tokens', () => {
   });
 
   test('[G5] type scale matches the token file', () => {
-    expect(declared.get('font-family')).toBe(`"${tokens.typography.fontFamily}"`);
+    expect(declared.get('font-family')).toBe(`'${tokens.typography.fontFamily}'`);
 
     for (const [style, spec] of Object.entries(tokens.typography.styles)) {
       const name = kebab(style);
       expect(declared.get(`type-${name}-size`), `type-${name}-size`).toBe(`${spec.size}px`);
-      expect(declared.get(`type-${name}-font`), `type-${name}-font`).toBe(`"${spec.font}"`);
+      expect(declared.get(`type-${name}-font`), `type-${name}-font`).toBe(`'${spec.font}'`);
       expect(declared.get(`type-${name}-color`), `type-${name}-color`).toBe(spec.color);
       if (spec.lineHeight !== undefined) {
         expect(declared.get(`type-${name}-line-height`), `type-${name}-line-height`).toBe(
@@ -114,9 +120,9 @@ describe('design tokens', () => {
 
     // The three sizes the acceptance item names.
     expect(declared.get('type-body-size')).toBe('14px');
-    expect(declared.get('type-body-font')).toBe('"Book"');
+    expect(declared.get('type-body-font')).toBe("'Book'");
     expect(declared.get('type-panel-title-size')).toBe('20px');
-    expect(declared.get('type-panel-title-font')).toBe('"Medium"');
+    expect(declared.get('type-panel-title-font')).toBe("'Medium'");
     expect(declared.get('type-chip-label-size')).toBe('13px');
     expect(declared.get('type-chip-value-size')).toBe('13px');
   });

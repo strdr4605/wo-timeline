@@ -143,7 +143,9 @@ async function waitForSettledColumns(page: Page): Promise<void> {
 async function columnCount(page: Page): Promise<number> {
   return page
     .locator('.grid__timeline')
-    .evaluate((timeline) => Number((timeline as HTMLElement).style.getPropertyValue('--column-count')));
+    .evaluate((timeline) =>
+      Number((timeline as HTMLElement).style.getPropertyValue('--column-count')),
+    );
 }
 
 /** The header labels at column indices of the range, read at their x in the header track. */
@@ -179,7 +181,9 @@ async function barToTodayLine(page: Page): Promise<number> {
 }
 
 async function scrollGridTo(page: Page, left: number): Promise<void> {
-  await page.locator('.grid').evaluate((grid, x) => grid.scrollTo({ left: x, behavior: 'instant' }), left);
+  await page
+    .locator('.grid')
+    .evaluate((grid, x) => grid.scrollTo({ left: x, behavior: 'instant' }), left);
 }
 
 async function headerX(page: Page, label: string): Promise<number> {

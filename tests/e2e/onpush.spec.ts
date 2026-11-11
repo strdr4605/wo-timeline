@@ -10,7 +10,9 @@ const APP_DIR = join(process.cwd(), 'src', 'app');
 test('[I6] every component uses OnPush and no template tracks by $index', () => {
   const files = sourceFiles(APP_DIR);
 
-  const components = files.filter((file) => file.endsWith('.ts') && /@Component\(/.test(read(file)));
+  const components = files.filter(
+    (file) => file.endsWith('.ts') && /@Component\(/.test(read(file)),
+  );
   expect(components.length).toBeGreaterThan(0);
 
   const withoutOnPush = components.filter(

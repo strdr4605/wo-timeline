@@ -109,10 +109,9 @@ export class TimescaleChip {
 
   /** The menu exists only while it is open, so the option can take the focus only after render. */
   private focusOption(option: Timescale): void {
-    afterNextRender(
-      () => this.optionButtons()[this.options().indexOf(option)]?.focus(),
-      { injector: this.injector },
-    );
+    afterNextRender(() => this.optionButtons()[this.options().indexOf(option)]?.focus(), {
+      injector: this.injector,
+    });
   }
 
   private optionButtons(): HTMLElement[] {

@@ -32,13 +32,17 @@ const EXPLAINED: Record<string, string[]> = {
     'The same day is not after it',
     'Day 0 of the next month is the last day of this month',
   ],
-  'data/schedule.service.ts': ['Parity mode always shows the design fixture and never touches the storage'],
+  'data/schedule.service.ts': [
+    'Parity mode always shows the design fixture and never touches the storage',
+  ],
 };
 
 test('[H5] comments explain the date maths and the key decisions', () => {
   const missing = Object.entries(EXPLAINED).flatMap(([file, phrases]) => {
     const source = readFileSync(join(APP_DIR, file), 'utf8');
-    return phrases.filter((phrase) => !source.includes(phrase)).map((phrase) => `${file}: ${phrase}`);
+    return phrases
+      .filter((phrase) => !source.includes(phrase))
+      .map((phrase) => `${file}: ${phrase}`);
   });
 
   expect(missing, 'comments that are gone').toEqual([]);

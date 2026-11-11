@@ -131,9 +131,7 @@ test('[E4] the overlap error names the work centre and sits between the buttons 
   await page.getByRole('button', { name: 'Create' }).click();
 
   const alert = page.getByRole('alert');
-  await expect(alert).toHaveText(
-    'These dates overlap another order on Konsulting Inc.',
-  );
+  await expect(alert).toHaveText('These dates overlap another order on Konsulting Inc.');
   await expect(alert).toHaveCSS('color', rgb('#b13600'));
   await expect(alert).toHaveCSS('background-color', rgb('#fffcf1'));
 

@@ -62,9 +62,15 @@ test('[I12] Load 5,000 orders: the counter shows 5000 and the bars in the DOM st
 
   // The counter follows the scroll and agrees with the DOM.
   await expect
-    .poll(async () => (await badgeCount(page, 'bars').textContent()) === String(await page.locator('.work-order-bar').count()))
+    .poll(
+      async () =>
+        (await badgeCount(page, 'bars').textContent()) ===
+        String(await page.locator('.work-order-bar').count()),
+    )
     .toBe(true);
-  await expect(badgeCount(page, 'columns')).toHaveText(String(await page.locator('.grid-header-cell').count()));
+  await expect(badgeCount(page, 'columns')).toHaveText(
+    String(await page.locator('.grid-header-cell').count()),
+  );
   await expect(badgeCount(page, 'frame')).toHaveText(/^\d+$/);
 });
 
@@ -82,9 +88,9 @@ test('[I12] the generated orders use every status and never overlap on a work ce
       await expect(page.locator('.grid-row')).toHaveCount(rows);
       await expect(page.locator('.work-order-bar')).toHaveCount(5000);
 
-      const statuses = await page.locator('.work-order-bar').evaluateAll((bars) => [
-        ...new Set(bars.map((bar) => bar.getAttribute('data-status'))),
-      ]);
+      const statuses = await page
+        .locator('.work-order-bar')
+        .evaluateAll((bars) => [...new Set(bars.map((bar) => bar.getAttribute('data-status')))]);
       expect(statuses.sort()).toEqual(['blocked', 'complete', 'in-progress', 'open']);
 
       // In each row the next bar starts after the previous one ends.
@@ -96,7 +102,9 @@ test('[I12] the generated orders use every status and never overlap on a work ce
           const ranges = [...row.querySelectorAll<HTMLElement>('.work-order-bar')]
             .map((bar) => ({ start: position(bar, 'start'), end: position(bar, 'end') }))
             .sort((a, b) => a.start - b.start);
-          return ranges.slice(1).flatMap((range, i) => (range.start > ranges[i].end ? [] : [rowIndex]));
+          return ranges
+            .slice(1)
+            .flatMap((range, i) => (range.start > ranges[i].end ? [] : [rowIndex]));
         }),
       );
       expect(touching).toEqual([]);
@@ -188,7 +196,9 @@ function columnsInDom(page: Page): Promise<number> {
 function columnsInRange(page: Page): Promise<number> {
   return page
     .locator('.grid__timeline')
-    .evaluate((timeline) => Number((timeline as HTMLElement).style.getPropertyValue('--column-count')));
+    .evaluate((timeline) =>
+      Number((timeline as HTMLElement).style.getPropertyValue('--column-count')),
+    );
 }
 
 function storedValues(page: Page): Promise<(string | null)[]> {

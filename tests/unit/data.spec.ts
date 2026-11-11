@@ -32,7 +32,10 @@ describe('sample data', () => {
     // One work centre holds several orders that do not overlap.
     const perCentre = new Map<string, number>();
     for (const document of SAMPLE_WORK_ORDER_DOCUMENTS) {
-      perCentre.set(document.data.workCenterId, (perCentre.get(document.data.workCenterId) ?? 0) + 1);
+      perCentre.set(
+        document.data.workCenterId,
+        (perCentre.get(document.data.workCenterId) ?? 0) + 1,
+      );
     }
     const withSeveral = [...perCentre.values()].filter((count) => count > 1);
     expect(withSeveral.length).toBeGreaterThan(0);
@@ -41,8 +44,7 @@ describe('sample data', () => {
     for (const document of SAMPLE_WORK_ORDER_DOCUMENTS) {
       const others = SAMPLE_WORK_ORDER_DOCUMENTS.filter(
         (other) =>
-          other.docId !== document.docId &&
-          other.data.workCenterId === document.data.workCenterId,
+          other.docId !== document.docId && other.data.workCenterId === document.data.workCenterId,
       );
       expect(overlaps(document.data, others), `${document.docId} overlaps`).toBe(false);
     }
@@ -87,9 +89,7 @@ describe('sample data', () => {
     };
 
     // The function does not change its input and does not need Angular.
-    const orders = [
-      { workCenterId: 'wc-genesis', startDate: '2026-10-18', endDate: '2026-11-30' },
-    ];
+    const orders = [{ workCenterId: 'wc-genesis', startDate: '2026-10-18', endDate: '2026-11-30' }];
     const snapshot = JSON.stringify(orders);
 
     expect(overlaps(candidate, orders)).toBe(false);

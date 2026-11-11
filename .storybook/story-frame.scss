@@ -4,5 +4,6 @@
 .story-bar-row {
   position: relative;
   height: t.$layout-grid-row-height;
+
   --column-width: #{t.$layout-grid-header-column-width-month};
 }

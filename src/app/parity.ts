@@ -8,13 +8,15 @@
 import { WorkOrderDocument } from './data/sample-data';
 
 /** True when the page was opened with `?parity=1`. Read once: the hook does not change at runtime. */
-export const PARITY_MODE = new URLSearchParams(globalThis.location?.search ?? '').get('parity') === '1';
+export const PARITY_MODE =
+  new URLSearchParams(globalThis.location?.search ?? '').get('parity') === '1';
 
 /**
  * `?parity=1&fixture=hover` selects the fixture of the hover artboards ("Options CTA Controls" and
  * "Edit and Delete Controls Expanded"). They show two bars more than the default artboard.
  */
-const HOVER_FIXTURE = new URLSearchParams(globalThis.location?.search ?? '').get('fixture') === 'hover';
+const HOVER_FIXTURE =
+  new URLSearchParams(globalThis.location?.search ?? '').get('fixture') === 'hover';
 
 /** The artboards mark September 2024 as the current month. */
 export const PARITY_TODAY = new Date(2024, 8, 1);

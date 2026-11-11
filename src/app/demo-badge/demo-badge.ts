@@ -17,10 +17,10 @@ import {
   selector: 'app-demo-badge',
   template: `
     <p class="demo-badge" role="status" aria-live="off">
-      Orders <span data-count="orders">{{ orderCount() }}</span>
-      · bars in DOM <span data-count="bars">{{ bars() }}</span>
-      · columns in DOM <span data-count="columns">{{ columns() }}</span>
-      · frame <span data-count="frame">{{ frame() }}</span> ms
+      Orders <span data-count="orders">{{ orderCount() }}</span> · bars in DOM
+      <span data-count="bars">{{ bars() }}</span> · columns in DOM
+      <span data-count="columns">{{ columns() }}</span> · frame
+      <span data-count="frame">{{ frame() }}</span> ms
     </p>
   `,
   styleUrl: './demo-badge.scss',

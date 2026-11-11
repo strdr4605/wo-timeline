@@ -14,6 +14,7 @@ $appear: #{t.$layout-motion-duration-base} #{t.$layout-motion-easing};
 .work-order-bar {
   position: absolute;
   top: 50%;
+
   // The bar starts and ends at the interpolated position of its dates, the rule of the day marker.
   left: calc((var(--start-index) + var(--start-fraction)) * var(--column-width));
   width: calc(
@@ -152,6 +153,7 @@ $appear: #{t.$layout-motion-duration-base} #{t.$layout-motion-easing};
 
 .work-order-bar__handle {
   cursor: ew-resize;
+
   // A touch drag on a handle resizes the bar, it does not scroll the grid.
   touch-action: none;
 }
@@ -222,6 +224,7 @@ $appear: #{t.$layout-motion-duration-base} #{t.$layout-motion-easing};
   padding: t.$layout-dropdown-menu-padding-y 0;
   border-radius: t.$layout-dropdown-menu-radius;
   background: t.$color-surface-panel;
+
   // The border is an inset shadow: in the design it takes no space and the hovered row covers it.
   box-shadow:
     0 t.$layout-dropdown-menu-shadow-y t.$layout-dropdown-menu-shadow-blur
@@ -230,6 +233,7 @@ $appear: #{t.$layout-motion-duration-base} #{t.$layout-motion-easing};
       t.$layout-dropdown-menu-shadow2-spread t.$layout-dropdown-menu-shadow2-color,
     inset 0 0 0 t.$component-bar-border-width
       rgba(t.$layout-dropdown-menu-border-color, t.$layout-dropdown-menu-border-alpha);
+
   // Only a fade: the menu box is at its place from the first frame, so a click or a measure
   // during the fade finds it there.
   opacity: 0;
@@ -282,6 +286,7 @@ $appear: #{t.$layout-motion-duration-base} #{t.$layout-motion-easing};
   left: 50%;
   z-index: 9;
   display: flex;
+
   // The tooltip may be wider than a short bar.
   width: max-content;
   align-items: center;
@@ -291,10 +296,11 @@ $appear: #{t.$layout-motion-duration-base} #{t.$layout-motion-easing};
   border-radius: t.$layout-tooltip-radius;
   background: t.$layout-tooltip-bg;
   box-shadow:
-    0 0 t.$layout-grid-cell-hover-tooltip-shadow-blur t.$layout-grid-cell-hover-tooltip-shadow-spread
-      t.$layout-grid-cell-hover-tooltip-shadow-color,
+    0 0 t.$layout-grid-cell-hover-tooltip-shadow-blur
+      t.$layout-grid-cell-hover-tooltip-shadow-spread t.$layout-grid-cell-hover-tooltip-shadow-color,
     0 t.$layout-grid-cell-hover-tooltip-shadow2-y t.$layout-grid-cell-hover-tooltip-shadow2-blur
-      t.$layout-grid-cell-hover-tooltip-shadow2-spread t.$layout-grid-cell-hover-tooltip-shadow2-color;
+      t.$layout-grid-cell-hover-tooltip-shadow2-spread
+      t.$layout-grid-cell-hover-tooltip-shadow2-color;
   transform: translateX(-50%);
   font-family: t.$font-family;
   font-size: t.$type-tooltip-size;

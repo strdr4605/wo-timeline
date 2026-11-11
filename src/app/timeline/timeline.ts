@@ -250,12 +250,7 @@ export function addDays(date: Date, days: number): Date {
 }
 
 function addHours(date: Date, hours: number): Date {
-  return new Date(
-    date.getFullYear(),
-    date.getMonth(),
-    date.getDate(),
-    date.getHours() + hours,
-  );
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours() + hours);
 }
 
 /** A local date as an ISO date, yyyy-mm-dd. */

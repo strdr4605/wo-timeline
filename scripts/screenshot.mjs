@@ -6,6 +6,7 @@
 // The viewport is 1440 x 1024 with a device scale factor of 1, so the PNG has the same
 // pixels as the exported Sketch artboard.
 
+/* global document -- page.evaluate callbacks run in the browser */
 import { chromium } from 'playwright';
 
 const args = process.argv.slice(2);

@@ -38,6 +38,7 @@
 .timescale-chip__value {
   display: flex;
   align-items: flex-start;
+
   // Centred, the Medium weight lands 1px below the design. The text box of the design is pinned.
   padding-top: t.$component-scale-chip-text-y;
   line-height: t.$component-scale-chip-text-line-height;
@@ -86,6 +87,7 @@
   left: 0;
   z-index: 3;
   width: t.$layout-dropdown-menu-width;
+
   // Sketch draws the 1px border inside the box, so the rows start 12px below the outer edge.
   padding: (t.$layout-dropdown-menu-padding-y - t.$layout-grid-vertical-grid-line-width) 0;
   background: t.$color-surface-panel;
@@ -97,6 +99,7 @@
       t.$layout-dropdown-menu-shadow-spread t.$layout-dropdown-menu-shadow-color,
     0 t.$layout-dropdown-menu-shadow2-y t.$layout-dropdown-menu-shadow2-blur
       t.$layout-dropdown-menu-shadow2-spread t.$layout-dropdown-menu-shadow2-color;
+
   // The menu is created on open, so it uses an animation, not a transition.
   animation: timescale-menu-enter #{t.$layout-motion-duration-base} #{t.$layout-motion-easing};
 }
@@ -113,8 +116,7 @@
   align-items: center;
   width: 100%;
   height: t.$layout-dropdown-menu-row-height;
-  padding: 0
-    (t.$layout-dropdown-menu-row-padding-x - t.$layout-grid-vertical-grid-line-width);
+  padding: 0 (t.$layout-dropdown-menu-row-padding-x - t.$layout-grid-vertical-grid-line-width);
   border: 0;
   background: transparent;
   font-family: t.$font-family;

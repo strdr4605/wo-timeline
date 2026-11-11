@@ -43,7 +43,9 @@ test('[R1] the top bar shows the neutral WO Timeline wordmark and the app uses t
     await page.locator('.grid-rail-divider').focus();
     await page.keyboard.press('ArrowRight');
 
-    await expect.poll(() => page.evaluate((key) => localStorage.getItem(key), RAIL_WIDTH_KEY)).toBe('320');
+    await expect
+      .poll(() => page.evaluate((key) => localStorage.getItem(key), RAIL_WIDTH_KEY))
+      .toBe('320');
     const keys = await page.evaluate(() => Object.keys(localStorage).sort());
     expect(keys).toEqual([RAIL_WIDTH_KEY, WORK_ORDERS_KEY].sort());
   });

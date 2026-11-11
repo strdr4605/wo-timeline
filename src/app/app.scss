@@ -23,6 +23,7 @@
 // The head is white from the top bar down to the grid header band.
 .page__head {
   height: (t.$layout-grid-header-top - t.$layout-top-bar-height);
+
   // Padding, not a title margin: a margin would collapse through the head and show the page colour.
   padding-top: (t.$layout-page-title-y - t.$layout-top-bar-height);
   padding-left: t.$layout-toolbar-timescale-x;
@@ -50,6 +51,7 @@
 // A secondary button with the frame and the value font of the timescale chip. No new colours.
 .today-button {
   height: t.$component-scale-chip-height;
+
   // Pinned to the text box of the chip value, so "Today" sits on the same baseline as "Month".
   padding: t.$component-scale-chip-text-y t.$layout-badge-padding-x 0;
   display: flex;

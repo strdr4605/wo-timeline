@@ -127,7 +127,7 @@ test('[C3] every status has the colours of the design', async ({ page }) => {
 test('[C4] the bar is 38 high, has a radius of 8 and a 1px border', async ({ page }) => {
   await page.goto('/');
 
-  const bar = page.locator('.work-order-bar[data-status=\'in-progress\']').first();
+  const bar = page.locator(".work-order-bar[data-status='in-progress']").first();
   const box = await bar.boundingBox();
 
   expect(Math.round(box!.height)).toBe(38);

@@ -16,10 +16,10 @@ message in the drawer.
 
 ## Requirements
 
-| Tool | Version |
-|---|---|
+| Tool    | Version                              |
+| ------- | ------------------------------------ |
 | Node.js | 22.12 or later. Tested with 26.13.0. |
-| npm | Tested with 11.20.0. |
+| npm     | Tested with 11.20.0.                 |
 
 The repository has no `.nvmrc` file and no `engines` field in `package.json`. The minimum comes
 from the dependencies: Vitest 5.1.0 needs Node `^22.12.0 || ^24.0.0 || >=26.0.0`, and Angular
@@ -63,15 +63,15 @@ and `src/app/parity.ts`.
 The Playwright suite uses the dev server on port 4200. When no server answers, Playwright
 starts one with `npm run start`.
 
-| Command | What it does |
-|---|---|
-| `npm run build` | Builds the app into `dist/`. |
-| `npx vitest run` | Runs the unit tests in `tests/unit/` (date maths, overlap, sample data, tokens, drawer form). |
-| `npx playwright test` | Runs the end-to-end tests in `tests/e2e/`, headless, in Chromium at 1440 x 1024. |
-| `npm run test:all` | Runs the three commands above, in that sequence. |
+| Command                        | What it does                                                                                                                                                                  |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `npm run build`                | Builds the app into `dist/`.                                                                                                                                                  |
+| `npx vitest run`               | Runs the unit tests in `tests/unit/` (date maths, overlap, sample data, tokens, drawer form).                                                                                 |
+| `npx playwright test`          | Runs the end-to-end tests in `tests/e2e/`, headless, in Chromium at 1440 x 1024.                                                                                              |
+| `npm run test:all`             | Runs the three commands above, in that sequence.                                                                                                                              |
 | `DEMO_HEADLESS=1 npm run demo` | Runs the suite with `playwright.demo.config.ts` (slow motion, one video for each requirement test, in `docs/demo/videos/`). Without `DEMO_HEADLESS=1`, a Chrome window opens. |
-| `npm run storybook` | Starts Storybook on <http://localhost:6006>. |
-| `npm run build-storybook` | Builds a static Storybook into `storybook-static/`. |
+| `npm run storybook`            | Starts Storybook on <http://localhost:6006>.                                                                                                                                  |
+| `npm run build-storybook`      | Builds a static Storybook into `storybook-static/`.                                                                                                                           |
 
 The design checks need the dev server on port 4200:
 
@@ -94,18 +94,18 @@ node docs/requirements/verify.mjs
 
 ### Code structure
 
-| Folder or file | Contents |
-|---|---|
-| `src/app/app.ts` | The page: top bar, timescale, Today button, drawer state, resize messages. |
+| Folder or file                 | Contents                                                                                                               |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------- |
+| `src/app/app.ts`               | The page: top bar, timescale, Today button, drawer state, resize messages.                                             |
 | `src/app/timeline/timeline.ts` | The date maths of the columns: one column for each hour, day, week or month, and the position of a date in its column. |
-| `src/app/timeline-grid/` | The work centre rail, the header, the grid, the today line, scroll and virtualization. |
-| `src/app/work-order-bar/` | One bar: name, status badge, tooltip, three-dot menu, resize handles. |
-| `src/app/timescale-chip/` | The Timescale dropdown. |
-| `src/app/work-order-drawer/` | The create and edit drawer. `drawer-form.ts` holds the form defaults and the date format. |
-| `src/app/data/` | Sample data, the overlap function, and `ScheduleService` (the store). |
-| `src/app/parity.ts` | Parity mode and the design fixtures. |
-| `src/app/keyboard.ts` | The keyboard model that the bar menu and the timescale menu share. |
-| `src/styles/` | Global SCSS. `_tokens.scss` is generated. |
+| `src/app/timeline-grid/`       | The work centre rail, the header, the grid, the today line, scroll and virtualization.                                 |
+| `src/app/work-order-bar/`      | One bar: name, status badge, tooltip, three-dot menu, resize handles.                                                  |
+| `src/app/timescale-chip/`      | The Timescale dropdown.                                                                                                |
+| `src/app/work-order-drawer/`   | The create and edit drawer. `drawer-form.ts` holds the form defaults and the date format.                              |
+| `src/app/data/`                | Sample data, the overlap function, and `ScheduleService` (the store).                                                  |
+| `src/app/parity.ts`            | Parity mode and the design fixtures.                                                                                   |
+| `src/app/keyboard.ts`          | The keyboard model that the bar menu and the timescale menu share.                                                     |
+| `src/styles/`                  | Global SCSS. `_tokens.scss` is generated.                                                                              |
 
 ### Decisions
 
@@ -126,7 +126,7 @@ node docs/requirements/verify.mjs
   does not use the storage.
 - **Infinite scroll with logical offsets.** The grid keeps its range as two column offsets from
   today (`firstOffset..lastOffset`), not as an array of columns. `columnFor(timescale, today,
-  offset)` builds a column. When you scroll near an edge, the range grows. When columns are
+offset)` builds a column. When you scroll near an edge, the range grows. When columns are
   added on the left, the scroll position is moved by the same width, so the view does not jump.
 - **Virtualization.** A custom window with signals, not the CDK virtual scroll: the bars are
   absolute and go across many columns. A scroll signal gives the visible columns plus a buffer.
@@ -145,43 +145,43 @@ node docs/requirements/verify.mjs
 
 Only the libraries in `package.json` are used.
 
-| Library | Reason |
-|---|---|
-| `@angular/*` 20.3 | The brief asks for Angular 17 or later, standalone components and TypeScript strict mode. |
-| `@angular/forms` | The drawer form uses Reactive Forms (`FormGroup`, `FormControl`, `Validators`), as the brief asks. |
-| `@ng-bootstrap/ng-bootstrap` 19.0.1 | The brief asks for `ngb-datepicker` for the start and end dates. |
-| `@popperjs/core` 2.11.8 | Peer dependency of ng-bootstrap. It places the datepicker popup. |
-| `@angular/localize` | ng-bootstrap needs `$localize`. It is loaded as a polyfill in `angular.json`. |
-| `@ng-select/ng-select` 20.7.0 | The brief asks for ng-select for the status field. It is restyled to the design pill. |
-| `rxjs`, `zone.js`, `tslib` | Runtime dependencies of Angular. |
-| `vitest` 5.1.0 | Fast unit tests for the pure functions (date maths, overlap, data, tokens) without a browser. |
-| `@playwright/test`, `playwright` 1.65.0 | End-to-end tests in a headless Chromium, and the demo videos. |
-| `@axe-core/playwright` | Accessibility checks in the e2e suite. |
-| `pixelmatch`, `pngjs` | `scripts/pixel-check.mjs` compares the app screenshot with the artboard PNG. |
-| `storybook`, `@storybook/angular` 10.6.5 | Stories for the bar (one for each status), the timescale chip and the drawer. |
-| `typescript` 5.9 | The language of the app, in strict mode. |
+| Library                                  | Reason                                                                                             |
+| ---------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `@angular/*` 20.3                        | The brief asks for Angular 17 or later, standalone components and TypeScript strict mode.          |
+| `@angular/forms`                         | The drawer form uses Reactive Forms (`FormGroup`, `FormControl`, `Validators`), as the brief asks. |
+| `@ng-bootstrap/ng-bootstrap` 19.0.1      | The brief asks for `ngb-datepicker` for the start and end dates.                                   |
+| `@popperjs/core` 2.11.8                  | Peer dependency of ng-bootstrap. It places the datepicker popup.                                   |
+| `@angular/localize`                      | ng-bootstrap needs `$localize`. It is loaded as a polyfill in `angular.json`.                      |
+| `@ng-select/ng-select` 20.7.0            | The brief asks for ng-select for the status field. It is restyled to the design pill.              |
+| `rxjs`, `zone.js`, `tslib`               | Runtime dependencies of Angular.                                                                   |
+| `vitest` 5.1.0                           | Fast unit tests for the pure functions (date maths, overlap, data, tokens) without a browser.      |
+| `@playwright/test`, `playwright` 1.65.0  | End-to-end tests in a headless Chromium, and the demo videos.                                      |
+| `@axe-core/playwright`                   | Accessibility checks in the e2e suite.                                                             |
+| `pixelmatch`, `pngjs`                    | `scripts/pixel-check.mjs` compares the app screenshot with the artboard PNG.                       |
+| `storybook`, `@storybook/angular` 10.6.5 | Stories for the bar (one for each status), the timescale chip and the drawer.                      |
+| `typescript` 5.9                         | The language of the app, in strict mode.                                                           |
 
 ## Bonus items done
 
 The full list with evidence is in `docs/requirements/acceptance-criteria.md`.
 
-| Id | Item |
-|---|---|
-| C7 | Tooltip on bar hover: name, status, full date range. |
-| C8, C9 | Drag handles at both bar ends. A drag resizes the order, snapped to days, with checks and keys. |
-| D9, D10 | Escape closes the drawer. Tab moves through the fields. |
-| F5 | localStorage persistence. |
-| H4, H6 | AI prompt log in the repo. |
-| I1 | Infinite horizontal scroll. |
-| I2 | Today button. |
-| I3 | Animations under 300 ms. `prefers-reduced-motion` turns them off. |
-| I4 | Automated test suite, headless. |
-| I5 | Accessibility: names, keyboard, focus trap, axe. |
-| I6 | OnPush and stable track keys. |
-| I9 | Virtual scrolling. |
-| I10 | Drag or keys resize the work centre column. The width is saved. |
-| I11 | Storybook. |
-| J1, J2 | Demo config with one video for each requirement test. |
+| Id      | Item                                                                                            |
+| ------- | ----------------------------------------------------------------------------------------------- |
+| C7      | Tooltip on bar hover: name, status, full date range.                                            |
+| C8, C9  | Drag handles at both bar ends. A drag resizes the order, snapped to days, with checks and keys. |
+| D9, D10 | Escape closes the drawer. Tab moves through the fields.                                         |
+| F5      | localStorage persistence.                                                                       |
+| H4, H6  | AI prompt log in the repo.                                                                      |
+| I1      | Infinite horizontal scroll.                                                                     |
+| I2      | Today button.                                                                                   |
+| I3      | Animations under 300 ms. `prefers-reduced-motion` turns them off.                               |
+| I4      | Automated test suite, headless.                                                                 |
+| I5      | Accessibility: names, keyboard, focus trap, axe.                                                |
+| I6      | OnPush and stable track keys.                                                                   |
+| I9      | Virtual scrolling.                                                                              |
+| I10     | Drag or keys resize the work centre column. The width is saved.                                 |
+| I11     | Storybook.                                                                                      |
+| J1, J2  | Demo config with one video for each requirement test.                                           |
 
 ## AI workflow
 

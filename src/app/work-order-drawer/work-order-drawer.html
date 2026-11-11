@@ -1,3 +1,4 @@
+<!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -- the backdrop is a pointer target; Escape closes the drawer from the keyboard -->
 <div class="drawer-overlay" [class.drawer-overlay--open]="open()" (click)="cancel()"></div>
 
 <aside
@@ -14,7 +15,9 @@
     <header class="drawer__head">
       <div>
         <h2 id="drawer-title" class="drawer__title">Work Order Details</h2>
-        <p id="drawer-subtitle" class="drawer__subtitle">Specify the dates, name and status for this order</p>
+        <p id="drawer-subtitle" class="drawer__subtitle">
+          Specify the dates, name and status for this order
+        </p>
       </div>
 
       <div class="drawer__actions">
@@ -34,9 +37,7 @@
 
     <!-- The buttons sit in the head, so the message that blocks them sits right under it. -->
     @if (overlapCenter(); as center) {
-      <p class="drawer__alert" role="alert">
-        These dates overlap another order on {{ center }}.
-      </p>
+      <p class="drawer__alert" role="alert">These dates overlap another order on {{ center }}.</p>
     }
 
     <div class="drawer__fields">
@@ -71,7 +72,9 @@
           [searchable]="false"
         >
           <ng-template ng-label-tmp let-item="item">
-            <span class="drawer-status__pill" [attr.data-status]="item.value">{{ item.label }}</span>
+            <span class="drawer-status__pill" [attr.data-status]="item.value">{{
+              item.label
+            }}</span>
           </ng-template>
         </ng-select>
       </div>
@@ -113,7 +116,9 @@
           #startPicker="ngbDatepicker"
           (click)="toggleCalendar(startPicker, $any($event.target))"
           (focus)="editedDate.set('startDate')"
-          (input)="editedDate.set('startDate'); showTypedDate(startPicker, $any($event.target).value)"
+          (input)="
+            editedDate.set('startDate'); showTypedDate(startPicker, $any($event.target).value)
+          "
           (blur)="editedDate.set(null)"
           autocomplete="off"
           [class.drawer-field__control--invalid]="dateError('startDate')"

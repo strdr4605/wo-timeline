@@ -41,7 +41,12 @@ test('[A3] the status field is ng-select, restyled, with no system dropdown', as
   await status.click();
   const panel = page.locator('ng-dropdown-panel');
   await expect(panel).toBeVisible();
-  await expect(panel.locator('.ng-option')).toHaveText(['Open', 'In progress', 'Complete', 'Blocked']);
+  await expect(panel.locator('.ng-option')).toHaveText([
+    'Open',
+    'In progress',
+    'Complete',
+    'Blocked',
+  ]);
 
   // The theme of the design replaces the default ng-select border colour (#ccc).
   const border = await status
@@ -62,7 +67,9 @@ test('[A4] the start and end dates use ngb-datepicker', async ({ page }) => {
   }
 });
 
-test('[I7] a phone screen keeps the timeline, the scroll and the drawer usable', async ({ page }) => {
+test('[I7] a phone screen keeps the timeline, the scroll and the drawer usable', async ({
+  page,
+}) => {
   await page.setViewportSize({ width: 375, height: 667 });
   await page.goto('/');
 
@@ -82,7 +89,12 @@ test('[I7] a phone screen keeps the timeline, the scroll and the drawer usable',
   await page.mouse.click(330, 420);
   await expect(page.locator('.drawer')).toHaveClass(/drawer--open/);
   await page.waitForTimeout(300);
-  expect(await page.locator('.drawer').boundingBox()).toEqual({ x: 0, y: 0, width: 375, height: 667 });
+  expect(await page.locator('.drawer').boundingBox()).toEqual({
+    x: 0,
+    y: 0,
+    width: 375,
+    height: 667,
+  });
   await expect(page.locator('#drawer-name')).toBeInViewport();
 });
 
@@ -117,7 +129,9 @@ async function layoutOf(page: Page) {
   return page.evaluate(() => {
     const box = (selector: string) => document.querySelector(selector)!.getBoundingClientRect();
     const style = (selector: string) => getComputedStyle(document.querySelector(selector)!);
-    const rows = [...document.querySelectorAll('.grid-row')].map((row) => row.getBoundingClientRect().height);
+    const rows = [...document.querySelectorAll('.grid-row')].map(
+      (row) => row.getBoundingClientRect().height,
+    );
     const bar = style('.work-order-bar');
 
     return {

@@ -55,7 +55,12 @@ describe('overlap', () => {
     expect(overlaps(edited, [EXISTING])).toBe(false);
 
     // The other orders of the work centre still count.
-    const neighbour = { ...EXISTING, docId: 'wo-neighbour', startDate: '2026-03-24', endDate: '2026-03-30' };
+    const neighbour = {
+      ...EXISTING,
+      docId: 'wo-neighbour',
+      startDate: '2026-03-24',
+      endDate: '2026-03-30',
+    };
     expect(overlaps(edited, [EXISTING, neighbour])).toBe(true);
   });
 
@@ -66,9 +71,9 @@ describe('overlap', () => {
   });
 
   test('[E5] the same dates on another work centre are allowed', () => {
-    expect(overlaps(order('2026-03-10', '2026-03-20', { workCenterId: 'wc-spartan' }), [EXISTING])).toBe(
-      false,
-    );
+    expect(
+      overlaps(order('2026-03-10', '2026-03-20', { workCenterId: 'wc-spartan' }), [EXISTING]),
+    ).toBe(false);
   });
 });
 

@@ -29,7 +29,9 @@ describe('demo data generator', () => {
 
   test('[I12] 55 work centres fill about two years before and after today', () => {
     const centers = [...SAMPLE_CENTERS, ...generateDemoCenters(50)];
-    const dates = generateDemoOrders(centers, 5000, TODAY).flatMap((o) => [o.startDate, o.endDate]).sort();
+    const dates = generateDemoOrders(centers, 5000, TODAY)
+      .flatMap((o) => [o.startDate, o.endDate])
+      .sort();
 
     expect(dates[0] >= isoDate(addDays(TODAY, -740))).toBe(true);
     expect(dates.at(-1)! <= isoDate(addDays(TODAY, 740))).toBe(true);

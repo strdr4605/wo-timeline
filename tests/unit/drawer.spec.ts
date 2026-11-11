@@ -68,9 +68,9 @@ describe('drawer form validation', () => {
     expect(isEndAfterStart(start, start)).toBe(false);
     expect(isEndAfterStart(start, { year: 2026, month: 2, day: 28 })).toBe(false);
     // The month is compared as a number, not as text: 10 is after 9.
-    expect(isEndAfterStart({ year: 2026, month: 9, day: 30 }, { year: 2026, month: 10, day: 1 })).toBe(
-      true,
-    );
+    expect(
+      isEndAfterStart({ year: 2026, month: 9, day: 30 }, { year: 2026, month: 10, day: 1 }),
+    ).toBe(true);
   });
 
   test('[E1] a valid form gives an ISO draft on the work centre of the request', () => {

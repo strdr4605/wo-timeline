@@ -3,18 +3,19 @@
 // The shadows that the drawer fields and the global ng-select / datepicker rules share.
 
 $control-shadow:
-  0 t.$component-text-field-shadow-y t.$component-text-field-shadow-blur t.$component-text-field-shadow-spread
-    t.$component-text-field-shadow-color,
-  0 t.$component-text-field-shadow-y2 t.$component-text-field-shadow-blur2 t.$component-text-field-shadow-spread2
-    t.$component-text-field-shadow-color2;
+  0 t.$component-text-field-shadow-y t.$component-text-field-shadow-blur
+    t.$component-text-field-shadow-spread t.$component-text-field-shadow-color,
+  0 t.$component-text-field-shadow-y2 t.$component-text-field-shadow-blur2
+    t.$component-text-field-shadow-spread2 t.$component-text-field-shadow-color2;
 
 // The design draws the focus border outside the box, so the box keeps its size.
 $focus-ring: 0 0 0 t.$component-text-field-focus-ring-width t.$component-text-field-focus-ring-color;
 
+// The dropdown panels share one border ring and two soft shadows.
 $menu-shadow:
   0 0 0 t.$layout-dropdown-menu-border-width
     rgba(t.$layout-dropdown-menu-border-color, t.$layout-dropdown-menu-border-alpha),
-  0 t.$layout-dropdown-menu-shadow-y t.$layout-dropdown-menu-shadow-blur t.$layout-dropdown-menu-shadow-spread
-    t.$layout-dropdown-menu-shadow-color,
-  0 t.$layout-dropdown-menu-shadow2-y t.$layout-dropdown-menu-shadow2-blur t.$layout-dropdown-menu-shadow2-spread
-    t.$layout-dropdown-menu-shadow2-color;
+  0 t.$layout-dropdown-menu-shadow-y t.$layout-dropdown-menu-shadow-blur
+    t.$layout-dropdown-menu-shadow-spread t.$layout-dropdown-menu-shadow-color,
+  0 t.$layout-dropdown-menu-shadow2-y t.$layout-dropdown-menu-shadow2-blur
+    t.$layout-dropdown-menu-shadow2-spread t.$layout-dropdown-menu-shadow2-color;

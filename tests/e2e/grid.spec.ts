@@ -189,7 +189,11 @@ test('[B11] column lines run 747 down from the header line in every timescale', 
 
   // Normal mode: the same lines with the column width of each timescale.
   await page.goto('/');
-  for (const [option, width] of [['Day', 48], ['Week', 114], ['Month', 114]] as const) {
+  for (const [option, width] of [
+    ['Day', 48],
+    ['Week', 114],
+    ['Month', 114],
+  ] as const) {
     await page.locator('.timescale-chip__value').click();
     await page.locator('.timescale-menu__item', { hasText: option }).click();
     const size = () =>
@@ -208,7 +212,10 @@ test('[B11] column lines run 747 down from the header line in every timescale', 
 async function openParity(page: Page) {
   await page.goto('/?parity=1');
   await expect
-    .poll(async () => (await page.locator('.grid-header-cell', { hasText: 'Aug 2024' }).boundingBox())!.x)
+    .poll(
+      async () =>
+        (await page.locator('.grid-header-cell', { hasText: 'Aug 2024' }).boundingBox())!.x,
+    )
     .toBe(483);
 }
 
@@ -220,9 +227,9 @@ async function style(page: Page, selector: string, property: keyof CSSStyleDecla
 }
 
 async function tops(page: Page, selector: string) {
-  const boxes = await page.locator(selector).evaluateAll((elements) =>
-    elements.map((element) => element.getBoundingClientRect().top),
-  );
+  const boxes = await page
+    .locator(selector)
+    .evaluateAll((elements) => elements.map((element) => element.getBoundingClientRect().top));
   return boxes;
 }
 

@@ -1,21 +1,35 @@
 @use 'sass:math';
 @use '../../styles/tokens' as t;
 
-$header-height: (t.$layout-grid-header-bottom - t.$layout-grid-header-top + t.$layout-grid-horizontal-grid-line-width);
+$header-height: (
+  t.$layout-grid-header-bottom - t.$layout-grid-header-top +
+    t.$layout-grid-horizontal-grid-line-width
+);
 $line: t.$layout-grid-horizontal-grid-line-width solid t.$layout-grid-horizontal-grid-line-color;
 
 // The design draws the 3px today line centred on the 1px column line left of the current month.
-$today-offset: math.div(t.$layout-grid-today-marker-width + t.$layout-grid-vertical-grid-line-width, 2);
+$today-offset: math.div(
+  t.$layout-grid-today-marker-width + t.$layout-grid-vertical-grid-line-width,
+  2
+);
 
 // The user can drag the rail edge. A narrow screen keeps part of the timeline visible next to
 // the sticky rail.
 $rail-width: min(
-  clamp(#{t.$layout-rail-resize-min-width}, var(--rail-width, #{t.$layout-grid-left-rail-w}), #{t.$layout-rail-resize-max-width}),
+  clamp(
+    #{t.$layout-rail-resize-min-width},
+    var(--rail-width, #{t.$layout-grid-left-rail-w}),
+    #{t.$layout-rail-resize-max-width}
+  ),
   40vw
 );
 
 // The resize line is centred on the 1px timeline border right of the rail, as in the design.
-$rail-line-left: math.div(t.$layout-rail-resize-handle-width + t.$layout-grid-vertical-grid-line-width - t.$layout-rail-resize-line-width, 2);
+$rail-line-left: math.div(
+  t.$layout-rail-resize-handle-width + t.$layout-grid-vertical-grid-line-width -
+    t.$layout-rail-resize-line-width,
+  2
+);
 
 // The grid is the card under the page head: it runs to the page bottom and scrolls both ways.
 .grid {
@@ -72,7 +86,10 @@ $rail-line-left: math.div(t.$layout-rail-resize-handle-width + t.$layout-grid-ve
   &:first-child {
     height: t.$layout-grid-first-row-height;
     border-bottom-color: transparent;
-    padding-top: (t.$layout-grid-first-row-height - t.$layout-grid-row-height + t.$layout-grid-horizontal-grid-line-width);
+    padding-top: (
+      t.$layout-grid-first-row-height - t.$layout-grid-row-height +
+        t.$layout-grid-horizontal-grid-line-width
+    );
   }
 }
 
@@ -95,15 +112,18 @@ $rail-line-left: math.div(t.$layout-rail-resize-handle-width + t.$layout-grid-ve
 .grid__timeline {
   position: relative;
   isolation: isolate;
+
   // The rows and their hover run to the right edge of the page, past the last column.
   flex: 1 0 auto;
+
   // After the rail edge, which is last in the DOM.
   order: 2;
+
   // A bar past the last column must not make the scroll area wider. It is cut until the range
   // extends. Clip, not hidden: clip makes no scroll container, so the sticky header still works.
   overflow-x: clip;
-  border-left: t.$layout-grid-vertical-grid-line-width solid
-    t.$layout-grid-vertical-grid-line-color;
+  border-left: t.$layout-grid-vertical-grid-line-width solid t.$layout-grid-vertical-grid-line-color;
+
   // The body fill of the design stops 2px above the page bottom. The page under it is white.
   border-bottom: t.$layout-grid-body-fill-bottom-gap solid t.$layout-grid-header-fill;
   background: t.$layout-grid-body-fill;
@@ -242,6 +262,7 @@ $rail-line-left: math.div(t.$layout-rail-resize-handle-width + t.$layout-grid-ve
 // The empty cell under the pointer: a box around the pointer, the tooltip over it.
 .grid-cell-hover {
   position: absolute;
+
   // No transform: a transform makes a stacking context, and the sticky header then covers the
   // tooltip of the first row.
   top: calc(50% - #{math.div(t.$layout-grid-cell-hover-height, 2)});
@@ -256,7 +277,10 @@ $rail-line-left: math.div(t.$layout-rail-resize-handle-width + t.$layout-grid-ve
 
 .grid-cell-hover__tooltip {
   position: absolute;
-  bottom: calc(100% + #{t.$layout-grid-cell-hover-tooltip-gap + t.$layout-grid-cell-hover-border-width});
+  bottom: calc(
+    100% + #{t.$layout-grid-cell-hover-tooltip-gap + t.$layout-grid-cell-hover-border-width}
+  );
+
   // The token offset counts from the outer box edge. CSS counts from inside the box border.
   left: (t.$layout-grid-cell-hover-tooltip-offset-x - t.$layout-grid-cell-hover-border-width);
   z-index: 3;
@@ -268,10 +292,11 @@ $rail-line-left: math.div(t.$layout-rail-resize-handle-width + t.$layout-grid-ve
   border-radius: t.$layout-tooltip-radius;
   background: t.$layout-tooltip-bg;
   box-shadow:
-    0 0 t.$layout-grid-cell-hover-tooltip-shadow-blur t.$layout-grid-cell-hover-tooltip-shadow-spread
-      t.$layout-grid-cell-hover-tooltip-shadow-color,
+    0 0 t.$layout-grid-cell-hover-tooltip-shadow-blur
+      t.$layout-grid-cell-hover-tooltip-shadow-spread t.$layout-grid-cell-hover-tooltip-shadow-color,
     0 t.$layout-grid-cell-hover-tooltip-shadow2-y t.$layout-grid-cell-hover-tooltip-shadow2-blur
-      t.$layout-grid-cell-hover-tooltip-shadow2-spread t.$layout-grid-cell-hover-tooltip-shadow2-color;
+      t.$layout-grid-cell-hover-tooltip-shadow2-spread
+      t.$layout-grid-cell-hover-tooltip-shadow2-color;
   font-family: t.$font-family;
   font-size: t.$type-tooltip-size;
   font-weight: t.$type-tooltip-font-weight;
@@ -359,10 +384,11 @@ $rail-line-left: math.div(t.$layout-rail-resize-handle-width + t.$layout-grid-ve
   border-radius: t.$layout-tooltip-radius;
   background: t.$layout-tooltip-bg;
   box-shadow:
-    0 0 t.$layout-grid-cell-hover-tooltip-shadow-blur t.$layout-grid-cell-hover-tooltip-shadow-spread
-      t.$layout-grid-cell-hover-tooltip-shadow-color,
+    0 0 t.$layout-grid-cell-hover-tooltip-shadow-blur
+      t.$layout-grid-cell-hover-tooltip-shadow-spread t.$layout-grid-cell-hover-tooltip-shadow-color,
     0 t.$layout-grid-cell-hover-tooltip-shadow2-y t.$layout-grid-cell-hover-tooltip-shadow2-blur
-      t.$layout-grid-cell-hover-tooltip-shadow2-spread t.$layout-grid-cell-hover-tooltip-shadow2-color;
+      t.$layout-grid-cell-hover-tooltip-shadow2-spread
+      t.$layout-grid-cell-hover-tooltip-shadow2-color;
   font-family: t.$font-family;
   font-size: t.$type-tooltip-size;
   font-weight: t.$type-tooltip-font-weight;

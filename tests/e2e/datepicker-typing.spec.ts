@@ -104,7 +104,9 @@ test('[D12] after a mouse pick, typed text shows no date error until the field l
   const error = page.locator('#drawer-start-error');
 
   await start.click();
-  await page.locator('ngb-datepicker .ngb-dp-day[aria-label="Tuesday, September 10, 2024"]').click();
+  await page
+    .locator('ngb-datepicker .ngb-dp-day[aria-label="Tuesday, September 10, 2024"]')
+    .click();
   await expect(start).toHaveValue('10.09.2024');
   await expect(start).toBeFocused();
 

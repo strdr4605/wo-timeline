@@ -68,7 +68,10 @@ test('[D3] a click on an empty cell opens the create drawer with the start date 
 
   // A click on a bar does not open the drawer.
   await page.locator('.drawer-overlay').click({ position: { x: 100, y: 600 } });
-  await page.locator('.work-order-bar').first().click({ position: { x: 150, y: 19 } });
+  await page
+    .locator('.work-order-bar')
+    .first()
+    .click({ position: { x: 150, y: 19 } });
   await expect(page.locator('.drawer')).not.toHaveClass(/drawer--open/);
 });
 
@@ -158,9 +161,9 @@ test('[D11] the text field shows the placeholder state and the focus state of th
   expect(await name.boundingBox()).toEqual({ x: 874, y: 131, width: 542, height: 38 });
   expect(await style(page, '#drawer-name', 'borderTopColor')).toBe(rgb('#d8dceb'));
   expect(await style(page, '#drawer-name', 'borderTopLeftRadius')).toBe('5px');
-  expect(
-    await name.evaluate((input) => getComputedStyle(input, '::placeholder').color),
-  ).toBe(rgb('#a4aac0'));
+  expect(await name.evaluate((input) => getComputedStyle(input, '::placeholder').color)).toBe(
+    rgb('#a4aac0'),
+  );
 
   await name.focus();
   // The focus border of the design is 2px #aaafff outside the box.

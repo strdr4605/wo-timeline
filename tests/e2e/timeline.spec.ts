@@ -44,9 +44,7 @@ test('[B2] the timeline grid scrolls horizontally', async ({ page }) => {
   await page.goto('/');
 
   const grid = page.locator('.grid');
-  const scrollable = await grid.evaluate(
-    (element) => element.scrollWidth > element.clientWidth,
-  );
+  const scrollable = await grid.evaluate((element) => element.scrollWidth > element.clientWidth);
   expect(scrollable).toBe(true);
 
   const firstCellBefore = await page.locator('.grid-header-cell').first().boundingBox();
@@ -190,7 +188,9 @@ test('[G3] the wordmark sits at (101, 20), 80 x 10, on a top bar without a borde
 
   const logo = page.locator('.top-bar .logo');
   await expect(logo).toHaveAttribute('alt', 'WO Timeline');
-  expect(await logo.evaluate((element: HTMLImageElement) => element.naturalWidth)).toBeGreaterThan(0);
+  expect(await logo.evaluate((element: HTMLImageElement) => element.naturalWidth)).toBeGreaterThan(
+    0,
+  );
   expect(await logo.boundingBox()).toEqual({ x: 101, y: 20, width: 80, height: 10 });
 
   const bar = page.locator('.top-bar');
@@ -213,4 +213,3 @@ test('parity mode shows the artboard view: Aug 2024 first, Sep 2024 current, the
   await expect(page.locator('app-work-order-bar')).toHaveCount(4);
   await expect(page.locator('.timescale-chip__value')).toContainText('Month');
 });
-

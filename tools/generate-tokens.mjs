@@ -40,7 +40,7 @@ const valueFor = (value, path) => {
   }
   // Hex colours stay unquoted so Sass emits a valid CSS colour.
   if (value.startsWith('#')) return value;
-  return `"${value}"`;
+  return `'${value}'`;
 };
 
 const rows = [];

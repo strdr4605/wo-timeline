@@ -69,6 +69,7 @@
         </div>
 
         @for (center of workCenters(); track center.id; let first = $first) {
+          <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -- the empty cell is a pointer target in the design; no keyboard create path yet, adding one is a behaviour change outside R3 -->
           <div
             class="grid-row"
             [class.grid-row--first]="first"
@@ -93,7 +94,7 @@
                 [end]="bar.end"
                 (edit)="editOrder.emit(bar.order)"
                 (remove)="deleteOrder.emit(bar.order)"
-                (resize)="onBarResize(bar, $event)"
+                (resized)="onBarResize(bar, $event)"
                 (nudge)="onBarNudge(bar, $event)"
                 (focusin)="focusedOrderId.set(bar.source.docId)"
                 (focusout)="onBarFocusOut(bar.source.docId, $event)"

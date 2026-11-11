@@ -1,7 +1,9 @@
 @use '../../styles/tokens' as t;
 @use '../../styles/control-shadows' as *;
 
-$field-gap: (t.$layout-panel-field-h - t.$layout-panel-field-label-h - t.$layout-panel-field-control-h);
+$field-gap: (
+  t.$layout-panel-field-h - t.$layout-panel-field-label-h - t.$layout-panel-field-control-h
+);
 $duration: #{t.$layout-motion-duration-base};
 $slide: transform $duration #{t.$layout-motion-easing};
 $fade: opacity $duration #{t.$layout-motion-easing};
@@ -31,14 +33,18 @@ $fade: opacity $duration #{t.$layout-motion-easing};
   right: 0;
   bottom: 0;
   z-index: 11;
+
   // A screen narrower than the panel shows the full panel, not its right part.
   width: min(#{t.$layout-panel-width}, 100vw);
   border-radius: t.$layout-panel-radius 0 0 t.$layout-panel-radius;
   background: t.$color-surface-panel;
   box-shadow:
-    0 t.$layout-panel-shadow-y t.$layout-panel-shadow-blur t.$layout-panel-shadow-spread t.$layout-panel-shadow-color,
-    0 t.$layout-panel-shadow-y2 t.$layout-panel-shadow-blur2 t.$layout-panel-shadow-spread2 t.$layout-panel-shadow-color2,
-    0 t.$layout-panel-shadow-y3 t.$layout-panel-shadow-blur3 t.$layout-panel-shadow-spread3 t.$layout-panel-shadow-color3;
+    0 t.$layout-panel-shadow-y t.$layout-panel-shadow-blur t.$layout-panel-shadow-spread
+      t.$layout-panel-shadow-color,
+    0 t.$layout-panel-shadow-y2 t.$layout-panel-shadow-blur2 t.$layout-panel-shadow-spread2
+      t.$layout-panel-shadow-color2,
+    0 t.$layout-panel-shadow-y3 t.$layout-panel-shadow-blur3 t.$layout-panel-shadow-spread3
+      t.$layout-panel-shadow-color3;
   transform: translateX(calc(100% + #{t.$layout-panel-shadow-blur3}));
   visibility: hidden;
   transition:
@@ -71,7 +77,8 @@ $fade: opacity $duration #{t.$layout-motion-easing};
 }
 
 .drawer__subtitle {
-  margin: (t.$layout-panel-subtitle-y - t.$layout-panel-title-y - t.$layout-panel-title-line-height) 0 0;
+  margin: (t.$layout-panel-subtitle-y - t.$layout-panel-title-y - t.$layout-panel-title-line-height)
+    0 0;
   font-family: t.$font-family;
   font-size: t.$layout-panel-subtitle-size;
   line-height: t.$layout-panel-subtitle-line-height;
@@ -88,11 +95,13 @@ $fade: opacity $duration #{t.$layout-motion-easing};
 .drawer-button {
   width: t.$layout-panel-buttons-primary-w;
   height: t.$layout-panel-buttons-primary-h;
+
   // The design text sits one pixel under the centre of the Chromium line box.
   padding: t.$component-button-text-offset-y 0 0;
   border: t.$component-button-border-width solid;
   border-radius: t.$radius-input;
-  box-shadow: 0 t.$component-button-shadow-y t.$component-button-shadow-blur t.$component-button-shadow-color;
+  box-shadow: 0 t.$component-button-shadow-y t.$component-button-shadow-blur
+    t.$component-button-shadow-color;
   font-family: t.$font-family;
   font-size: t.$type-button-size;
   font-weight: t.$type-button-font-weight;
@@ -147,6 +156,7 @@ $fade: opacity $duration #{t.$layout-motion-easing};
 .drawer-field__control {
   width: 100%;
   height: t.$layout-panel-field-control-h;
+
   // The design measures the text inset from the outer edge, CSS from inside the border.
   padding: 0 (t.$component-text-field-value-inset-x - t.$component-text-field-border-width);
   border: t.$component-text-field-border-width solid t.$component-text-field-border-color;

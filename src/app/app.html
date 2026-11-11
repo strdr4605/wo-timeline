@@ -23,8 +23,12 @@
 
       <!-- Demo mode (?demo=1) only. Parity mode never shows it. See src/app/demo.ts. -->
       @if (demoMode) {
-        <button type="button" class="today-button" (click)="loadDemoOrders()">Load 5,000 orders</button>
-        <button type="button" class="today-button" (click)="loadDemoCenters()">Load 50 work centres</button>
+        <button type="button" class="today-button" (click)="loadDemoOrders()">
+          Load 5,000 orders
+        </button>
+        <button type="button" class="today-button" (click)="loadDemoCenters()">
+          Load 50 work centres
+        </button>
         <button type="button" class="today-button" (click)="resetData()">Reset data</button>
       }
     </div>
