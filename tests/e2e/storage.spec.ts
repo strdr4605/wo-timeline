@@ -68,7 +68,7 @@ test('[F5] create, edit and delete survive a reload', async ({ page }) => {
   expect(JSON.parse((await readStorage(page)) ?? 'null')).toEqual([]);
 });
 
-test('[F5] the stored data keeps the document structure of the brief', async ({ page }) => {
+test('[F5] the stored data keeps the document structure of the requirements', async ({ page }) => {
   await openApp(page);
   await openMenuItem(page, 'Concentrix Ltd', 'Delete');
 

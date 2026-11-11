@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-// Bonus b17-comments: a static check of the source. It needs no page. The brief asks for comments
+// Bonus b17-comments: a static check of the source. It needs no page. The requirements ask for comments
 // on the complex date maths and the key decisions. A refactor must not drop them without notice.
 
 const APP_DIR = join(process.cwd(), 'src', 'app');

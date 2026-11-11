@@ -5,7 +5,7 @@ prompts are short and generic.
 
 ## How the work was split
 
-- A lead agent split the brief into small units: one feature or one fix per unit.
+- A lead agent split the requirements into small units: one feature or one fix per unit.
 - A builder agent got one unit. It changed only the files of that unit and did not commit.
 - A fresh verifier agent checked each unit: pixels, behaviour, regressions and code.
 - The lead committed a unit only after the verifier passed it.
@@ -15,7 +15,7 @@ prompts are short and generic.
 ```text
 You build one unit of a work order timeline. Angular 20, standalone components, SCSS.
 
-Read the brief sections for your unit and the design export. The exported artboards are the
+Read the requirement sections for your unit and the design export. The exported artboards are the
 design truth. Use the design tokens; add a token when one is missing.
 
 Run the pixel check against the artboard. Fix the CSS until your layers match, or the rest is

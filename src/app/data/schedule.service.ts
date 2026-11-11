@@ -144,7 +144,7 @@ function loadWorkOrders(): WorkOrder[] {
   return toWorkOrders(SAMPLE_WORK_ORDER_DOCUMENTS);
 }
 
-/** Saves the orders in the document structure of the brief. */
+/** Saves the orders in the document structure of the requirements. */
 function storeWorkOrders(orders: readonly WorkOrder[]): void {
   const documents: WorkOrderDocument[] = orders.map(({ docId, ...data }) => ({
     docId,

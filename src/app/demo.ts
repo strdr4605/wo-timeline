@@ -31,7 +31,7 @@ const DEMO_SEED = 20261111;
 /** The orders spread over about two years before and after today. */
 const DEMO_HALF_SPAN_DAYS = 730;
 
-/** The brief: the end date must be after the start date, so an order holds at least two days. */
+/** The requirements: the end date must be after the start date, so an order holds at least two days. */
 const MIN_ORDER_DAYS = 2;
 
 const STATUSES: readonly WorkOrderStatus[] = ['open', 'in-progress', 'complete', 'blocked'];

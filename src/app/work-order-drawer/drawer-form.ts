@@ -24,12 +24,12 @@ export interface DrawerFormValue {
   endDate: DayStruct | null;
 }
 
-/** The brief: the end date of a new order is the start date plus 7 days. */
+/** The requirements: the end date of a new order is the start date plus 7 days. */
 const DEFAULT_LENGTH_DAYS = 7;
 
 const DOTTED_DATE = /^(\d{1,2})\.(\d{1,2})\.(\d{4})$/;
 
-/** The form values of a request: the order for edit, the defaults of the brief for create. */
+/** The form values of a request: the order for edit, the default values of the requirements for create. */
 export function formValueFor(request: DrawerRequest): DrawerFormValue {
   if (request.mode === 'edit') {
     const { order } = request;
@@ -56,7 +56,7 @@ export function formValueFor(request: DrawerRequest): DrawerFormValue {
   };
 }
 
-/** The brief: the end date must be after the start date. The same day is not after it. */
+/** The requirements: the end date must be after the start date. The same day is not after it. */
 export function isEndAfterStart(start: DayStruct, end: DayStruct): boolean {
   return structToIso(end) > structToIso(start);
 }

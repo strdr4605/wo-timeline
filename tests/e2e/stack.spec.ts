@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 
-// Unit u6-small: the stack items of the brief (A2-A4) and the must items I7 and I8.
+// Unit u6-small: the stack items of the requirements (A2-A4) and the must items I7 and I8.
 
 const DRAWER_SOURCE = 'src/app/work-order-drawer/work-order-drawer.ts';
 

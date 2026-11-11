@@ -4,7 +4,7 @@
  * The names come from the Sketch artboard "Work Order Schedule - Default" and the dates are
  * the Sketch bar positions shifted by 27 months, so the months run from 2026.
  *
- * Every document follows the structure of the brief: docId, docType, data.
+ * Every document follows the structure of the requirements: docId, docType, data.
  */
 
 export type WorkOrderStatus = 'open' | 'in-progress' | 'complete' | 'blocked';
