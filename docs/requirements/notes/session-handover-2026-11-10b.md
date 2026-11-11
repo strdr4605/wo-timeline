@@ -88,6 +88,38 @@ The bonus wave and the deliverables H1 and J3 are done. These items stay:
    the history cut (for example, squash the unit commits or keep them).
 2. H2, the Loom. The human records it with `docs/demo-script.md`.
 
+## Next unit after compaction: b19-demo-data (human approved 2026-11-11)
+
+The human is awake now. The overnight rules ("ask no questions") no longer apply. Report to the
+human in the chat. Still: never push, never run headed Chrome, one verified commit for each item.
+
+Give the unit a new item id in `acceptance-criteria.md` (bonus, e2e, source: human request
+"a button to dump a lot of work orders and show how virtualization works"). Next free id: I12.
+Same flow: fresh builder, fresh verifier, fix units as needed, commit with the e2e spec.
+
+Scope, approved by the human (core + A + B; C is not approved yet):
+
+1. `?demo=1` shows a "Load 5,000 orders" button next to the Today button. Without the flag the
+   button is not in the DOM. In parity mode it never shows. Pixel values must not change.
+2. The button makes about 5,000 orders with a seeded random generator: all statuses, across
+   about 2 years before and after today, no overlap in a work centre (the overlap rule holds).
+   The data stays in memory only. Nothing goes to localStorage. A reload gives the normal data.
+3. A live DOM counter badge (fixed, small, from the chip tokens), only with `?demo=1`:
+   "Orders N · bars in DOM N · columns in DOM N · frame N ms". It updates on scroll.
+4. A "Reset data" button, only with `?demo=1`, brings back the sample data.
+5. Extra A: `?virtual=0` turns windowing off (all columns and bars render), so the human can
+   compare the DOM count and the frame time. The default stays on.
+6. Extra B: the generator can also add 50 work centres (rows), for example a second button
+   "Load 50 work centres" or one option. Rows are not virtualized. Report the effect (DOM count,
+   frame time) in the notes; do not add row virtualization in this unit.
+7. Evidence: e2e tests titled `[I12]`: no button without the flag and in parity mode; load gives
+   about 5,000 orders and the bars in the DOM stay under a bound; no overlap in the generated
+   data; reset restores the sample data; `?virtual=0` renders all columns; nothing is written to
+   localStorage.
+
+Extra C (a demo-script section and video) waits for the human after b19 is done. The human may
+move to another task.
+
 ## Decisions taken in this session
 
 - Today button: in the top bar, right of the Timescale dropdown, styled from the chip tokens,
