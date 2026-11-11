@@ -37,6 +37,7 @@ the next session.
 | ptnurkzy | b16-script | J3 | `docs/demo-script.md`, 9:40, walk script `notes/b16-walk.mjs` |
 | wmnkywwm | b17-comments | H5 | comments on date maths, static check `tests/e2e/comments.spec.ts` |
 | vktzkmrt | b18-datepicker | D12 (bug fix) | click keeps focus in the date input, typed date selects the calendar day, errors only after blur |
+| rvnszpxn | b19-demo-data | I12 | `?demo=1`: load 5,000 orders, load 50 work centres, reset, DOM counter badge; `?virtual=0` turns windowing off. Done; extra C waits for the human |
 
 `node docs/requirements/verify.mjs`: 73 pass, 2 pending, 0 fail. Playwright: 88 passed. Vitest: 31.
 The 2 pending items are H2 (Loom, human) and H3 (public repo, blocked).
@@ -165,6 +166,11 @@ the other steps do. The fix is in the b3-a11y commit (moved there with `jj squas
 same pattern in new keyboard tests.
 
 ## Open notes
+
+- Month view with the 5,000 demo orders: windowing on is slower than off (frame median about
+  65 to 117 ms on, 17 ms off). Each window move re-renders about 2,800 bars, and `extendAtEdges`
+  forces a style recalc. This is b13 (I9) code. Fix ideas are in `notes/b19-demo-data.md`.
+  The human decides.
 
 - H3 is blocked (see "Remaining items").
 - I9: bars far from the view are not in the DOM, so Tab does not reach them. Accepted cost of
