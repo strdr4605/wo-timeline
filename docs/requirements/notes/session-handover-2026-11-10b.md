@@ -167,6 +167,11 @@ same pattern in new keyboard tests.
 
 ## Open notes
 
+- b20-perf (fonts) was dropped by the human. Lighthouse on the production build, median of 3:
+  FCP 2171 ms before. Non-blocking CDN stylesheet + local woff2 gave FCP 2316 ms (fonts load
+  twice, 170 kB). Local woff2 only gave FCP 2216 ms, pixel 0.19%, fonts 120 kB. `main.js`
+  (399 kB) holds back the first paint, not the fonts.
+
 - Month view with the 5,000 demo orders: windowing on is slower than off (frame median about
   65 to 117 ms on, 17 ms off). Each window move re-renders about 2,800 bars, and `extendAtEdges`
   forces a style recalc. This is b13 (I9) code. Fix ideas are in `notes/b19-demo-data.md`.
