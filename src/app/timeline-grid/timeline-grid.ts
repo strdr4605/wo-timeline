@@ -33,6 +33,7 @@ import {
   todayPosition,
 } from '../timeline/timeline';
 import { PARITY_FIRST_COLUMN_OFFSET, PARITY_MODE, PARITY_TODAY } from '../parity';
+import { VIRTUAL_MODE } from '../demo';
 import {
   BarNudge,
   BarPosition,
@@ -554,6 +555,11 @@ export class TimelineGrid implements AfterViewInit {
    * width does not change, so a new window cannot scroll the grid again.
    */
   private updateWindow(): void {
+    // `?virtual=0` keeps the window null, so every column and every bar renders (demo compare).
+    if (!VIRTUAL_MODE) {
+      return;
+    }
+
     const scroller = this.scroller()?.nativeElement;
     const rail = this.rail()?.nativeElement;
     const timeline = this.timeline()?.nativeElement;

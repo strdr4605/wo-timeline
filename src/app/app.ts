@@ -1,16 +1,18 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { ScheduleService } from './data/schedule.service';
-import { Timescale } from './timeline/timeline';
+import { Timescale, WorkCenter } from './timeline/timeline';
 import { TimescaleChip } from './timescale-chip/timescale-chip';
 import { CellPick, ResizeRequest, TimelineGrid } from './timeline-grid/timeline-grid';
 import { WorkOrder } from './data/sample-data';
 import { PARITY_MODE } from './parity';
+import { DEMO_CENTER_COUNT, DEMO_MODE, DEMO_ORDER_COUNT, generateDemoCenters, generateDemoOrders } from './demo';
+import { DemoBadge } from './demo-badge/demo-badge';
 import { DrawerRequest } from './work-order-drawer/drawer-form';
 import { WorkOrderDrawer } from './work-order-drawer/work-order-drawer';
 
 @Component({
   selector: 'app-root',
-  imports: [TimescaleChip, TimelineGrid, WorkOrderDrawer],
+  imports: [TimescaleChip, TimelineGrid, WorkOrderDrawer, DemoBadge],
   templateUrl: './app.html',
   styleUrl: './app.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -20,6 +22,8 @@ export class App {
   protected readonly timescale = signal<Timescale>('Month');
 
   protected readonly parityMode = PARITY_MODE;
+
+  protected readonly demoMode = DEMO_MODE;
 
   private readonly schedule = inject(ScheduleService);
 
@@ -78,8 +82,29 @@ export class App {
     this.resizeError.set(null);
   }
 
+  /** About 5,000 orders on the current work centres, in memory only. */
+  protected loadDemoOrders(): void {
+    this.loadDemo(this.workCenters());
+  }
+
+  /** The sample work centres and 50 more, with about 5,000 orders spread over all of them. */
+  protected loadDemoCenters(): void {
+    const sampleCenters = this.workCenters().filter((center) => !center.id.startsWith('demo-'));
+    this.loadDemo([...sampleCenters, ...generateDemoCenters(DEMO_CENTER_COUNT)]);
+  }
+
+  protected resetData(): void {
+    this.drawer.set(null);
+    this.schedule.resetData();
+  }
+
   protected resizeRail(width: number): void {
     this.schedule.saveRailWidth(width);
+  }
+
+  private loadDemo(centers: WorkCenter[]): void {
+    this.drawer.set(null);
+    this.schedule.loadDemo(centers, generateDemoOrders(centers, DEMO_ORDER_COUNT, new Date()));
   }
 
   private showResizeError(message: string): void {

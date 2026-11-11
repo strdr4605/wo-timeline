@@ -1,0 +1,29 @@
+@use '../../styles/tokens' as t;
+
+// A small fixed chip in the bottom left corner, away from the drawer. It uses the frame and the
+// fonts of the timescale chip.
+.demo-badge {
+  position: fixed;
+  left: t.$layout-resize-alert-bottom;
+  bottom: t.$layout-resize-alert-bottom;
+  z-index: 20;
+  margin: 0;
+  padding: t.$component-scale-chip-text-y t.$layout-badge-padding-x;
+  border-radius: t.$component-scale-chip-radius;
+  background: t.$component-scale-chip-fill;
+  box-shadow: t.$component-scale-chip-shadow-x t.$component-scale-chip-shadow-y
+    t.$component-scale-chip-shadow-blur t.$component-scale-chip-shadow-spread
+    t.$component-scale-chip-shadow-color;
+  font-family: t.$font-family;
+  font-size: t.$type-chip-label-size;
+  font-weight: t.$type-chip-label-font-weight;
+  line-height: t.$component-scale-chip-text-line-height;
+  color: t.$type-chip-label-color;
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+.demo-badge span {
+  font-weight: t.$type-chip-value-font-weight;
+  color: t.$type-chip-value-color;
+}

@@ -16,12 +16,9 @@ export { overlaps };
 /** Holds the work centres and the work orders of the schedule. */
 @Injectable({ providedIn: 'root' })
 export class ScheduleService {
-  readonly workCenters = signal<WorkCenter[]>(
-    SAMPLE_WORK_CENTER_DOCUMENTS.map((document) => ({
-      id: document.docId,
-      name: document.data.name,
-    })),
-  ).asReadonly();
+  private readonly centers = signal<WorkCenter[]>(sampleWorkCenters());
+
+  readonly workCenters = this.centers.asReadonly();
 
   /**
    * Parity mode always shows the design fixture and never touches the storage, so the parity
@@ -37,6 +34,9 @@ export class ScheduleService {
   private readonly savedRailWidth = signal<number | null>(PARITY_MODE ? null : loadRailWidth());
 
   readonly railWidth = this.savedRailWidth.asReadonly();
+
+  /** True while the demo data is shown. The demo data never goes to the storage. */
+  private demoData = false;
 
   /** The orders of one work centre, in the order of the sample data. */
   ordersOf(workCenterId: string): WorkOrder[] {
@@ -73,6 +73,20 @@ export class ScheduleService {
     this.persist();
   }
 
+  /** Shows the generated data of demo mode, in memory only. Edits to it are not saved either. */
+  loadDemo(centers: WorkCenter[], orders: WorkOrder[]): void {
+    this.demoData = true;
+    this.centers.set(centers);
+    this.orders.set(orders);
+  }
+
+  /** Brings back the data of a fresh load: the saved orders, or the sample data. */
+  resetData(): void {
+    this.demoData = false;
+    this.centers.set(sampleWorkCenters());
+    this.orders.set(PARITY_MODE ? toWorkOrders(PARITY_WORK_ORDER_DOCUMENTS) : loadWorkOrders());
+  }
+
   /** Parity mode keeps the new width for this page only. */
   saveRailWidth(width: number): void {
     this.savedRailWidth.set(width);
@@ -82,7 +96,7 @@ export class ScheduleService {
   }
 
   private persist(): void {
-    if (!PARITY_MODE) {
+    if (!PARITY_MODE && !this.demoData) {
       storeWorkOrders(this.orders());
     }
   }
@@ -144,6 +158,13 @@ function storeWorkOrders(orders: readonly WorkOrder[]): void {
 function loadRailWidth(): number | null {
   const width = Number(readStorage(RAIL_WIDTH_STORAGE_KEY) ?? NaN);
   return Number.isFinite(width) && width > 0 ? width : null;
+}
+
+function sampleWorkCenters(): WorkCenter[] {
+  return SAMPLE_WORK_CENTER_DOCUMENTS.map((document) => ({
+    id: document.docId,
+    name: document.data.name,
+  }));
 }
 
 function toWorkOrders(documents: readonly WorkOrderDocument[]): WorkOrder[] {

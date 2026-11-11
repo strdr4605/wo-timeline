@@ -9,7 +9,8 @@
       "sketch": "docs/design/tokens.json (extracted from the Sketch file)",
       "ref": "docs/videos/fe-reference-implementation-walkthrough.md (candidate walkthrough, Renvil Dsa)",
       "cand": "docs/videos/fe-work-order-timeline-overview.md (candidate walkthrough, Jacob Hamel)",
-      "lead": "lead decision 'Storybook for the main components' (bonus wave)"
+      "lead": "lead decision 'Storybook for the main components' (bonus wave)",
+      "human": "human request 'a button to dump a lot of work orders and show how virtualization works' (2026-11-11)"
     },
     "verifyKinds": {
       "unit": "covered by an automated unit test",
@@ -924,6 +925,18 @@
       "priority": "bonus",
       "status": "pass",
       "evidence": "e2e: [I11] Storybook has stories for each bar status, the timescale chip and the drawer, outside the app build"
+    },
+    {
+      "id": "I12",
+      "group": "Bonus features",
+      "requirement": "Demo data (?demo=1, never in parity mode): a 'Load 5,000 orders' button next to Today makes about 5,000 orders with a seeded generator (all statuses, about 2 years around today, no overlap on a work centre); 'Load 50 work centres' adds 50 rows (not virtualized); 'Reset data' brings back the sample data; a live badge shows orders, bars and columns in the DOM and the frame time. The data stays in memory, nothing goes to localStorage. ?virtual=0 turns the column windowing off for a compare.",
+      "source": [
+        "human"
+      ],
+      "verify": "e2e",
+      "priority": "bonus",
+      "status": "pass",
+      "evidence": "e2e: [I12] demo-data.spec.ts (6 tests); unit: demo.spec.ts [I12] no overlap, every status; effect: docs/requirements/notes/b19-demo-data.md"
     },
     {
       "id": "J1",
