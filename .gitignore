@@ -22,3 +22,6 @@ tests/demo/
 tests/e2e/demo-config.spec.ts
 scripts/pixel-check.mjs
 scripts/design-diff.mjs
+
+# Licensed font files. Keep them on disk only; the CDN is the font source.
+public/fonts/

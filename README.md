@@ -63,15 +63,15 @@ and `src/app/parity.ts`.
 The Playwright suite uses the dev server on port 4200. When no server answers, Playwright
 starts one with `npm run start`.
 
-| Command                        | What it does                                                                                                                                                                  |
-| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `npm run build`                | Builds the app into `dist/`.                                                                                                                                                  |
-| `npx vitest run`               | Runs the unit tests in `tests/unit/` (date maths, overlap, sample data, tokens, drawer form).                                                                                 |
-| `npx playwright test`          | Runs the end-to-end tests in `tests/e2e/`, headless, in Chromium at 1440 x 1024.                                                                                              |
-| `npm run test:all`             | Runs the three commands above, in that sequence.                                                                                                                              |
-| `DEMO_HEADLESS=1 npm run demo` | Runs the suite with `playwright.demo.config.ts` (slow motion, one video for each requirement test, in `docs/demo/videos/`). Without `DEMO_HEADLESS=1`, a Chrome window opens. |
-| `npm run storybook`            | Starts Storybook on <http://localhost:6006>.                                                                                                                                  |
-| `npm run build-storybook`      | Builds a static Storybook into `storybook-static/`.                                                                                                                           |
+| Command                                                                                                              | What it does                                                                                                                                                                  |
+| -------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `npm run build`                                                                                                      | Builds the app into `dist/`.                                                                                                                                                  |
+| `npx vitest run`                                                                                                     | Runs the unit tests in `tests/unit/` (date maths, overlap, sample data, tokens, drawer form).                                                                                 |
+| `npx playwright test`                                                                                                | Runs the end-to-end tests in `tests/e2e/`, headless, in Chromium at 1440 x 1024.                                                                                              |
+| `npm run test:all`                                                                                                   | Runs the three commands above, in that sequence.                                                                                                                              |
+| `DEMO_HEADLESS=1 npx playwright test --config=playwright.demo.config.ts` (local only: the config is not in the repo) | Runs the suite with `playwright.demo.config.ts` (slow motion, one video for each requirement test, in `docs/demo/videos/`). Without `DEMO_HEADLESS=1`, a Chrome window opens. |
+| `npm run storybook`                                                                                                  | Starts Storybook on <http://localhost:6006>.                                                                                                                                  |
+| `npm run build-storybook`                                                                                            | Builds a static Storybook into `storybook-static/`.                                                                                                                           |
 
 The design checks need the dev server on port 4200:
 
