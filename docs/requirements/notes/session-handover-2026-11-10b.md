@@ -36,6 +36,7 @@ the next session.
 | oqpyloym | b15-readme | H1 | `README.md` |
 | ptnurkzy | b16-script | J3 | `docs/demo-script.md`, 9:40, walk script `notes/b16-walk.mjs` |
 | wmnkywwm | b17-comments | H5 | comments on date maths, static check `tests/e2e/comments.spec.ts` |
+| vktzkmrt | b18-datepicker | D12 (bug fix) | click keeps focus in the date input, typed date selects the calendar day, errors only after blur |
 
 `node docs/requirements/verify.mjs`: 73 pass, 2 pending, 0 fail. Playwright: 88 passed. Vitest: 31.
 The 2 pending items are H2 (Loom, human) and H3 (public repo, blocked).
@@ -134,9 +135,6 @@ same pattern in new keyboard tests.
 ## Open notes
 
 - H3 is blocked (see "Remaining items").
-- Date fields: a click on a date field opens the ngb-datepicker and moves the focus to a calendar
-  day at once. A user who clicks and then types loses the typed text. Tab into the field works.
-  The demo script uses Tab. This is a possible UX bug; a fix needs a human decision.
 - I9: bars far from the view are not in the DOM, so Tab does not reach them. Accepted cost of
   virtualization.
 - The b15 verifier saw one flake of a B3 test under load in `npm run test:all`. It passed on rerun.
