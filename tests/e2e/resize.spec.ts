@@ -4,7 +4,7 @@ import { expect, test, type Locator, type Page } from '@playwright/test';
 // The sample data is used: Konsulting Inc runs Sep 18, 2026 to Jan 21, 2027, and Compleks Systems
 // on the same work centre starts Mar 7, 2027. Month view has 114px columns.
 
-const STORAGE_KEY = 'naologic.workOrders.v1';
+const STORAGE_KEY = 'wo-timeline.workOrders.v1';
 const MONTH_COLUMN = 114;
 
 test.use({ viewport: { width: 1440, height: 1024 } });

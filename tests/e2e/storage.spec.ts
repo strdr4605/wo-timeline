@@ -3,7 +3,7 @@ import { expect, test, type Page } from '@playwright/test';
 // Bonus b1-storage: the work orders survive a reload through localStorage.
 // The normal app (no `?parity=1`) reads and writes the storage. Parity mode ignores it.
 
-const STORAGE_KEY = 'naologic.workOrders.v1';
+const STORAGE_KEY = 'wo-timeline.workOrders.v1';
 
 /** The bar names of the sample data, in the order of docs/requirements/SAMPLE-DATA.md. */
 const SAMPLE_NAMES = [

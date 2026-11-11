@@ -2,7 +2,7 @@ import { expect, test } from '@playwright/test';
 
 const CDN = 'https://naologic-com-assets.naologic.com/fonts/circular-std/circular-std.css';
 
-test('[A5] Circular Std comes from the Naologic CDN with a local fallback', async ({ page }) => {
+test('[A5] Circular Std comes from the font CDN with a local fallback', async ({ page }) => {
   await page.goto('/');
 
   await expect(page.locator(`link[rel="stylesheet"][href="${CDN}"]`)).toHaveCount(1);

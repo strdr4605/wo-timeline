@@ -3,7 +3,7 @@ import { expect, test, type Locator, type Page } from '@playwright/test';
 // Bonus b11-rail: a drag on the rail edge changes the width of the work centre rail.
 // Tokens: design width 380, min 240, max 560, key step 20. The rail starts at x 102.
 
-const STORAGE_KEY = 'naologic.railWidth.v1';
+const STORAGE_KEY = 'wo-timeline.railWidth.v1';
 const RAIL_X = 102;
 
 test.use({ viewport: { width: 1440, height: 1024 } });

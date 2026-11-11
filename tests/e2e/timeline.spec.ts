@@ -183,13 +183,13 @@ test('[G2] the timescale chip is 146 wide with the segments at 75 and 71', async
   expect(chevron!.y).toBeCloseTo(165.91, 0);
 });
 
-test('[G3] the NAOLOGIC wordmark sits at (101, 20), 80 x 10, on a top bar without a border', async ({
+test('[G3] the wordmark sits at (101, 20), 80 x 10, on a top bar without a border', async ({
   page,
 }) => {
   await page.goto('/');
 
   const logo = page.locator('.top-bar .logo');
-  await expect(logo).toHaveAttribute('alt', 'Naologic');
+  await expect(logo).toHaveAttribute('alt', 'WO Timeline');
   expect(await logo.evaluate((element: HTMLImageElement) => element.naturalWidth)).toBeGreaterThan(0);
   expect(await logo.boundingBox()).toEqual({ x: 101, y: 20, width: 80, height: 10 });
 

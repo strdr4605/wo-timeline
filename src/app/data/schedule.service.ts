@@ -117,9 +117,9 @@ export type WorkOrderDraft = Omit<WorkOrder, 'docId'>;
 export type SaveResult = 'saved' | 'overlap';
 
 /** The storage key. The version suffix lets a later data shape ignore old entries. */
-export const WORK_ORDERS_STORAGE_KEY = 'naologic.workOrders.v1';
+export const WORK_ORDERS_STORAGE_KEY = 'wo-timeline.workOrders.v1';
 
-export const RAIL_WIDTH_STORAGE_KEY = 'naologic.railWidth.v1';
+export const RAIL_WIDTH_STORAGE_KEY = 'wo-timeline.railWidth.v1';
 
 const STATUSES: readonly WorkOrderStatus[] = ['open', 'in-progress', 'complete', 'blocked'];
 

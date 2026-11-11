@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="10" viewBox="0 0 80 10">
+  <title>WO Timeline</title>
+  <!-- A neutral text wordmark in the 80 x 10 box of the design logo, so the layout does not move. -->
+  <text x="0" y="9.6" textLength="80" lengthAdjust="spacingAndGlyphs" fill="#3e40db"
+    font-family="Helvetica, Arial, sans-serif" font-size="13" font-weight="700">WO Timeline</text>
+</svg>

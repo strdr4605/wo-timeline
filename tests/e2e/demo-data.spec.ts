@@ -4,7 +4,7 @@ import { expect, test, type Page } from '@playwright/test';
 // work centres), a Reset data button and a live DOM counter. `?virtual=0` turns the column
 // windowing off. The demo data stays in memory. Parity mode never shows the demo controls.
 
-const STORAGE_KEYS = ['naologic.workOrders.v1', 'naologic.railWidth.v1'];
+const STORAGE_KEYS = ['wo-timeline.workOrders.v1', 'wo-timeline.railWidth.v1'];
 
 const SAMPLE_NAMES = [
   'Concentrix Ltd',

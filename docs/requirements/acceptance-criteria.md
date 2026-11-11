@@ -2,7 +2,7 @@
 
 Work Order Schedule Timeline (Naologic front-end take-home). Generated from `acceptance-criteria.json` - edit the JSON, then run `node docs/requirements/render.mjs`.
 
-Progress: 74 pass, 0 fail, 0 open decision, 2 pending.
+Progress: 75 pass, 0 fail, 0 open decision, 2 pending.
 
 Legend: `[x]` pass, `[ ]` pending, `[?]` open decision. An item may only be marked pass with an evidence command (test name, screenshot path or measurement output) in the JSON `evidence` field.
 
@@ -14,7 +14,7 @@ Legend: `[x]` pass, `[ ]` pending, `[?]` open decision. An item may only be mark
 | [x] | A2 | Drawer form uses Reactive Forms (FormGroup, FormControl, Validators) | brief | unit | must | e2e: [A2] the drawer form is a Reactive Forms FormGroup with Validators |
 | [x] | A3 | Status dropdown uses ng-select, restyled to match the design (no system dropdown) | brief, owner | visual | must | e2e: [A3] the status field is ng-select, restyled, with no system dropdown |
 | [x] | A4 | Start and end dates use ngb-datepicker | brief | unit | must | e2e: [A4] the start and end dates use ngb-datepicker |
-| [x] | A5 | Circular Std loaded from the CDN with the local docs/design/fonts fallback | brief, sketch | visual | must | e2e: [A5] Circular Std comes from the Naologic CDN with a local fallback |
+| [x] | A5 | Circular Std loaded from the CDN with the local docs/design/fonts fallback | brief, sketch | visual | must | e2e: [A5] Circular Std comes from the font CDN with a local fallback |
 
 ## Timeline grid and zoom
 
@@ -92,7 +92,7 @@ Legend: `[x]` pass, `[ ]` pending, `[?]` open decision. An item may only be mark
 |---|---|---|---|---|---|---|
 | [x] | G1 | Every colour and size comes from docs/design/tokens.json, no guessed values | owner, sketch | visual | must | unit: design tokens [G1] every SCSS token variable matches tokens.json |
 | [x] | G2 | Timescale chip geometry: label segment 75, value segment 71, height 25, radius 5 | sketch | visual | must | e2e: [G2] the timescale chip is 146 wide with the segments at 75 and 71 |
-| [x] | G3 | Logo top left with the spacing from the design | ref, sketch | visual | must | e2e: [G3] the NAOLOGIC wordmark sits at (101, 20), 80 x 10, on a top bar without a border |
+| [x] | G3 | Logo top left with the spacing from the design | ref, sketch | visual | must | e2e: [G3] the wordmark sits at (101, 20), 80 x 10, on a top bar without a border |
 | [x] | G4 | Measure the rendered DOM against the token values (a script prints differences) | sketch, owner | visual | must | measure: .drawer border-bottom-left-radius = "12px" (expected "12px") |
 | [x] | G5 | Type scale matches: body 14 Book, drawer title 20 Medium, chip 13 | sketch | visual | must | unit: design tokens [G5] type scale matches the token file |
 
@@ -123,6 +123,7 @@ Legend: `[x]` pass, `[ ]` pending, `[?]` open decision. An item may only be mark
 | [x] | I10 | Drag the rail divider to resize the work center column ("Drag to resize" label at the rail edge of Timeline - Hover Options): blue line and label on hover, pointer drag with min and max width, Escape cancels, separator keys, width saved (not in parity mode) | sketch | e2e | bonus | e2e: [I10] a drag on the rail edge resizes the rail, with limits, Escape, keys and storage |
 | [x] | I11 | Storybook for the main components: the work order bar (one story per status: Open, In progress, Complete, Blocked), the timescale chip (closed and open menu) and the drawer (create and edit), with the real components, the global styles, the tokens and the sample data. Scripts storybook and build-storybook, output storybook-static (ignored). The app build, vitest and Playwright do not pick up the stories. | lead | e2e | bonus | e2e: [I11] Storybook has stories for each bar status, the timescale chip and the drawer, outside the app build |
 | [x] | I12 | Demo data (?demo=1, never in parity mode): a 'Load 5,000 orders' button next to Today makes about 5,000 orders with a seeded generator (all statuses, about 2 years around today, no overlap on a work centre); 'Load 50 work centres' adds 50 rows (not virtualized); 'Reset data' brings back the sample data; a live badge shows orders, bars and columns in the DOM and the frame time. The data stays in memory, nothing goes to localStorage. ?virtual=0 turns the column windowing off for a compare. | human | e2e | bonus | e2e: [I12] demo-data.spec.ts (6 tests); unit: demo.spec.ts [I12] no overlap, every status; effect: docs/requirements/notes/b19-demo-data.md |
+| [x] | R1 | Neutral branding for the public repo: a "WO Timeline" text wordmark (public/wo-timeline-logo.svg) in the 80 x 10 logo box at (101, 20); localStorage keys wo-timeline.workOrders.v1 and wo-timeline.railWidth.v1 (no migration of the old keys); no company name in src/, tests/, public/ outside the font CDN URL. Parity pixels change only inside the logo box. | human | e2e | bonus | e2e: [R1] the top bar shows the neutral WO Timeline wordmark and the app uses the wo-timeline storage keys; pixel: Schedule - Default 0.21% -> 0.23%, +311 px all in logo box; notes: docs/requirements/notes/r1-brand.md |
 
 ## Demo evidence
 

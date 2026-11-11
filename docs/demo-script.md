@@ -180,8 +180,8 @@ Rail:
 1. Push Cmd+R (or F5).
 2. Result: "Concentrix Ltd Edited" and the new "Konsulting Inc" end date of section 7 are still
    there. The rail keeps its width.
-3. Say: "The orders are saved in localStorage under `naologic.workOrders.v1`, in the document
-   structure of the brief. The rail width is saved under `naologic.railWidth.v1`."
+3. Say: "The orders are saved in localStorage under `wo-timeline.workOrders.v1`, in the document
+   structure of the brief. The rail width is saved under `wo-timeline.railWidth.v1`."
 
 ## 12. Parity mode (0:20)
 

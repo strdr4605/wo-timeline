@@ -80,7 +80,7 @@
       "verify": "visual",
       "priority": "must",
       "status": "pass",
-      "evidence": "e2e: [A5] Circular Std comes from the Naologic CDN with a local fallback"
+      "evidence": "e2e: [A5] Circular Std comes from the font CDN with a local fallback"
     },
     {
       "id": "B1",
@@ -691,7 +691,7 @@
       "verify": "visual",
       "priority": "must",
       "status": "pass",
-      "evidence": "e2e: [G3] the NAOLOGIC wordmark sits at (101, 20), 80 x 10, on a top bar without a border"
+      "evidence": "e2e: [G3] the wordmark sits at (101, 20), 80 x 10, on a top bar without a border"
     },
     {
       "id": "G4",
@@ -937,6 +937,18 @@
       "priority": "bonus",
       "status": "pass",
       "evidence": "e2e: [I12] demo-data.spec.ts (6 tests); unit: demo.spec.ts [I12] no overlap, every status; effect: docs/requirements/notes/b19-demo-data.md"
+    },
+    {
+      "id": "R1",
+      "group": "Bonus features",
+      "requirement": "Neutral branding for the public repo: a \"WO Timeline\" text wordmark (public/wo-timeline-logo.svg) in the 80 x 10 logo box at (101, 20); localStorage keys wo-timeline.workOrders.v1 and wo-timeline.railWidth.v1 (no migration of the old keys); no company name in src/, tests/, public/ outside the font CDN URL. Parity pixels change only inside the logo box.",
+      "source": [
+        "human"
+      ],
+      "verify": "e2e",
+      "priority": "bonus",
+      "status": "pass",
+      "evidence": "e2e: [R1] the top bar shows the neutral WO Timeline wordmark and the app uses the wo-timeline storage keys; pixel: Schedule - Default 0.21% -> 0.23%, +311 px all in logo box; notes: docs/requirements/notes/r1-brand.md"
     },
     {
       "id": "J1",
