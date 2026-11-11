@@ -186,8 +186,8 @@ The full list with evidence is in `docs/requirements/acceptance-criteria.md`.
 ## AI workflow
 
 AI agents built this app. A lead agent gave one unit to one builder agent. A fresh verifier
-agent checked each unit before the commit. The prompts, the contracts and the log are in
-`docs/ai-prompts.md`.
+agent checked each unit before the commit. Sample prompts are in
+[AI-PROMPTS.md](AI-PROMPTS.md).
 
 ## Known limits
 

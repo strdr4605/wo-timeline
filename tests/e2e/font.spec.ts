@@ -10,7 +10,7 @@ test('[A5] Circular Std comes from the font CDN with a local fallback', async ({
   const fontFamily = await page.evaluate(() => getComputedStyle(document.body).fontFamily);
   expect(fontFamily).toBe('Circular-Std');
 
-  // The local copy in docs/design/fonts is served as the fallback.
+  // The local copy in public/fonts is served as the fallback.
   const fallback = await page.request.get('/fonts/CircularStd-Book.otf');
   expect(fallback.status()).toBe(200);
 });

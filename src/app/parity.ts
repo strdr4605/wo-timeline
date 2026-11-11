@@ -1,8 +1,8 @@
 /**
  * Parity mode: a test hook that makes the app render the view of the Sketch artboards.
  *
- * Open the app with `?parity=1`. See docs/requirements/DESIGN-PARITY.md. The normal app does not
- * read anything from this file except the flag.
+ * Open the app with `?parity=1`. The normal app does not read anything from this file except the
+ * flag.
  */
 
 import { WorkOrderDocument } from './data/sample-data';

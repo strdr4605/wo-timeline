@@ -32,11 +32,6 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              },
-              {
-                "glob": "*.otf",
-                "input": "docs/design/fonts",
-                "output": "fonts"
               }
             ],
             "styles": [

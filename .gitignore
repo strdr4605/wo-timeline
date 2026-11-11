@@ -12,3 +12,13 @@ docs/demo/videos/
 .DS_Store
 .pixel-check
 storybook-static/
+
+# Private working files. They stay on disk and out of the public tree.
+docs/
+FE-technical-test-10-2026.md
+Work Order Schedule - *.png
+playwright.demo.config.ts
+tests/demo/
+tests/e2e/demo-config.spec.ts
+scripts/pixel-check.mjs
+scripts/design-diff.mjs

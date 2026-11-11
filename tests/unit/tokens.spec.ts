@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { describe, expect, test } from 'vitest';
 
 const root = join(__dirname, '..', '..');
-const tokens = JSON.parse(readFileSync(join(root, 'docs/design/tokens.json'), 'utf8'));
+const tokens = JSON.parse(readFileSync(join(root, 'src/styles/tokens.json'), 'utf8'));
 const scss = readFileSync(join(root, 'src/styles/_tokens.scss'), 'utf8');
 
 const kebab = (s: string) => s.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();

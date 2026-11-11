@@ -5,7 +5,7 @@ import { expect, test, type Page } from '@playwright/test';
 
 const STORAGE_KEY = 'wo-timeline.workOrders.v1';
 
-/** The bar names of the sample data, in the order of docs/requirements/SAMPLE-DATA.md. */
+/** The bar names of the sample data, in the order of src/app/data/sample-data.ts. */
 const SAMPLE_NAMES = [
   'Concentrix Ltd',
   'Polymer Extrusion',
