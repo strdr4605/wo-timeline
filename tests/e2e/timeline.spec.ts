@@ -20,7 +20,7 @@ async function chooseTimescale(page: import('@playwright/test').Page, option: st
 test('[B1] the work center panel stays fixed while the timeline scrolls sideways', async ({
   page,
 }) => {
-  await page.goto('/');
+  await page.goto('./');
 
   const rail = page.locator('.grid__rail');
   const name = page.locator('.work-center-name').first();
@@ -41,7 +41,7 @@ test('[B1] the work center panel stays fixed while the timeline scrolls sideways
 });
 
 test('[B2] the timeline grid scrolls horizontally', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('./');
 
   const grid = page.locator('.grid');
   const scrollable = await grid.evaluate((element) => element.scrollWidth > element.clientWidth);
@@ -61,7 +61,7 @@ test('[B2] the timeline grid scrolls horizontally', async ({ page }) => {
 });
 
 test('[B3] the timescale dropdown offers Hour, Day, Week and Month', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('./');
 
   await page.locator('.timescale-chip__value').click();
 
@@ -81,7 +81,7 @@ test('[B3] the timescale dropdown offers Hour, Day, Week and Month', async ({ pa
 });
 
 test('[B4] the default timescale is Month', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('./');
 
   await expect(page.locator('.timescale-chip__value')).toContainText('Month');
 
@@ -93,7 +93,7 @@ test('[B4] the default timescale is Month', async ({ page }) => {
 });
 
 test('[B5] the header row re-labels per zoom level', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('./');
 
   const monthLabels = await page.locator('.grid-header-cell').allTextContents();
   for (const label of monthLabels) {
@@ -117,7 +117,7 @@ test('[B5] the header row re-labels per zoom level', async ({ page }) => {
 });
 
 test('[B8] the initial view centres on today with a buffer', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('./');
 
   const rail = await page.locator('.grid__rail').boundingBox();
   const grid = await page.locator('.grid').boundingBox();
@@ -143,7 +143,7 @@ test('[B8] the initial view centres on today with a buffer', async ({ page }) =>
 });
 
 test('[G2] the timescale chip is 146 wide with the segments at 75 and 71', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('./');
 
   const chip = await page.locator('.timescale-chip').boundingBox();
   expect(chip!.width).toBe(146);
@@ -184,7 +184,7 @@ test('[G2] the timescale chip is 146 wide with the segments at 75 and 71', async
 test('[G3] the wordmark sits at (101, 20), 80 x 10, on a top bar without a border', async ({
   page,
 }) => {
-  await page.goto('/');
+  await page.goto('./');
 
   const logo = page.locator('.top-bar .logo');
   await expect(logo).toHaveAttribute('alt', 'WO Timeline');
@@ -205,7 +205,7 @@ test('[G3] the wordmark sits at (101, 20), 80 x 10, on a top bar without a borde
 test('parity mode shows the artboard view: Aug 2024 first, Sep 2024 current, the fixture bars', async ({
   page,
 }) => {
-  await page.goto('/?parity=1');
+  await page.goto('./?parity=1');
 
   const firstVisible = page.locator('.grid-header-cell', { hasText: 'Aug 2024' });
   await expect.poll(async () => (await firstVisible.boundingBox())!.x).toBe(483);

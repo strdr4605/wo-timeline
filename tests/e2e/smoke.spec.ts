@@ -12,7 +12,7 @@ test('[A1] app builds and serves the shell', async ({ page }) => {
     }
   });
 
-  const response = await page.goto('/');
+  const response = await page.goto('./');
   expect(response?.status()).toBe(200);
 
   await expect(page.locator('app-root')).toBeVisible();

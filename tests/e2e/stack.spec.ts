@@ -71,7 +71,7 @@ test('[I7] a phone screen keeps the timeline, the scroll and the drawer usable',
   page,
 }) => {
   await page.setViewportSize({ width: 375, height: 667 });
-  await page.goto('/');
+  await page.goto('./');
 
   // No page-wide horizontal scroll: the grid scrolls inside its card.
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBe(375);
@@ -99,7 +99,7 @@ test('[I7] a phone screen keeps the timeline, the scroll and the drawer usable',
 });
 
 test('[I8] Day and Week reuse the Month rows, bars and header of the design', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('./');
   const month = await layoutOf(page);
 
   for (const [option, columnWidth] of [
@@ -117,7 +117,7 @@ test('[I8] Day and Week reuse the Month rows, bars and header of the design', as
 });
 
 async function openDrawer(page: Page): Promise<void> {
-  await page.goto('/?parity=1');
+  await page.goto('./?parity=1');
   await page.mouse.click(EMPTY_CELL.x, EMPTY_CELL.y);
   await expect(page.locator('.drawer')).toHaveClass(/drawer--open/);
   // The slide-in is 200ms.

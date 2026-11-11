@@ -10,7 +10,7 @@ test.use({ viewport: { width: 1440, height: 1024 } });
 test('[E1] an impossible end date shows its error on Tab and Create does not save', async ({
   page,
 }) => {
-  await page.goto('/?parity=1');
+  await page.goto('./?parity=1');
   await page.evaluate(() => document.fonts.ready);
   const bars = page.locator('app-work-order-bar');
   const barCount = await bars.count();

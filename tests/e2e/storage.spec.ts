@@ -111,7 +111,7 @@ test('[F5] parity mode neither reads nor writes the storage', async ({ page }) =
   await openApp(page);
   await writeStorage(page, '[]');
 
-  await page.goto('/?parity=1');
+  await page.goto('./?parity=1');
   await expect(barNames(page)).toHaveText(PARITY_NAMES);
 
   await openMenuItem(page, 'Concentrix Ltd', 'Delete');
@@ -120,7 +120,7 @@ test('[F5] parity mode neither reads nor writes the storage', async ({ page }) =
 });
 
 async function openApp(page: Page): Promise<void> {
-  await page.goto('/');
+  await page.goto('./');
   await expect(page.locator('.grid-row').first()).toBeVisible();
 }
 

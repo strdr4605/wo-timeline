@@ -11,7 +11,7 @@ test.use({ viewport: { width: 1440, height: 1024 } });
 test('[D12] a click on a date field opens the calendar and keeps the focus for typing', async ({
   page,
 }) => {
-  await page.goto('/?parity=1');
+  await page.goto('./?parity=1');
   await page.evaluate(() => document.fonts.ready);
   await page.mouse.click(EMPTY_CELL.x, EMPTY_CELL.y);
   await expect(page.locator('.drawer')).toHaveClass(/drawer--open/);
@@ -126,7 +126,7 @@ test('[D12] after a mouse pick, typed text shows no date error until the field l
 });
 
 async function openCreateDrawer(page: Page): Promise<void> {
-  await page.goto('/?parity=1');
+  await page.goto('./?parity=1');
   await page.evaluate(() => document.fonts.ready);
   await page.mouse.click(EMPTY_CELL.x, EMPTY_CELL.y);
   await expect(page.locator('.drawer')).toHaveClass(/drawer--open/);

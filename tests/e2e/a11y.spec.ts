@@ -23,7 +23,7 @@ const DESIGN_CONTRAST_NODES = [
 test('[I5] controls have names, bars and menus work with the keyboard, the drawer keeps the focus', async ({
   page,
 }) => {
-  await page.goto('/?parity=1');
+  await page.goto('./?parity=1');
   const bar = page.locator('.work-order-bar').first();
   await expect(bar).toBeVisible();
 
@@ -121,7 +121,7 @@ test('[I5] controls have names, bars and menus work with the keyboard, the drawe
 
   await test.step('axe: no serious or critical violation on the default view, sample data', async () => {
     // Parity mode shows no Open bar. The sample data shows all four statuses.
-    await page.goto('/');
+    await page.goto('./');
     await expect(page.locator('.work-order-bar[data-status="open"]').first()).toBeVisible();
     expect(await seriousViolations(page)).toEqual([]);
   });

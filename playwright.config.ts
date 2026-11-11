@@ -5,7 +5,16 @@ const viewport = { width: 1440, height: 1024 };
 
 // A second checkout can run its own server next to the shared one on 4200.
 const port = Number(process.env['PORT'] ?? 4200);
-const baseURL = `http://localhost:${port}`;
+
+// CI serves the production build itself and sets BASE_URL (for example
+// http://localhost:4300/wo-timeline/). Then Playwright starts no dev server. The tests use
+// relative paths, so the base path of the URL stays in every navigation.
+const externalBaseURL = process.env['BASE_URL'];
+const baseURL = externalBaseURL ?? `http://localhost:${port}`;
+
+// A test tagged @local-only depends on the macOS font rendering (no test has the tag now).
+// SKIP_LOCAL_ONLY=1 leaves them out (CI).
+const grepInvert = process.env['SKIP_LOCAL_ONLY'] === '1' ? /@local-only/ : undefined;
 
 export default defineConfig({
   testDir: './tests/e2e',
@@ -13,6 +22,7 @@ export default defineConfig({
   forbidOnly: !!process.env['CI'],
   retries: process.env['CI'] ? 1 : 0,
   reporter: [['list']],
+  grepInvert,
   use: {
     // The suite must run without a window, also on a machine without a display.
     headless: true,
@@ -26,12 +36,14 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'], viewport },
     },
   ],
-  webServer: {
-    command: `npx ng serve --port ${port}`,
-    url: baseURL,
-    // The lead keeps a dev server on :4200. With CI=1 a fresh start would fail on the busy port,
-    // so the suite always reuses a running server and starts one only when none answers.
-    reuseExistingServer: true,
-    timeout: 120_000,
-  },
+  webServer: externalBaseURL
+    ? undefined
+    : {
+        command: `npx ng serve --port ${port}`,
+        url: baseURL,
+        // The lead keeps a dev server on :4200. With CI=1 a fresh start would fail on the busy port,
+        // so the suite always reuses a running server and starts one only when none answers.
+        reuseExistingServer: true,
+        timeout: 120_000,
+      },
 });

@@ -12,7 +12,7 @@ test('[R1] the top bar shows the neutral WO Timeline wordmark and the app uses t
   page,
 }) => {
   await test.step('the wordmark keeps the logo box of the design', async () => {
-    await page.goto('/');
+    await page.goto('./');
 
     const logo = page.locator('.top-bar .logo');
     await expect(logo).toHaveAttribute('src', 'wo-timeline-logo.svg');
@@ -20,7 +20,7 @@ test('[R1] the top bar shows the neutral WO Timeline wordmark and the app uses t
     expect(await logo.evaluate((element: HTMLImageElement) => element.naturalWidth)).toBe(80);
     expect(await logo.boundingBox()).toEqual({ x: 101, y: 20, width: 80, height: 10 });
 
-    const svg = await (await page.request.get('/wo-timeline-logo.svg')).text();
+    const svg = await (await page.request.get('./wo-timeline-logo.svg')).text();
     expect(svg).toContain('<title>WO Timeline</title>');
     expect(svg).toContain('>WO Timeline</text>');
   });

@@ -27,7 +27,7 @@ test.use({ viewport: { width: 1440, height: 1024 } });
 test('[I12] the demo buttons and the counter show only with ?demo=1, never in parity mode', async ({
   page,
 }) => {
-  for (const url of ['/', '/?parity=1', '/?parity=1&demo=1']) {
+  for (const url of ['./', './?parity=1', './?parity=1&demo=1']) {
     await test.step(url, async () => {
       await openApp(page, url);
       for (const name of DEMO_BUTTONS) {
@@ -37,7 +37,7 @@ test('[I12] the demo buttons and the counter show only with ?demo=1, never in pa
     });
   }
 
-  await openApp(page, '/?demo=1');
+  await openApp(page, './?demo=1');
   for (const name of DEMO_BUTTONS) {
     await expect(page.getByRole('button', { name })).toBeVisible();
   }
@@ -47,7 +47,7 @@ test('[I12] the demo buttons and the counter show only with ?demo=1, never in pa
 test('[I12] Load 5,000 orders: the counter shows 5000 and the bars in the DOM stay bounded', async ({
   page,
 }) => {
-  await openApp(page, '/?demo=1');
+  await openApp(page, './?demo=1');
   await page.getByRole('button', { name: 'Load 5,000 orders' }).click();
   await expect(badgeCount(page, 'orders')).toHaveText('5000');
 
@@ -77,7 +77,7 @@ test('[I12] Load 5,000 orders: the counter shows 5000 and the bars in the DOM st
 test('[I12] the generated orders use every status and never overlap on a work centre', async ({
   page,
 }) => {
-  await openApp(page, '/?demo=1&virtual=0');
+  await openApp(page, './?demo=1&virtual=0');
 
   for (const [button, rows] of [
     ['Load 5,000 orders', 5],
@@ -113,7 +113,7 @@ test('[I12] the generated orders use every status and never overlap on a work ce
 });
 
 test('[I12] Reset data brings back the sample data', async ({ page }) => {
-  await openApp(page, '/?demo=1');
+  await openApp(page, './?demo=1');
   await page.getByRole('button', { name: 'Load 50 work centres' }).click();
   await expect(page.locator('.grid-row')).toHaveCount(55);
   await expect(badgeCount(page, 'orders')).toHaveText('5000');
@@ -127,14 +127,14 @@ test('[I12] Reset data brings back the sample data', async ({ page }) => {
 
 test('[I12] ?virtual=0 renders every column and every bar', async ({ page }) => {
   await test.step('windowing on: fewer columns in the DOM than in the range', async () => {
-    await openApp(page, '/?demo=1');
+    await openApp(page, './?demo=1');
     await selectTimescale(page, 'Day');
     await scrollGridBy(page, 3000);
     await expect.poll(() => columnsInDom(page)).toBeLessThan(await columnsInRange(page));
   });
 
   await test.step('windowing off: every column of the range and all 5,000 bars', async () => {
-    await openApp(page, '/?demo=1&virtual=0');
+    await openApp(page, './?demo=1&virtual=0');
     await page.getByRole('button', { name: 'Load 5,000 orders' }).click();
     await selectTimescale(page, 'Day');
     await scrollGridBy(page, 3000);
@@ -145,7 +145,7 @@ test('[I12] ?virtual=0 renders every column and every bar', async ({ page }) => 
 });
 
 test('[I12] the demo data never goes to localStorage, also after an edit', async ({ page }) => {
-  await openApp(page, '/?demo=1');
+  await openApp(page, './?demo=1');
   await page.getByRole('button', { name: 'Load 5,000 orders' }).click();
   await expect(badgeCount(page, 'orders')).toHaveText('5000');
 

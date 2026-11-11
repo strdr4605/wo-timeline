@@ -12,7 +12,7 @@ test.use({ viewport: { width: 1440, height: 1024 } });
 test('[C9] a drag on a bar-end handle resizes the order, snapped to days, with checks and keys', async ({
   page,
 }) => {
-  await page.goto('/');
+  await page.goto('./');
 
   const bar = barNamed(page, 'Konsulting Inc');
   const label = bar.locator('.work-order-resize-label');

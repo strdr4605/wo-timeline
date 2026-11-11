@@ -7,7 +7,7 @@ import { expect, test, type Page } from '@playwright/test';
 test.use({ viewport: { width: 1440, height: 1024 } });
 
 test('[I1] a scroll to the right edge adds columns on the right', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('./');
   await waitForSettledColumns(page);
   const before = await columnCount(page);
 
@@ -22,7 +22,7 @@ test('[I1] a scroll to the right edge adds columns on the right', async ({ page 
 test('[I1] a scroll to the left edge adds columns on the left and the view does not jump', async ({
   page,
 }) => {
-  await page.goto('/');
+  await page.goto('./');
   await waitForSettledColumns(page);
 
   // Just outside the edge zone first, so the column window is at the place of the next scroll.
@@ -42,7 +42,7 @@ test('[I1] a scroll to the left edge adds columns on the left and the view does 
 });
 
 test('[I1] parity mode keeps the fixed range of the design', async ({ page }) => {
-  await page.goto('/?parity=1');
+  await page.goto('./?parity=1');
   await expect(page.locator('.grid-row').first()).toBeVisible();
   const before = await columnCount(page);
   const startScroll = await page.locator('.grid').evaluate((grid) => grid.scrollLeft);
@@ -60,7 +60,7 @@ test('[I1] parity mode keeps the fixed range of the design', async ({ page }) =>
 });
 
 test('[I1] a bar stays at its date after a left extend', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('./');
   await waitForSettledColumns(page);
   // The focus keeps the bar in the DOM when the scroll moves it out of the column window (I9).
   const bar = page.locator('.work-order-bar').first();
@@ -79,7 +79,7 @@ for (const timescale of ['Day', 'Hour']) {
   test(`[I1] in ${timescale} a scroll to the right end keeps adding columns, no empty area`, async ({
     page,
   }) => {
-    await page.goto('/');
+    await page.goto('./');
     await chooseTimescale(page, timescale);
     await waitForSettledColumns(page);
 

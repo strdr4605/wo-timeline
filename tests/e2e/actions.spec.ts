@@ -242,7 +242,7 @@ test('[D9] Escape and a click outside close an edit without a save', async ({ pa
 });
 
 async function openParity(page: Page): Promise<void> {
-  await page.goto('/?parity=1');
+  await page.goto('./?parity=1');
   await page.evaluate(() => document.fonts.ready);
 }
 

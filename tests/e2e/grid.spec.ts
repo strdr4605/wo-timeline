@@ -78,7 +78,7 @@ test('[B6] the Current month chip sits on the header line at the current month',
   expect(await style(page, '.grid-current-chip', 'color')).toBe(rgb('#3e40db'));
 
   // Normal mode: the chip names the current week or day.
-  await page.goto('/');
+  await page.goto('./');
   for (const [option, label] of [
     ['Week', 'Current week'],
     ['Day', 'Today'],
@@ -188,7 +188,7 @@ test('[B11] column lines run 747 down from the header line in every timescale', 
   );
 
   // Normal mode: the same lines with the column width of each timescale.
-  await page.goto('/');
+  await page.goto('./');
   for (const [option, width] of [
     ['Day', 48],
     ['Week', 114],
@@ -210,7 +210,7 @@ test('[B11] column lines run 747 down from the header line in every timescale', 
 });
 
 async function openParity(page: Page) {
-  await page.goto('/?parity=1');
+  await page.goto('./?parity=1');
   await expect
     .poll(
       async () =>

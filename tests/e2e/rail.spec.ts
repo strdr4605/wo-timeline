@@ -11,7 +11,7 @@ test.use({ viewport: { width: 1440, height: 1024 } });
 test('[I10] a drag on the rail edge resizes the rail, with limits, Escape, keys and storage', async ({
   page,
 }) => {
-  await page.goto('/');
+  await page.goto('./');
 
   const divider = page.locator('.grid-rail-divider');
   const label = divider.locator('.grid-rail-divider__label');
@@ -135,7 +135,7 @@ test('[I10] a drag on the rail edge resizes the rail, with limits, Escape, keys 
   });
 
   await test.step('parity mode ignores the saved width and saves none', async () => {
-    await page.goto('/?parity=1');
+    await page.goto('./?parity=1');
     await expect(divider).toHaveAttribute('aria-valuenow', '380');
     expect(await railWidth(page)).toBe(380);
 

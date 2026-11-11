@@ -87,7 +87,7 @@ test('[I3] prefers-reduced-motion: reduce sets every duration to 0s', async ({ p
 });
 
 async function openParity(page: Page): Promise<void> {
-  await page.goto('/?parity=1');
+  await page.goto('./?parity=1');
   await page.evaluate(() => document.fonts.ready);
 }
 

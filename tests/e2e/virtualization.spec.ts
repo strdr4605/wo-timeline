@@ -119,7 +119,7 @@ test('[I9] a drag across the window edge resizes the bar', async ({ page }) => {
 });
 
 test('[I9] parity mode renders every column', async ({ page }) => {
-  await page.goto('/?parity=1');
+  await page.goto('./?parity=1');
   await expect(page.locator('.grid-row').first()).toBeVisible();
 
   const { header, grid } = await domColumns(page);
@@ -135,7 +135,7 @@ test('[I9] parity mode renders every column', async ({ page }) => {
 });
 
 async function openDayView(page: Page): Promise<void> {
-  await page.goto('/');
+  await page.goto('./');
   await expect(page.locator('.grid-row').first()).toBeVisible();
   await page.locator('.timescale-chip__value').click();
   await page.locator('.timescale-menu__item', { hasText: 'Day' }).click();

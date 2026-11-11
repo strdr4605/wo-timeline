@@ -9,13 +9,13 @@ test.use({ viewport: { width: 1440, height: 1024 } });
 
 test('[I2] the Today button centres the viewport on today in every timescale', async ({ page }) => {
   await test.step('parity mode shows no Today button', async () => {
-    await page.goto('/?parity=1');
+    await page.goto('./?parity=1');
     await expect(page.locator('.grid-row').first()).toBeVisible();
     await expect(page.locator('.today-button')).toHaveCount(0);
   });
 
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.goto('/');
+  await page.goto('./');
   const button = page.getByRole('button', { name: 'Today' });
   await expect(button).toBeVisible();
 

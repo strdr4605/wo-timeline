@@ -235,7 +235,7 @@ test('[D15] the overlay dims the page behind the drawer', async ({ page }) => {
 });
 
 async function openParity(page: Page): Promise<void> {
-  await page.goto('/?parity=1');
+  await page.goto('./?parity=1');
   await page.evaluate(() => document.fonts.ready);
 }
 

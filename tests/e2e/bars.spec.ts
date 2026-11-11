@@ -57,7 +57,7 @@ const PARITY_BARS: [string, number, number, number][] = [
 ];
 
 test('[C1] the bar starts at the start date and ends at the end date', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('./');
 
   // Concentrix Ltd runs on Genesis Hardware from 2026-10-18 to 2027-02-22.
   const box = await barNamed(page, 'Concentrix Ltd').boundingBox();
@@ -86,7 +86,7 @@ test('[C1] the bar starts at the start date and ends at the end date', async ({ 
 
   // In parity mode the dates of the design fixture put every bar on the pixels of the artboard.
   // A day is 3.7px wide in Month view, so an edge can miss the mock by up to 2px.
-  await page.goto('/?parity=1&fixture=hover');
+  await page.goto('./?parity=1&fixture=hover');
 
   for (const [name, x, y, width] of PARITY_BARS) {
     const parityBox = await barNamed(page, name).boundingBox();
@@ -97,7 +97,7 @@ test('[C1] the bar starts at the start date and ends at the end date', async ({ 
 });
 
 test('[C2] the bar shows the work order name and a status badge', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('./');
 
   const bar = barNamed(page, 'Concentrix Ltd');
   await expect(bar.locator('.work-order-bar__name')).toHaveText('Concentrix Ltd');
@@ -111,7 +111,7 @@ test('[C2] the bar shows the work order name and a status badge', async ({ page 
 });
 
 test('[C3] every status has the colours of the design', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('./');
 
   for (const status of STATUS_CASES) {
     const bar = page.locator(`.work-order-bar[data-status='${status.status}']`).first();
@@ -125,7 +125,7 @@ test('[C3] every status has the colours of the design', async ({ page }) => {
 });
 
 test('[C4] the bar is 38 high, has a radius of 8 and a 1px border', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('./');
 
   const bar = page.locator(".work-order-bar[data-status='in-progress']").first();
   const box = await bar.boundingBox();
@@ -140,7 +140,7 @@ test('[C4] the bar is 38 high, has a radius of 8 and a 1px border', async ({ pag
 test('[C5] the three-dot button appears on hover and opens a menu with Edit and Delete', async ({
   page,
 }) => {
-  await page.goto('/');
+  await page.goto('./');
 
   const bar = barNamed(page, 'Concentrix Ltd');
   const actions = bar.locator('.work-order-bar__actions');
@@ -176,7 +176,7 @@ test('[C5] the three-dot button appears on hover and opens a menu with Edit and 
 });
 
 test('[C6] the menu is the menu of the design, not a system menu', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('./');
 
   const bar = barNamed(page, 'Concentrix Ltd');
   await bar.hover();
@@ -206,7 +206,7 @@ test('[C6] the menu is the menu of the design, not a system menu', async ({ page
 });
 
 test('[C7] the bar shows a tooltip with name, status and the full date range', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('./');
 
   const bar = barNamed(page, 'Concentrix Ltd');
   const tooltip = bar.locator('.work-order-tooltip');
@@ -240,7 +240,7 @@ test('[C7] the bar shows a tooltip with name, status and the full date range', a
 });
 
 test('[C8] the bar shows a drag handle at both ends on hover', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('./');
 
   const bar = barNamed(page, 'Concentrix Ltd');
   const startHandle = bar.locator('.work-order-bar__handle--start');
@@ -270,7 +270,7 @@ test('[C8] the bar shows a drag handle at both ends on hover', async ({ page }) 
 });
 
 test('[P9] the three-dot button uses the pressed fill while its menu is open', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('./');
 
   const bar = barNamed(page, 'Concentrix Ltd');
   const actions = bar.locator('.work-order-bar__actions');
