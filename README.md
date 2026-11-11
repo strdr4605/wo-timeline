@@ -1,5 +1,12 @@
 # Work Order Schedule Timeline
 
+[![CI](https://github.com/strdr4605/wo-timeline/actions/workflows/ci.yml/badge.svg)](https://github.com/strdr4605/wo-timeline/actions/workflows/ci.yml)
+[![e2e](https://img.shields.io/endpoint?url=https://strdr4605.github.io/wo-timeline/badges/e2e.json)](https://github.com/strdr4605/wo-timeline/actions/workflows/ci.yml)
+[![unit](https://img.shields.io/endpoint?url=https://strdr4605.github.io/wo-timeline/badges/unit.json)](https://github.com/strdr4605/wo-timeline/actions/workflows/ci.yml)
+
+[Live app](https://strdr4605.github.io/wo-timeline/) ·
+[Storybook](https://strdr4605.github.io/wo-timeline/storybook/)
+
 This repository contains the Naologic front-end take-home: a Work Order Schedule Timeline.
 The brief is `FE-technical-test-10-2026.md`.
 

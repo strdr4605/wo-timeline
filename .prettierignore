@@ -5,6 +5,7 @@ dist/
 storybook-static/
 playwright-report/
 test-results/
+reports/
 .pixel-check/
 docs/
 tests/demo/

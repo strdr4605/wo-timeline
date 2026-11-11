@@ -8,6 +8,7 @@ vitest-report/
 playwright-report.json
 vitest-report.json
 test-results/
+reports/
 docs/demo/videos/
 .DS_Store
 .pixel-check

@@ -54,6 +54,43 @@ test('[R4] CI tests and deploys the Pages build; a deep link and an unknown path
   });
 });
 
+test('[R5] CI publishes test count badges from the real reports; the README shows them', () => {
+  const workflow = read('.github/workflows/ci.yml');
+  const readme = read('README.md');
+
+  // The counts come from the JSON reports of the runs. The human reporters stay in the log.
+  expect(workflow).toContain(
+    'npx vitest run --reporter=default --reporter=json --outputFile.json=reports/unit.json',
+  );
+  expect(workflow).toContain('npx playwright test --reporter=list,json');
+  expect(workflow).toContain('PLAYWRIGHT_JSON_OUTPUT_FILE: reports/e2e.json');
+  expect(workflow).toContain(
+    'node tools/badge.mjs vitest reports/unit.json unit reports/badges/unit.json',
+  );
+  expect(workflow).toContain(
+    'node tools/badge.mjs playwright reports/e2e.json e2e reports/badges/e2e.json',
+  );
+
+  // Deploy puts the badges next to the site, at badges/unit.json and badges/e2e.json.
+  expect(workflow).toMatch(
+    /pattern: badge-\*\n\s+path: site\/badges\n\s+merge-multiple: true\n\s+- uses: actions\/upload-pages-artifact/,
+  );
+
+  // The local default runs do not change.
+  expect(read('playwright.config.ts')).toContain("reporter: [['list']]");
+  expect(read('vitest.config.ts')).not.toContain('reporter');
+
+  const top = readme.split('\n').slice(0, 10).join('\n');
+  expect(top).toContain('actions/workflows/ci.yml/badge.svg');
+  for (const name of ['e2e', 'unit']) {
+    expect(top).toContain(
+      `https://img.shields.io/endpoint?url=https://strdr4605.github.io/wo-timeline/badges/${name}.json`,
+    );
+  }
+  expect(top).toContain('(https://strdr4605.github.io/wo-timeline/)');
+  expect(top).toContain('(https://strdr4605.github.io/wo-timeline/storybook/)');
+});
+
 function read(path: string): string {
   return readFileSync(join(process.cwd(), path), 'utf8');
 }

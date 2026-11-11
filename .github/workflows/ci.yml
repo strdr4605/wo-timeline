@@ -39,7 +39,19 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
-      - run: npx vitest run
+      - name: Unit tests (default reporter for the log, JSON report for the badge)
+        run: npx vitest run --reporter=default --reporter=json --outputFile.json=reports/unit.json
+      # The badge steps also run after a failure, so the run keeps a red badge as an artifact.
+      # Pages gets the badges only from a run where all jobs pass (see deploy).
+      - name: Unit badge
+        if: ${{ !cancelled() }}
+        run: node tools/badge.mjs vitest reports/unit.json unit reports/badges/unit.json
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: badge-unit
+          path: reports/badges/unit.json
+          if-no-files-found: error
 
   build:
     needs: unit
@@ -86,11 +98,22 @@ jobs:
       - name: Playwright against the production build
         # A test tagged @local-only (none at present) would depend on the macOS font rendering.
         # SKIP_LOCAL_ONLY leaves such tests out on Linux.
-        run: npx playwright test
+        # The list reporter is for the log, the JSON report is for the badge.
+        run: npx playwright test --reporter=list,json
         env:
           CI: 'true'
           BASE_URL: http://localhost:4300/wo-timeline/
           SKIP_LOCAL_ONLY: '1'
+          PLAYWRIGHT_JSON_OUTPUT_FILE: reports/e2e.json
+      - name: E2E badge
+        if: ${{ !cancelled() }}
+        run: node tools/badge.mjs playwright reports/e2e.json e2e reports/badges/e2e.json
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: badge-e2e
+          path: reports/badges/e2e.json
+          if-no-files-found: error
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
@@ -113,6 +136,12 @@ jobs:
         with:
           name: site
           path: site
+      # badges/unit.json and badges/e2e.json for the README (shields.io endpoint badges).
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: badge-*
+          path: site/badges
+          merge-multiple: true
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site
