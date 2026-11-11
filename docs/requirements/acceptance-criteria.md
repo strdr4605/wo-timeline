@@ -61,7 +61,7 @@ Legend: `[x]` pass, `[ ]` pending, `[?]` open decision. An item may only be mark
 | [x] | D9 | Escape closes the drawer | ref | e2e | bonus | e2e: [D9] Escape closes the drawer, but first closes an open dropdown |
 | [x] | D10 | Tab moves between the fields | ref | e2e | bonus | e2e: [D10] Tab moves through the fields in order, End date above Start date |
 | [x] | D11 | Text field shows the placeholder state and the active/focused state from the design | owner, sketch | visual | must | e2e: [D11] the text field shows the placeholder state and the focus state of the design |
-| [x] | D12 | Date picker opens when the field is clicked; no separate calendar button | owner | e2e | must | unit: drawer form defaults [D12] dates read and write as DD.MM.YYYY, as in the design |
+| [x] | D12 | Date picker opens when the field is clicked; no separate calendar button | owner | e2e | must | unit: drawer form defaults [D12] dates read and write as DD.MM.YYYY, as in the design; e2e: datepicker-typing.spec.ts [D12] click keeps focus for typing; [D12] Start open, click End: End gets focus and typed text, Start unchanged; [D12] mouse pick, then partial text: no error until blur, then error, Create blocked |
 | [x] | D13 | Status dropdown is a pill when collapsed and plain text when expanded | owner, sketch | visual | must | e2e: [D13] the status is a pill when collapsed and plain text in the open list |
 | [x] | D14 | Button geometry: primary #5659ff and secondary white, 66x32, top right of the drawer | sketch | visual | must | e2e: [D14] Cancel and the primary button: 66 x 32 at the top right, white and #5659ff |
 | [x] | D15 | Overlay behind the drawer dims the timeline | owner, sketch | visual | must | e2e: [D15] the overlay dims the page behind the drawer |

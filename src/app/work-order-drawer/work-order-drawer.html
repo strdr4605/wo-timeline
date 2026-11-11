@@ -87,7 +87,10 @@
           ngbDatepicker
           navigation="arrows"
           #endPicker="ngbDatepicker"
-          (click)="endPicker.toggle()"
+          (click)="toggleCalendar(endPicker, $any($event.target))"
+          (focus)="editedDate.set('endDate')"
+          (input)="editedDate.set('endDate'); showTypedDate(endPicker, $any($event.target).value)"
+          (blur)="editedDate.set(null)"
           autocomplete="off"
           [class.drawer-field__control--invalid]="dateError('endDate')"
           [attr.aria-invalid]="dateError('endDate') ? true : null"
@@ -108,7 +111,10 @@
           ngbDatepicker
           navigation="arrows"
           #startPicker="ngbDatepicker"
-          (click)="startPicker.toggle()"
+          (click)="toggleCalendar(startPicker, $any($event.target))"
+          (focus)="editedDate.set('startDate')"
+          (input)="editedDate.set('startDate'); showTypedDate(startPicker, $any($event.target).value)"
+          (blur)="editedDate.set(null)"
           autocomplete="off"
           [class.drawer-field__control--invalid]="dateError('startDate')"
           [attr.aria-invalid]="dateError('startDate') ? true : null"

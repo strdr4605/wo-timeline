@@ -489,7 +489,7 @@
       "verify": "e2e",
       "priority": "must",
       "status": "pass",
-      "evidence": "unit: drawer form defaults [D12] dates read and write as DD.MM.YYYY, as in the design"
+      "evidence": "unit: drawer form defaults [D12] dates read and write as DD.MM.YYYY, as in the design; e2e: datepicker-typing.spec.ts [D12] click keeps focus for typing; [D12] Start open, click End: End gets focus and typed text, Start unchanged; [D12] mouse pick, then partial text: no error until blur, then error, Create blocked"
     },
     {
       "id": "D13",

@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  ComponentRef,
   DestroyRef,
   ElementRef,
   Injectable,
@@ -30,6 +31,7 @@ import {
 import {
   NgbDateParserFormatter,
   NgbDateStruct,
+  NgbDatepicker,
   NgbInputDatepicker,
 } from '@ng-bootstrap/ng-bootstrap';
 import { NgLabelTemplateDirective, NgSelectComponent } from '@ng-select/ng-select';
@@ -95,6 +97,13 @@ export class WorkOrderDrawer {
    */
   protected readonly submitted = signal(false);
 
+  /**
+   * The date field that has the focus, or null. Before the first Create or Save, its error waits
+   * for the blur (E1). A mouse pick marks the field touched, but the user can still be in the
+   * middle of a correction.
+   */
+  protected readonly editedDate = signal<DateField | null>(null);
+
   /** The name of the work centre that the dates collide on, or null. */
   protected readonly overlapCenter = signal<string | null>(null);
 
@@ -135,13 +144,14 @@ export class WorkOrderDrawer {
   }
 
   /**
-   * A date field shows its own error when it loses focus: a typo must show before Create. The
-   * end-before-start error waits for the first Create or Save, because the user often changes
-   * one date and then the other.
+   * A date field shows its own error when it loses focus: a typo must show before Create. After
+   * the first Create or Save, the error follows the typed text at once. The end-before-start
+   * error waits for the first Create or Save, because the user often changes one date and then
+   * the other.
    */
   protected dateError(field: DateField): string | null {
     const control = this.form.controls[field];
-    if (!this.submitted() && !control.touched) {
+    if (!this.submitted() && (!control.touched || this.editedDate() === field)) {
       return null;
     }
     if (control.hasError('required')) {
@@ -154,6 +164,38 @@ export class WorkOrderDrawer {
       return 'The end date must be after the start date.';
     }
     return null;
+  }
+
+  /**
+   * A click opens the calendar, but the focus stays in the field, so the user can type at once.
+   * ngbDatepicker 19 has no input for this: open() moves the focus to a day one time, in a
+   * setTimeout. We skip only that call. When the user tabs into the calendar, the arrow keys
+   * still move the focus from day to day.
+   */
+  protected toggleCalendar(picker: NgbInputDatepicker, field: HTMLInputElement): void {
+    this.closeOtherCalendars(picker, field);
+    picker.toggle();
+
+    const calendar = calendarOf(picker);
+    if (calendar) {
+      calendar.focus = () => delete (calendar as Partial<NgbDatepicker>).focus;
+    }
+  }
+
+  /**
+   * A typed date that is complete shows as the selected day of the open calendar. The calendar
+   * gets the date directly: picker.writeValue() would reformat the text under the caret and mark
+   * the field touched, and a touched field shows its error before blur (E1).
+   */
+  protected showTypedDate(picker: NgbInputDatepicker, text: string): void {
+    const date = parseDottedDate(text);
+    const calendar = calendarOf(picker);
+    if (!date || !calendar) {
+      return;
+    }
+
+    calendar.writeValue(date);
+    picker.navigateTo(date);
   }
 
   protected cancel(): void {
@@ -275,6 +317,24 @@ export class WorkOrderDrawer {
     );
   }
 
+  /**
+   * Only one calendar is open at a time. The other calendar closes before this one opens, and it
+   * gives the focus to the clicked field, not back to its own field. Without this, its outside
+   * click handler closes it later and moves the focus away from the field the user types in.
+   */
+  private closeOtherCalendars(picker: NgbInputDatepicker, field: HTMLInputElement): void {
+    for (const other of this.datepickers()) {
+      if (other === picker || !other.isOpen()) {
+        continue;
+      }
+
+      const restoreFocus = other.restoreFocus;
+      other.restoreFocus = field;
+      other.close();
+      other.restoreFocus = restoreFocus;
+    }
+  }
+
   private popupOpen(): boolean {
     return (
       this.statusSelect().some((select) => select.isOpen()) ||
@@ -305,6 +365,15 @@ function invalidDateMessage(value: unknown): string {
     return `${value.trim()} is not a valid date.`;
   }
   return 'Enter the date as dd.mm.yyyy.';
+}
+
+/**
+ * The calendar popup of an input datepicker, or null when it is closed. ngbDatepicker 19.0.1
+ * keeps it in the private _cRef field and has no public getter.
+ */
+function calendarOf(picker: NgbInputDatepicker): NgbDatepicker | null {
+  const popup = (picker as unknown as { _cRef: ComponentRef<NgbDatepicker> | null })._cRef;
+  return popup?.instance ?? null;
 }
 
 /** ngbDatepicker writes the typed text into the control when it cannot parse it. */
